@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Notes</title>
+    <link rel="stylesheet" href="/styles/notes.all.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="nav-heart">❤️</a>
+        <div class="nav-links">
+            <a href="/notes" class="nav-button">Notes</a>
+            <a href="/profile" class="nav-button">Profile</a>
+            <a href="/wishes" class="nav-button">Wishes</a>
+        </div>
+    </nav>
+
+    <!-- Notes Inbox -->
+    <header class="inbox-header">
+        <h1>Inbox</h1>
+        <a href="/notes/create" class="create-button">New Note</a>
+    </header>
+    <div class="inbox-container">
+        <% if (notes.length === 0) { %>
+            <p class="no-notes">No notes yet. Create one!</p>
+        <% } else { %>
+            <% notes.forEach(note => { %>
+            <div class="note-row <%= note.seen ? 'seen' : 'unseen' %>">
+                <div class="note-content">
+                    <a href="/notes/<%= note.id %>" class="note-title"><%= note.title %></a>
+                    <div class="note-meta">
+                        <span class="from">From: <%= note.written_by?.username %></span>
+                        <span class="to">To: <%= note.written_for?.username %></span>
+                    </div>
+                </div>
+                <span class="note-status">
+                    <%= note.seen ? 'Read' : 'Unread' %>
+                </span>
+            </div>
+            <% }) %>
+        <% } %>
+    </div>
+</body>
+</html>

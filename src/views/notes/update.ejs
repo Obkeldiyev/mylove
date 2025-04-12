@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Note: <%= note.title %></title>
+    <link rel="stylesheet" href="/styles/notes.update.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="nav-heart">❤️</a>
+        <div class="nav-links">
+            <a href="/notes" class="nav-button">Notes</a>
+            <a href="/profile" class="nav-button">Profile</a>
+            <a href="/wishes" class="nav-button">Wishes</a>
+        </div>
+    </nav>
+
+    <!-- Update Note Form -->
+    <header class="form-header">
+        <h1>Update Note</h1>
+    </header>
+    <div class="form-container">
+        <form action="/notes/<%= note.id %>/update" method="POST">
+            <input type="text" name="title" value="<%= note.title %>" placeholder="Title" required>
+            <textarea name="content" placeholder="Content" required><%= note.content %></textarea>
+            <select name="written_by_id" required>
+                <option value="" disabled>Select sender</option>
+                <% admins.forEach(admin => { %>
+                <option value="<%= admin.id %>" <%= note.written_by_id === admin.id ? 'selected' : '' %>><%= admin.username %></option>
+                <% }) %>
+            </select>
+            <select name="written_for_id" required>
+                <option value="" disabled>Select recipient</option>
+                <% admins.forEach(admin => { %>
+                <option value="<%= admin.id %>" <%= note.written_for_id === admin.id ? 'selected' : '' %>><%= admin.username %></option>
+                <% }) %>
+            </select>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+    <link rel="stylesheet" href="/styles/admin.profile.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="nav-heart">❤️</a>
+        <ul class="nav-links">
+            <li><a href="/notes">Notes</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/wishes">Wishes</a></li>
+        </ul>
+    </nav>
+
+    <!-- Profile Content -->
+    <h1>Your Profile</h1>
+
+    <div class="container">
+        <img src="../../Uploads/<%= checkAdmin.profile_photo %>" alt="Profile Photo">
+
+        <div class="name">
+            <h1 class="bigger"><%= checkAdmin.first_name %></h1>
+            <h1><%= checkAdmin.surname %></h1>
+        </div>
+
+        <div class="birth">
+            <h1 class="birth"><%= checkAdmin.birth_year %>, <%= checkAdmin.birth_month %> <%= checkAdmin.birth_day %></h1>
+        </div>
+
+        <div class="content">
+            <p><%= checkAdmin.about %></p>
+        </div>
+
+        <div class="actions">
+            <a href="/update">Edit profile</a>
+        </div>
+    </div>
+</body>
+</html>

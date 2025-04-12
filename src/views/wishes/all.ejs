@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Wishes</title>
+    <link rel="stylesheet" href="/styles/wishes.all.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="nav-heart">❤️</a>
+        <div class="nav-links">
+            <a href="/notes" class="nav-button">Notes</a>
+            <a href="/profile" class="nav-button">Profile</a>
+            <a href="/wishes" class="nav-button">Wishes</a>
+        </div>
+    </nav>
+
+    <!-- Wishes Inbox -->
+    <header class="inbox-header">
+        <h1>Wishes</h1>
+        <a href="/wishes/create" class="create-button">New Wish</a>
+    </header>
+    <div class="inbox-container">
+        <% if (wishes.length === 0) { %>
+            <p class="no-wishes">No wishes yet. Create one!</p>
+        <% } else { %>
+            <% wishes.forEach(wish => { %>
+            <div class="wish-row">
+                <div class="wish-content">
+                    <a href="/wishes/<%= wish.id %>" class="wish-title"><%= wish.title %></a>
+                </div>
+            </div>
+            <% }) %>
+        <% } %>
+    </div>
+</body>
+</html>

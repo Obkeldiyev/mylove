@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wish Board - Share Your Dreams</title>
+    <link rel="stylesheet" href="/styles/index.css" />
+    <script src="/scripts/index.js" defer></script>
+  </head>
+  <body>
+    <!-- Animated Hearts Background -->
+    <div class="hearts-background"></div>
+
+    <!-- Welcome Section -->
+    <header class="welcome-header">
+      <h1>Welcome to the Wish Board</h1>
+      <p>Share your dreams, inspire others, and make wishes come true!</p>
+    </header>
+
+    <!-- Quote Carousel -->
+    <section class="quote-carousel">
+      <div class="quote-slide active">
+        <blockquote>
+          "A wish is a dream your heart makes." <cite>– Cinderella</cite>
+        </blockquote>
+      </div>
+      <div class="quote-slide">
+        <blockquote>
+          "The future belongs to those who believe in their dreams."
+          <cite>– Eleanor Roosevelt</cite>
+        </blockquote>
+      </div>
+      <div class="quote-slide">
+        <blockquote>
+          "Make a wish, and believe it will come true."
+          <cite>– Anonymous</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- Wishes Showcase -->
+    <section class="wishes-showcase">
+      <h2>Explore Wishes</h2>
+      <div class="wishes-grid">
+        <div class="wish-card">
+          <h3>World Peace</h3>
+          <p>I wish for a world where everyone lives in harmony and kindness.</p>
+          <span class="wish-author">– Alex, 2025</span>
+        </div>
+        <div class="wish-card">
+          <h3>Adventure Awaits</h3>
+          <p>I dream of traveling to every continent and meeting new cultures!</p>
+          <span class="wish-author">– Maya, 2025</span>
+        </div>
+        <div class="wish-card">
+          <h3>Love Forever</h3>
+          <p>Mydress is to find a soulmate who shares my heart’s desires.</p>
+          <span class="wish-author">– Emma, 2025</span>
+        </div>
+        <div class="wish-card">
+          <h3>Creative Spark</h3>
+          <p>I wish to write a novel that inspires millions.</p>
+          <span class="wish-author">– Liam, 2025</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+      <div class="cta-container">
+        <h2>Join the Wish Community</h2>
+        <p>Sign in to share your wishes or start dreaming now!</p>
+        <div class="cta-buttons">
+          <a href="/login" class="cta-button">Login</a>
+          <a href="/wishes/create" class="cta-button">Create a Wish</a>
+        </div>
+      </div>
+    </section>
+    <script>
+        // Generate animated hearts
+document.addEventListener('DOMContentLoaded', () => {
+  const heartsContainer = document.querySelector('.hearts-background');
+  for (let i = 0; i < 15; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerHTML = '❤️';
+    heart.style.setProperty('--random-left', Math.random()); // For CSS clamp
+    heart.style.animationDuration = `${8 + Math.random() * 4}s`;
+    heart.style.animationDelay = `${Math.random() * 4}s`;
+    heart.style.fontSize = `${1 + Math.random() * 0.5}rem`;
+    heartsContainer.appendChild(heart);
+  }
+
+  // Quote carousel
+  const slides = document.querySelectorAll('.quote-slide');
+  let currentSlide = 0;
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  showSlide(currentSlide);
+  setInterval(nextSlide, 5000); // Change quote every 5 seconds
+});
+    </script>
+  </body>
+</html>

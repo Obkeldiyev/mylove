@@ -1,0 +1,304 @@
+/* Reset default margins and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* General body styles */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial,
+      sans-serif;
+    background: linear-gradient(to bottom right, #ff9a9e, #ffb3b3, #ffcccc);
+    color: #333;
+    min-height: 100vh;
+    padding: 20px 15px;
+    position: relative;
+    overflow: hidden; /* Prevent scrollbars from animated hearts */
+  }
+  
+  /* Animated hearts background */
+  .hearts-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+  }
+  
+  .heart {
+    position: absolute;
+    font-size: 1.5rem;
+    color: #ff4d6a;
+    opacity: 0.3;
+    animation: float 10s infinite ease-in-out, fade 10s infinite ease-in-out;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(100vh) rotate(0deg);
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateY(-100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes fade {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  /* Random heart positioning */
+  .heart:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 8s;
+  }
+  .heart:nth-child(2) {
+    left: 20%;
+    animation-delay: 2s;
+    animation-duration: 12s;
+  }
+  .heart:nth-child(3) {
+    left: 30%;
+    animation-delay: 1s;
+    animation-duration: 10s;
+  }
+  .heart:nth-child(4) {
+    left: 40%;
+    animation-delay: 3s;
+    animation-duration: 9s;
+  }
+  .heart:nth-child(5) {
+    left: 50%;
+    animation-delay: 0.5s;
+    animation-duration: 11s;
+  }
+  .heart:nth-child(6) {
+    left: 60%;
+    animation-delay: 2.5s;
+    animation-duration: 8s;
+  }
+  .heart:nth-child(7) {
+    left: 70%;
+    animation-delay: 1.5s;
+    animation-duration: 10s;
+  }
+  .heart:nth-child(8) {
+    left: 80%;
+    animation-delay: 4s;
+    animation-duration: 9s;
+  }
+  .heart:nth-child(9) {
+    left: 90%;
+    animation-delay: 0.8s;
+    animation-duration: 12s;
+  }
+  
+  /* Subtle static heart pattern */
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.pngkit.com/png/detail/296-2963394_love-heart-pattern-pink-heart-png.png');
+    background-size: 10%;
+    background-repeat: repeat;
+    opacity: 0.05;
+    z-index: -1;
+  }
+  
+  /* Form header */
+  .form-header {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    text-align: center;
+    animation: slideIn 1s ease-out;
+  }
+  
+  .form-header h1 {
+    font-size: 2rem;
+    color: #ff4d6a;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Form container */
+  .form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    animation: fadeInUp 1s ease-out;
+  }
+  
+  form {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border: 2px solid #ff4d6a;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Form pulse animation */
+  form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 100, 100, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    animation: pulse 4s infinite ease-in-out;
+  }
+  
+  @keyframes pulse {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.5);
+    }
+  }
+  
+  /* Input fields */
+  .input-field {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #ff4d6a;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .input-field:hover {
+    border-color: #90ee90;
+    background-color: #f5fff5;
+    transform: translateY(-2px);
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: #90ee90;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(144, 238, 144, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* Submit button */
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ff4d6a;
+    background-color: #ffffff;
+    border: 2px solid #ff4d6a;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+  
+  .submit-button:hover {
+    background-color: #90ee90;
+    color: #ffffff;
+    border-color: #90ee90;
+    transform: scale(1.05);
+  }
+  
+  .submit-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+    z-index: -1;
+  }
+  
+  .submit-button:hover::after {
+    width: 200px;
+    height: 200px;
+  }
+  
+  /* Animations */
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive design */
+  @media (max-width: 500px) {
+    body {
+      padding: 15px 10px;
+    }
+  
+    .form-header h1 {
+      font-size: 1.5rem;
+    }
+  
+    .form-container {
+      margin: 0 5px;
+    }
+  
+    form {
+      padding: 20px;
+    }
+  
+    .input-field,
+    .submit-button {
+      font-size: 0.9rem;
+      padding: 10px;
+    }
+  }

@@ -1,0 +1,178 @@
+/* Reset default margins and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom right, #ff9a9e, #ffb3b3, #ffcccc);
+    color: #333;
+    min-height: 100vh;
+    padding: 80px 20px 20px; /* Top padding to avoid navbar overlap */
+}
+
+/* Navbar styling */
+.navbar {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* Heart icon on the left */
+.nav-heart {
+    font-size: 1.5rem;
+    color: #ff4d6a;
+    text-decoration: none;
+    padding: 0 10px;
+}
+
+.nav-heart:hover {
+    color: #ff77b2;
+    transform: scale(1.2);
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Centered nav links */
+.nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.nav-links li {
+    margin: 0 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ff4d6a;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    color: #ff77b2;
+}
+
+/* Flash messages */
+.flash {
+    padding: 10px;
+    margin: 10px auto;
+    max-width: 600px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.flash.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Form styling */
+h1 {
+    font-size: 2.5rem;
+    color: #ff4d6a;
+    text-align: center;
+    margin: 20px 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+form {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+input,
+textarea,
+button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #ff4d6a;
+    border-radius: 5px;
+}
+
+textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+input[type="file"] {
+    padding: 10px 12px; /* Adjust padding for file input */
+}
+
+button {
+    background-color: #ff4d6a;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 12px;
+}
+
+button:hover {
+    background-color: #ff77b2;
+}
+
+input:hover,
+textarea:hover,
+button:hover {
+    transform: scale(1.02);
+    transition: transform 0.2s ease-in-out;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #ff77b2;
+    outline: none;
+}
+
+/* Responsive design */
+@media (max-width: 500px) {
+    .navbar {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .nav-links {
+        margin-top: 10px;
+    }
+
+    .nav-links li {
+        margin: 0 10px;
+    }
+
+    form {
+        padding: 20px;
+        margin: 0 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create a Wish</title>
+    <link rel="stylesheet" href="/styles/wishes.create.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <a href="/" class="nav-heart">❤️</a>
+      <div class="nav-links">
+        <a href="/notes" class="nav-button">Notes</a>
+        <a href="/profile" class="nav-button">Profile</a>
+        <a href="/wishes" class="nav-button">Wishes</a>
+      </div>
+    </nav>
+
+    <!-- Form Header -->
+    <header class="form-header">
+      <h1>Create a Wish</h1>
+    </header>
+
+    <!-- Form Container -->
+    <div class="form-container">
+      <form action="/wishes/create" method="POST">
+        <input type="text" name="title" placeholder="Wish Title" required />
+        <textarea
+          name="description"
+          placeholder="Wish Description"
+          required
+        ></textarea>
+        <button type="submit">Create Wish</button>
+      </form>
+    </div>
+  </body>
+</html>

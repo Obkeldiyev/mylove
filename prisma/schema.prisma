@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id             String  @id @default(uuid())
+  first_name     String
+  second_name    String
+  username       String  @unique
+  password       String
+  birth_year     Int
+  birth_month    String
+  birth_day      Int
+  about          String
+  profile_photo  String?
+  notesWritten   Notes[] @relation("NotesWrittenBy")
+  notesReceived  Notes[] @relation("NotesWrittenFor")
+}
+
+model Wishes {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+}
+
+model Notes {
+  id             Int     @id @default(autoincrement())
+  title          String
+  content        String
+  seen           Boolean @default(false)
+  written_by_id  String
+  written_for_id String
+  written_by     Admin   @relation("NotesWrittenBy", fields: [written_by_id], references: [id])
+  written_for    Admin   @relation("NotesWrittenFor", fields: [written_for_id], references: [id])
+}

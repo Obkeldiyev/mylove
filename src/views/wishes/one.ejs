@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= wish.title %></title>
+    <link rel="stylesheet" href="/styles/wishes.detail.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <a href="/" class="nav-heart">❤️</a>
+      <div class="nav-links">
+        <a href="/notes" class="nav-button">Notes</a>
+        <a href="/profile" class="nav-button">Profile</a>
+        <a href="/wishes" class="nav-button">Wishes</a>
+      </div>
+    </nav>
+
+    <!-- Wish Header -->
+    <header class="note-header">
+      <h1><%= wish.title %></h1>
+    </header>
+
+    <!-- Wish Container -->
+    <div class="note-container">
+      <div class="note-content">
+        <p><%= wish.description %></p>
+      </div>
+      <div class="note-actions">
+        <a href="/wishes/update/<%= wish.id %>" class="action-button edit-button"
+          >Edit</a
+        >
+        <form
+          action="/wishes/delete/<%= wish.id %>"
+          method="POST"
+          class="delete-form"
+        >
+          <button type="submit" class="action-button delete-button">
+            Delete
+          </button>
+        </form>
+        <a href="/wishes" class="back-button">← Back to Wishes</a>
+      </div>
+    </div>
+  </body>
+</html>

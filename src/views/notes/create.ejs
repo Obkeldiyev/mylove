@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Note</title>
+    <link rel="stylesheet" href="/styles/notes.create.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="nav-heart">❤️</a>
+        <div class="nav-links">
+            <a href="/notes" class="nav-button">Notes</a>
+            <a href="/profile" class="nav-button">Profile</a>
+            <a href="/wishes" class="nav-button">Wishes</a>
+        </div>
+    </nav>
+
+    <!-- Create Note Form -->
+    <header class="form-header">
+        <h1>Create a Note</h1>
+    </header>
+    <div class="form-container">
+        <form action="/notes/create" method="POST">
+            <input type="text" name="title" placeholder="Title" required>
+            <textarea name="content" placeholder="Content" required></textarea>
+            <select name="written_by_id" required>
+                <option value="" disabled selected>Select sender</option>
+                <% admins.forEach(admin => { %>
+                <option value="<%= admin.id %>"><%= admin.username %></option>
+                <% }) %>
+            </select>
+            <select name="written_for_id" required>
+                <option value="" disabled selected>Select recipient</option>
+                <% admins.forEach(admin => { %>
+                <option value="<%= admin.id %>"><%= admin.username %></option>
+                <% }) %>
+            </select>
+            <button type="submit">Create</button>
+        </form>
+    </div>
+</body>
+</html>

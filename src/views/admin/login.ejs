@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="/styles/login.css" />
+  </head>
+  <body>
+    <!-- Form Header -->
+    <header class="form-header">
+      <h1>Login to Your Wishes</h1>
+    </header>
+
+    <!-- Form Container -->
+    <div class="form-container">
+      <form action="/login" method="POST">
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          required
+          class="input-field"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+          class="input-field"
+        />
+        <button type="submit" class="submit-button">Login</button>
+      </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+  const heartsContainer = document.createElement('div');
+  heartsContainer.className = 'hearts-background';
+  document.body.appendChild(heartsContainer);
+
+  for (let i = 0; i < 10; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerHTML = '❤️';
+    heart.style.left = `${Math.random() * 100}%`;
+    heart.style.animationDuration = `${8 + Math.random() * 4}s`;
+    heart.style.animationDelay = `${Math.random() * 4}s`;
+    heartsContainer.appendChild(heart);
+  }
+});
+    </script>
+  </body>
+</html>
