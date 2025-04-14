@@ -7,6 +7,19 @@
     <link rel="stylesheet" href="/styles/login.css" />
   </head>
   <body>
+    <div class="flash-container">
+      <% if (successMessage && successMessage.length > 0) { %>
+      <div class="flash flash-success">
+        <%= successMessage %>
+        <span class="flash-close">×</span>
+      </div>
+      <% } %> <% if (errorMessage && errorMessage.length > 0) { %>
+      <div class="flash flash-error">
+        <%= errorMessage %>
+        <span class="flash-close">×</span>
+      </div>
+      <% } %>
+    </div>
     <!-- Form Header -->
     <header class="form-header">
       <h1>Login to Your Wishes</h1>
@@ -34,20 +47,46 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-  const heartsContainer = document.createElement('div');
-  heartsContainer.className = 'hearts-background';
-  document.body.appendChild(heartsContainer);
+      document.addEventListener("DOMContentLoaded", () => {
+        const heartsContainer = document.createElement("div");
+        heartsContainer.className = "hearts-background";
+        document.body.appendChild(heartsContainer);
 
-  for (let i = 0; i < 10; i++) {
-    const heart = document.createElement('div');
-    heart.className = 'heart';
-    heart.innerHTML = '❤️';
-    heart.style.left = `${Math.random() * 100}%`;
-    heart.style.animationDuration = `${8 + Math.random() * 4}s`;
-    heart.style.animationDelay = `${Math.random() * 4}s`;
-    heartsContainer.appendChild(heart);
-  }
+        for (let i = 0; i < 10; i++) {
+          const heart = document.createElement("div");
+          heart.className = "heart";
+          heart.innerHTML = "❤️";
+          heart.style.left = `${Math.random() * 100}%`;
+          heart.style.animationDuration = `${8 + Math.random() * 4}s`;
+          heart.style.animationDelay = `${Math.random() * 4}s`;
+          heartsContainer.appendChild(heart);
+        }
+      });
+      document.addEventListener('DOMContentLoaded', () => {
+    const closeButtons = document.querySelectorAll('.flash-close');
+
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const flash = button.parentElement;
+            flash.style.transition = 'opacity 0.3s ease';
+            flash.style.opacity = '0';
+            setTimeout(() => {
+                flash.remove();
+            }, 300);
+        });
+    });
+
+    // Auto-dismiss after 5 seconds
+    const flashes = document.querySelectorAll('.flash');
+    flashes.forEach(flash => {
+        setTimeout(() => {
+            flash.style.transition = 'opacity 0.3s ease';
+            flash.style.opacity = '0';
+            setTimeout(() => {
+                flash.remove();
+            }, 300);
+        }, 5000);
+    });
 });
     </script>
   </body>

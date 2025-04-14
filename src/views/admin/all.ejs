@@ -4,22 +4,63 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="/styles/adminall.css">
+    <link rel="stylesheet" href="/styles/adminall.css" />
   </head>
   <body>
     <nav class="navbar">
-        <a href="/" class="nav-heart">❤️</a>
-        <ul class="nav-links">
-            <li><a href="/notes">Notes</a></li>
-            <li><a href="/profile">Profile</a></li>
-            <li><a href="/wishes">Wishes</a></li>
-        </ul>
+      <a href="/" class="nav-heart">❤️</a>
+      <ul class="nav-links">
+        <li><a href="/notes">Notes</a></li>
+        <li><a href="/profile">Profile</a></li>
+        <li><a href="/wishes">Wishes</a></li>
+      </ul>
     </nav>
+    <div class="flash-container">
+      <% if (successMessage && successMessage.length > 0) { %>
+      <div class="flash flash-success">
+        <%= successMessage %>
+        <span class="flash-close">×</span>
+      </div>
+      <% } %> <% if (errorMessage && errorMessage.length > 0) { %>
+      <div class="flash flash-error">
+        <%= errorMessage %>
+        <span class="flash-close">×</span>
+      </div>
+      <% } %>
+    </div>
     <h1>All Admins</h1>
     <ul>
       <% admins.forEach(admin => { %>
       <li><%= admin.username %></li>
       <% }) %>
     </ul>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+    const closeButtons = document.querySelectorAll('.flash-close');
+
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const flash = button.parentElement;
+            flash.style.transition = 'opacity 0.3s ease';
+            flash.style.opacity = '0';
+            setTimeout(() => {
+                flash.remove();
+            }, 300);
+        });
+    });
+
+    // Auto-dismiss after 5 seconds
+    const flashes = document.querySelectorAll('.flash');
+    flashes.forEach(flash => {
+        setTimeout(() => {
+            flash.style.transition = 'opacity 0.3s ease';
+            flash.style.opacity = '0';
+            setTimeout(() => {
+                flash.remove();
+            }, 300);
+        }, 5000);
+    });
+});
+    </script>
   </body>
 </html>

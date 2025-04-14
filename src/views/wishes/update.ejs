@@ -17,6 +17,21 @@
       </div>
     </nav>
 
+    <div class="flash-container">
+      <% if (successMessage && successMessage.length > 0) { %>
+          <div class="flash flash-success">
+              <%= successMessage %>
+              <span class="flash-close">×</span>
+          </div>
+      <% } %>
+      <% if (errorMessage && errorMessage.length > 0) { %>
+          <div class="flash flash-error">
+              <%= errorMessage %>
+              <span class="flash-close">×</span>
+          </div>
+      <% } %>
+  </div>
+
     <!-- Form Header -->
     <header class="form-header">
       <h1>Update Wish</h1>
@@ -24,7 +39,7 @@
 
     <!-- Form Container -->
     <div class="form-container">
-      <form action="/wishes/<%= wish.id %>/update" method="POST">
+      <form action="/wishes/update/<%= wish.id %>" method="POST">
         <input
           type="text"
           name="title"
@@ -40,5 +55,34 @@
         <button type="submit">Update Wish</button>
       </form>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+    const closeButtons = document.querySelectorAll('.flash-close');
+
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const flash = button.parentElement;
+            flash.style.transition = 'opacity 0.3s ease';
+            flash.style.opacity = '0';
+            setTimeout(() => {
+                flash.remove();
+            }, 300);
+        });
+    });
+
+    // Auto-dismiss after 5 seconds
+    const flashes = document.querySelectorAll('.flash');
+    flashes.forEach(flash => {
+        setTimeout(() => {
+            flash.style.transition = 'opacity 0.3s ease';
+            flash.style.opacity = '0';
+            setTimeout(() => {
+                flash.remove();
+            }, 300);
+        }, 5000);
+    });
+});
+    </script>
   </body>
 </html>

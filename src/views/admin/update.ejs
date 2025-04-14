@@ -17,13 +17,20 @@
         </ul>
     </nav>
 
-    <!-- Flash Messages -->
-    <% if (locals.success && success.length > 0) { %>
-        <div class="flash success"><%= success %></div>
-    <% } %>
-    <% if (locals.error && error.length > 0) { %>
-        <div class="flash error"><%= error %></div>
-    <% } %>
+    <div class="flash-container">
+        <% if (successMessage && successMessage.length > 0) { %>
+            <div class="flash flash-success">
+                <%= successMessage %>
+                <span class="flash-close">×</span>
+            </div>
+        <% } %>
+        <% if (errorMessage && errorMessage.length > 0) { %>
+            <div class="flash flash-error">
+                <%= errorMessage %>
+                <span class="flash-close">×</span>
+            </div>
+        <% } %>
+    </div>
 
     <!-- Update Form -->
     <h1>Update Profile</h1>
@@ -39,5 +46,34 @@
         <input type="file" name="photo" accept="image/*">
         <button type="submit">Update</button>
     </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const closeButtons = document.querySelectorAll('.flash-close');
+
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const flash = button.parentElement;
+            flash.style.transition = 'opacity 0.3s ease';
+            flash.style.opacity = '0';
+            setTimeout(() => {
+                flash.remove();
+            }, 300);
+        });
+    });
+
+    // Auto-dismiss after 5 seconds
+    const flashes = document.querySelectorAll('.flash');
+    flashes.forEach(flash => {
+        setTimeout(() => {
+            flash.style.transition = 'opacity 0.3s ease';
+            flash.style.opacity = '0';
+            setTimeout(() => {
+                flash.remove();
+            }, 300);
+        }, 5000);
+    });
+});
+    </script>
 </body>
 </html>

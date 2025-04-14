@@ -213,3 +213,78 @@ button:hover {
         min-height: 80px;
     }
 }
+
+/* Flash Message Styles */
+.flash-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 300px;
+}
+
+.flash {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.5s ease-in-out;
+    background: linear-gradient(135deg, #ff99cc, #ff66b3); /* Pink gradient */
+    border: 1px solid #ccffcc; /* Light green border */
+}
+
+.flash-success {
+    background: linear-gradient(135deg, #ccffcc, #99ff99); /* Light green gradient */
+    color: #333;
+    border: 1px solid #ff99cc; /* Pink border */
+}
+
+.flash-error {
+    background: linear-gradient(135deg, #ff6666, #ff3333); /* Red for errors */
+    border: 1px solid #ff99cc;
+}
+
+.flash-close {
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    transition: color 0.3s;
+}
+
+.flash-success .flash-close {
+    color: #333;
+}
+
+.flash-close:hover {
+    color: #ff99cc; /* Pink hover effect */
+}
+
+.flash-success .flash-close:hover {
+    color: #ff66b3;
+}
+
+/* Slide-in animation */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Heart detail */
+.flash::before {
+    content: '♥';
+    margin-right: 10px;
+    font-size: 18px;
+}

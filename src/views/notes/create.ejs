@@ -17,6 +17,21 @@
         </div>
     </nav>
 
+    <div class="flash-container">
+        <% if (successMessage && successMessage.length > 0) { %>
+            <div class="flash flash-success">
+                <%= successMessage %>
+                <span class="flash-close">×</span>
+            </div>
+        <% } %>
+        <% if (errorMessage && errorMessage.length > 0) { %>
+            <div class="flash flash-error">
+                <%= errorMessage %>
+                <span class="flash-close">×</span>
+            </div>
+        <% } %>
+    </div>
+
     <!-- Create Note Form -->
     <header class="form-header">
         <h1>Create a Note</h1>
@@ -25,12 +40,6 @@
         <form action="/notes/create" method="POST">
             <input type="text" name="title" placeholder="Title" required>
             <textarea name="content" placeholder="Content" required></textarea>
-            <select name="written_by_id" required>
-                <option value="" disabled selected>Select sender</option>
-                <% admins.forEach(admin => { %>
-                <option value="<%= admin.id %>"><%= admin.username %></option>
-                <% }) %>
-            </select>
             <select name="written_for_id" required>
                 <option value="" disabled selected>Select recipient</option>
                 <% admins.forEach(admin => { %>
@@ -40,5 +49,34 @@
             <button type="submit">Create</button>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const closeButtons = document.querySelectorAll('.flash-close');
+
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const flash = button.parentElement;
+            flash.style.transition = 'opacity 0.3s ease';
+            flash.style.opacity = '0';
+            setTimeout(() => {
+                flash.remove();
+            }, 300);
+        });
+    });
+
+    // Auto-dismiss after 5 seconds
+    const flashes = document.querySelectorAll('.flash');
+    flashes.forEach(flash => {
+        setTimeout(() => {
+            flash.style.transition = 'opacity 0.3s ease';
+            flash.style.opacity = '0';
+            setTimeout(() => {
+                flash.remove();
+            }, 300);
+        }, 5000);
+    });
+});
+    </script>
 </body>
 </html>

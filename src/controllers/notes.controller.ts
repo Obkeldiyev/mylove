@@ -108,19 +108,33 @@ export class NotesController {
 
     static async createNote(req: Request, res: Response, next: NextFunction) {
         try {
-            const { title, content, written_by_id, written_for_id } = req.body;
+            const { token } = req.cookies;
+            const { title, content, written_for_id } = req.body;
 
-            await client.notes.create({
-                data: {
-                    title,
-                    content,
-                    written_by_id,
-                    written_for_id
+            const data: any = verify(token, process.env.SECRET_KEY as string);
+
+            const checkAdmin = await client.admin.findUnique({
+                where: {
+                    id: data.id
                 }
             });
 
-            req.flash("success", "Note created successfully");
-            res.redirect("/notes");
+            if(checkAdmin){
+                await client.notes.create({
+                    data: {
+                        title,
+                        content,
+                        written_by_id: checkAdmin.id,
+                        written_for_id
+                    }
+                });
+    
+                req.flash("success", "Note created successfully");
+                res.redirect("/notes");
+            }else{
+                req.flash("error", "Your token required");
+                res.redirect("/")
+            }
         } catch (error: any) {
             next(new ErrorHandler(error.message, error.status));
         }
@@ -149,6 +163,10 @@ export class NotesController {
 
     static async updateNote(req: Request, res: Response, next: NextFunction) {
         try {
+            const { token } = req.cookies;
+            
+            const data: any = verify(token, process.env.SECRET_KEY as string);
+
             const { id } = req.params;
             const { title, content, written_by_id, written_for_id } = req.body;
 
@@ -156,23 +174,28 @@ export class NotesController {
                 where: { id: Number(id) }
             });
 
-            if (note) {
-                await client.notes.update({
-                    where: { id: Number(id) },
-                    data: {
-                        title,
-                        content,
-                        written_by_id,
-                        written_for_id
-                    }
-                });
-
-                req.flash("success", "Note updated successfully");
-                res.redirect(`/notes/${id}`);
-            } else {
-                req.flash("error", "Note not found");
-                res.redirect("/notes");
-            }
+            if(note?.written_by_id === data.id){
+                if (note) {
+                    await client.notes.update({
+                        where: { id: Number(id) },
+                        data: {
+                            title,
+                            content,
+                            written_by_id,
+                            written_for_id
+                        }
+                    });
+    
+                    req.flash("success", "Note updated successfully");
+                    res.redirect(`/notes/${id}`);
+                } else {
+                    req.flash("error", "Note not found");
+                    res.redirect("/notes");
+                }
+            }else{
+                req.flash("error", "You don't have access to edit this note");
+                res.redirect(`/notes/${id}`)
+            } 
         } catch (error: any) {
             next(new ErrorHandler(error.message, error.status));
         }
