@@ -7,6 +7,7 @@ import { mainPage } from "src/controllers/main.page.controller";
 const router: Router = Router();
 
 router.get("/", mainPage.get)
+router.get("/us", mainPage.getUs)
 router.use(adminRoutes);
 router.use(wishRoutes);
 router.use(noteRoutes);

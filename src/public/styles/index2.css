@@ -1,0 +1,393 @@
+/* Reset default margins and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* General body styles */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial,
+      sans-serif;
+    background: linear-gradient(to bottom right, #ff9a9e, #ffb3b3, #ffcccc);
+    color: #333;
+    min-height: 100vh;
+    padding: 20px 15px;
+    position: relative;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+  }
+  
+  /* Subtle static heart pattern */
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.pngkit.com/png/detail/296-2963394_love-heart-pattern-pink-heart-png.png');
+    background-size: 10%;
+    background-repeat: repeat;
+    opacity: 0.05;
+    z-index: -1;
+  }
+  
+  /* Animated hearts background */
+  .hearts-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden; /* Ensure hearts stay within bounds */
+  }
+  
+  .heart {
+    position: absolute;
+    font-size: 1.5rem;
+    color: #ff4d6a;
+    opacity: 0.3;
+    animation: float 10s infinite ease-in-out, fade 10s infinite ease-in-out;
+    will-change: transform, opacity; /* Optimize animation performance */
+  }
+  
+  /* Ensure hearts stay within viewport */
+  .heart {
+    left: clamp(5%, calc(5% + (90% * var(--random-left))), 95%);
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(100vh) rotate(0deg);
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateY(-100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes fade {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  /* Welcome header */
+  .welcome-header {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    text-align: center;
+    animation: slideIn 1s ease-out;
+  }
+  
+  .welcome-header h1 {
+    font-size: 2.5rem;
+    color: #ff4d6a;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .welcome-header p {
+    font-size: 1.2rem;
+    color: #333;
+    margin-top: 10px;
+  }
+  
+  /* Quote carousel */
+  .quote-carousel {
+    max-width: 800px;
+    margin: 0 auto 40px;
+    position: relative;
+  }
+  
+  .quote-slide {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #ff4d6a;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in;
+  }
+  
+  .quote-slide.active {
+    display: block;
+  }
+  
+  .quote-slide blockquote {
+    font-size: 1.2rem;
+    color: #ff4d6a;
+    font-style: italic;
+  }
+  
+  .quote-slide cite {
+    display: block;
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  /* Wishes showcase */
+  .wishes-showcase {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+  }
+  
+  .wishes-showcase h2 {
+    font-size: 2rem;
+    color: #ff4d6a;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: slideIn 1s ease-out;
+  }
+  
+  .wishes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 0 10px; /* Prevent grid from touching edges */
+  }
+  
+  .wish-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #ff4d6a;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 1s ease-out;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .wish-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .wish-card h3 {
+    font-size: 1.4rem;
+    color: #ff4d6a;
+    margin-bottom: 10px;
+  }
+  
+  .wish-card p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .wish-card .wish-author {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+  }
+  
+  /* Pulse effect on wish card */
+  .wish-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 100, 100, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    animation: pulse 4s infinite ease-in-out;
+  }
+  
+  @keyframes pulse {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.5);
+    }
+  }
+  
+  /* Call to action */
+  .cta-section {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    animation: fadeInUp 1s ease-out;
+  }
+  
+  .cta-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border: 2px solid #ff4d6a;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .cta-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 100, 100, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    animation: pulse 4s infinite ease-in-out;
+  }
+  
+  .cta-container h2 {
+    font-size: 1.8rem;
+    color: #ff4d6a;
+    margin-bottom: 10px;
+  }
+  
+  .cta-container p {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .cta-button {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ff4d6a;
+    background-color: #ffffff;
+    border: 2px solid #ff4d6a;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .cta-button:hover {
+    background-color: #90ee90;
+    color: #ffffff;
+    border-color: #90ee90;
+    transform: scale(1.05);
+  }
+  
+  .cta-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+    z-index: -1;
+  }
+  
+  .cta-button:hover::after {
+    width: 200px;
+    height: 200px;
+  }
+  
+  /* Animations */
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive design */
+  @media (max-width: 600px) {
+    body {
+      padding: 15px 10px;
+    }
+  
+    .welcome-header h1 {
+      font-size: 1.8rem;
+    }
+  
+    .welcome-header p {
+      font-size: 1rem;
+    }
+  
+    .quote-slide blockquote {
+      font-size: 1rem;
+    }
+  
+    .quote-slide cite {
+      font-size: 0.9rem;
+    }
+  
+    .wishes-showcase h2 {
+      font-size: 1.5rem;
+    }
+  
+    .wish-card h3 {
+      font-size: 1.2rem;
+    }
+  
+    .wish-card p {
+      font-size: 0.9rem;
+    }
+  
+    .cta-container h2 {
+      font-size: 1.5rem;
+    }
+  
+    .cta-container p {
+      font-size: 1rem;
+    }
+  
+    .cta-button {
+      font-size: 0.9rem;
+      padding: 10px 20px;
+    }
+  }

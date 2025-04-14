@@ -1,20 +1,17 @@
-/* Reset default margins and padding */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* General body styles */
 body {
     font-family: 'Arial', sans-serif;
     background: linear-gradient(to bottom right, #ff9a9e, #ffb3b3, #ffcccc);
     color: #333;
     min-height: 100vh;
-    padding: 80px 20px 20px; /* Top padding to avoid navbar overlap */
+    padding: 80px 20px 20px;
 }
 
-/* Navbar styling */
 .navbar {
     width: 100%;
     background-color: rgba(255, 255, 255, 0.9);

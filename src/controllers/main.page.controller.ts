@@ -10,6 +10,13 @@ const client = new PrismaClient();
 export class mainPage {
     static async get(req: Request, res: Response, next: NextFunction){
         try {
+            res.render("index")
+        } catch (error: any) {
+            next(new ErrorHandler(error.message, error.status))
+        }
+    }
+    static async getUs(req: Request, res: Response, next: NextFunction){
+        try {
             res.render("main")
         } catch (error: any) {
             next(new ErrorHandler(error.message, error.status))
