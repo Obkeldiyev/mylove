@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { NotesController } from "src/controllers/notes.controller";
-import { verifyToken } from "src/middlewares/verifyToken";
+import { NotesController } from "../controllers/notes.controller";
+import { verifyToken } from "../middlewares/verifyToken";
 
 const noteRoutes = Router();
 

@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { AdminAuthController } from "src/controllers/admin.auth.controller";
-import { AdminController } from "src/controllers/admin.controller";
+import { AdminAuthController } from "../controllers/admin.auth.controller";
+import { AdminController } from "../controllers/admin.controller";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { verifyToken } from "src/middlewares/verifyToken";
+import { verifyToken } from "../middlewares/verifyToken";
 
 const uploadDir = path.join(process.cwd(), "src", "public", "uploads");
 if (!fs.existsSync(uploadDir)) {

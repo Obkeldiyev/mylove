@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ChatController } from "../controllers/chat.controller";
 import { verifyToken } from "../middlewares/verifyToken";
-import { upload } from "src/config/multer";
+import { upload } from "../config/multer";
 
 const chatRoutes = Router();
 

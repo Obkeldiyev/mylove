@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { DiaryController } from "src/controllers/diary.controller";
-import { verifyToken } from "src/middlewares/verifyToken";
+import { DiaryController } from "../controllers/diary.controller";
+import { verifyToken } from "../middlewares/verifyToken";
 
 const diaryRoutes: Router = Router();
 
