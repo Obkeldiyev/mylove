@@ -15,7 +15,6 @@
       <p>Two hearts, one journey — dreaming, growing, and loving together every day.</p>
     </header>
     
-    <!-- Quote Carousel -->
     <section class="quote-carousel">
       <div class="quote-slide active">
         <blockquote>
@@ -36,7 +35,6 @@
       </div>
     </section>
     
-    <!-- Wishes Showcase -->
     <section class="wishes-showcase">
       <h2>Our Dreams Together</h2>
       <div class="wishes-grid">
@@ -63,7 +61,6 @@
       </div>
     </section>
     
-    <!-- Call to Action -->
     <section class="cta-section">
       <div class="cta-container">
         <h2>Our love</h2>
@@ -75,21 +72,19 @@
       </div>
     </section>    
     <script>
-        // Generate animated hearts
 document.addEventListener('DOMContentLoaded', () => {
   const heartsContainer = document.querySelector('.hearts-background');
   for (let i = 0; i < 15; i++) {
     const heart = document.createElement('div');
     heart.className = 'heart';
     heart.innerHTML = '❤️';
-    heart.style.setProperty('--random-left', Math.random()); // For CSS clamp
+    heart.style.setProperty('--random-left', Math.random());
     heart.style.animationDuration = `${8 + Math.random() * 4}s`;
     heart.style.animationDelay = `${Math.random() * 4}s`;
     heart.style.fontSize = `${1 + Math.random() * 0.5}rem`;
     heartsContainer.appendChild(heart);
   }
 
-  // Quote carousel
   const slides = document.querySelectorAll('.quote-slide');
   let currentSlide = 0;
 
@@ -105,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   showSlide(currentSlide);
-  setInterval(nextSlide, 5000); // Change quote every 5 seconds
+  setInterval(nextSlide, 5000);
 });
     </script>
   </body>
