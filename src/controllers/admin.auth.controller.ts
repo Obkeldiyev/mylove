@@ -1,4 +1,4 @@
-import { ErrorHandler } from "@errors";
+import { ErrorHandler } from "../middlewares/errorHandler.middleware";
 import { Admin, PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
