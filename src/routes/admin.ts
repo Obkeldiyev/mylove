@@ -42,8 +42,8 @@ adminRoutes.post("/login", AdminAuthController.login);
 adminRoutes.get("/profile", verifyToken, AdminController.getProfile);
 adminRoutes.get("/all", verifyToken, AdminController.getAllAdmins);
 adminRoutes.get("/update", verifyToken, AdminController.getUpdateProfilePage);
-adminRoutes.get("/create", verifyToken, AdminController.getCreateAdminPage);
-adminRoutes.post("/create", verifyToken, upload.single("photo"), AdminController.createAdmin);
+adminRoutes.get("/create", AdminController.getCreateAdminPage);
+adminRoutes.post("/create", upload.single("photo"), AdminController.createAdmin);
 adminRoutes.post("/update", verifyToken, upload.single("photo"), AdminController.updateProfile);
 
 export default adminRoutes;
