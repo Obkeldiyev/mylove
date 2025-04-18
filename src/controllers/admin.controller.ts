@@ -126,7 +126,7 @@ export class AdminController {
             });
 
             if(profile){
-                if(profile.username === username){
+                if(profile_photo !== null){
                     await client.admin.update({
                         where: {
                             id: profile.id
@@ -136,19 +136,35 @@ export class AdminController {
                             second_name,
                             username,
                             password,
-                            birth_year,
+                            birth_year: Number(birth_year),
                             birth_month,
-                            birth_day,
+                            birth_day: Number(birth_day),
                             about,
                             profile_photo,
                         }
                     });
-
+    
                     req.flash("success", "Profile updated successfully");
                     res.redirect("/profile");
                 }else{
-                    req.flash("error", "Something went wrong");
-                    res.redirect("/login");
+                    await client.admin.update({
+                        where: {
+                            id: profile.id
+                        },
+                        data: {
+                            first_name,
+                            second_name,
+                            username,
+                            password,
+                            birth_year: Number(birth_year),
+                            birth_month,
+                            birth_day: Number(birth_day),
+                            about,
+                        }
+                    });
+    
+                    req.flash("success", "Profile updated successfully");
+                    res.redirect("/profile");
                 }
             }else{
                 req.flash("error", "This profile does not exists");

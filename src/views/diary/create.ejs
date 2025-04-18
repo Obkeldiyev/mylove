@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Diary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(to bottom right, #ff9a9e, #ffb3b3, #ffcccc);
+            color: #333;
+            min-height: 100vh;
+            padding: 60px 15px 15px;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.pngkit.com/png/detail/296-2963394_love-heart-pattern-pink-heart-png.png');
+            background-size: 10%;
+            background-repeat: repeat;
+            opacity: 0.05;
+            z-index: -1;
+        }
+        .navbar {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .nav-heart {
+            font-size: 1.6rem;
+            color: #ff4d6a;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+        .nav-heart:hover {
+            color: #90ee90;
+        }
+        .nav-links {
+            display: flex;
+            flex-grow: 1;
+            justify-content: center;
+            gap: 20px;
+        }
+        .nav-button {
+            text-decoration: none;
+            color: #ff4d6a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border: 1px solid #ff4d6a;
+            border-radius: 4px;
+            background-color: #ffffff;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .nav-button:hover {
+            background-color: #90ee90;
+            color: #ffffff;
+            border-color: #90ee90;
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border: 1px solid #ffe6e6;
+            border-radius: 4px;
+        }
+        .form-container h1 {
+            font-size: 1.8rem;
+            color: #ff4d6a;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .form-container label {
+            display: block;
+            font-size: 0.95rem;
+            color: #ff4d6a;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .form-container input,
+        .form-container textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ff4d6a;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: #ffffff;
+            transition: border-color 0.2s;
+        }
+        .form-container input:focus,
+        .form-container textarea:focus {
+            outline: none;
+            border-color: #90ee90;
+        }
+        .form-container button {
+            background-color: #ffffff;
+            color: #ff4d6a;
+            padding: 8px 16px;
+            border: 1px solid #ff4d6a;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .form-container button:hover {
+            background-color: #90ee90;
+            color: #ffffff;
+            border-color: #90ee90;
+        }
+        @media (max-width: 500px) {
+            body {
+                padding: 50px 10px 10px;
+            }
+            .navbar {
+                padding: 8px;
+            }
+            .nav-links {
+                gap: 10px;
+                justify-content: flex-end;
+            }
+            .nav-button {
+                font-size: 0.85rem;
+                padding: 5px 10px;
+            }
+            .form-container {
+                padding: 15px;
+            }
+            .form-container h1 {
+                font-size: 1.5rem;
+            }
+            .form-container button {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+        .flash-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 300px;
+        }
+        .flash {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.5s ease-in-out;
+            background: linear-gradient(135deg, #ff99cc, #ff66b3);
+            border: 1px solid #ccffcc;
+        }
+        .flash-success {
+            background: linear-gradient(135deg, #ccffcc, #99ff99);
+            color: #333;
+            border: 1px solid #ff99cc;
+        }
+        .flash-error {
+            background: linear-gradient(135deg, #ff6666, #ff3333);
+            border: 1px solid #ff99cc;
+        }
+        .flash-close {
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            transition: color 0.3s;
+        }
+        .flash-success .flash-close {
+            color: #333;
+        }
+        .flash-close:hover {
+            color: #ff99cc;
+        }
+        .flash-success .flash-close:hover {
+            color: #ff66b3;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        .flash::before {
+            content: '♥';
+            margin-right: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="nav-heart">❤️</a>
+        <div class="nav-links">
+            <a href="/notes" class="nav-button">Notes</a>
+            <a href="/profile" class="nav-button">Profile</a>
+            <a href="/wishes" class="nav-button">Wishes</a>
+            <a href="/diary" class="nav-button">Diary</a>
+            <a href="/chat" class="nav-button">Chat</a>
+        </div>
+    </nav>
+    <div class="flash-container">
+        <% if (successMessage && successMessage.length > 0) { %>
+        <div class="flash flash-success">
+          <%= successMessage %>
+          <span class="flash-close">×</span>
+        </div>
+        <% } %> <% if (errorMessage && errorMessage.length > 0) { %>
+        <div class="flash flash-error">
+          <%= errorMessage %>
+          <span class="flash-close">×</span>
+        </div>
+        <% } %>
+      </div>
+    <div class="form-container">
+        <h1>Create a New Diary</h1>
+        <form action="/diary/create" method="POST">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+            <label for="content">Content</label>
+            <textarea id="content" name="content" rows="6" required></textarea>
+            <label for="ranking">Rating (1-10)</label>
+            <input type="number" id="ranking" name="ranking" min="1" max="10" value="5" required>
+            <button type="submit">Create Diary</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const closeButtons = document.querySelectorAll('.flash-close');
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const flash = button.parentElement;
+                    flash.style.transition = 'opacity 0.3s ease';
+                    flash.style.opacity = '0';
+                    setTimeout(() => {
+                        flash.remove();
+                    }, 300);
+                });
+            });
+            const flashes = document.querySelectorAll('.flash');
+            flashes.forEach(flash => {
+                setTimeout(() => {
+                    flash.style.transition = 'opacity 0.3s ease';
+                    flash.style.opacity = '0';
+                    setTimeout(() => {
+                        flash.remove();
+                    }, 300);
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>

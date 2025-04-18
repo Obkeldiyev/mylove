@@ -14,6 +14,8 @@
             <a href="/notes" class="nav-button">Notes</a>
             <a href="/profile" class="nav-button">Profile</a>
             <a href="/wishes" class="nav-button">Wishes</a>
+            <a href="/diary" class="nav-button">Diary</a>
+            <a href="/chat" class="nav-button">Chat</a>
         </div>
     </nav>
     <div class="flash-container">
@@ -40,7 +42,8 @@
         <% if (notes.length === 0) { %>
             <p class="no-notes">No notes yet. Create one!</p>
         <% } else { %>
-            <% notes.forEach(note => { %>
+            <!-- Render notes from last index to first (newest first) -->
+            <% notes.slice().reverse().forEach(note => { %>
             <div class="note-row <%= note.seen ? 'seen' : 'unseen' %>">
                 <div class="note-content">
                     <a href="/notes/<%= note.id %>" class="note-title"><%= note.title %></a>
@@ -59,31 +62,31 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-    const closeButtons = document.querySelectorAll('.flash-close');
+            const closeButtons = document.querySelectorAll('.flash-close');
 
-    closeButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const flash = button.parentElement;
-            flash.style.transition = 'opacity 0.3s ease';
-            flash.style.opacity = '0';
-            setTimeout(() => {
-                flash.remove();
-            }, 300);
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const flash = button.parentElement;
+                    flash.style.transition = 'opacity 0.3s ease';
+                    flash.style.opacity = '0';
+                    setTimeout(() => {
+                        flash.remove();
+                    }, 300);
+                });
+            });
+
+            // Auto-dismiss after 5 seconds
+            const flashes = document.querySelectorAll('.flash');
+            flashes.forEach(flash => {
+                setTimeout(() => {
+                    flash.style.transition = 'opacity 0.3s ease';
+                    flash.style.opacity = '0';
+                    setTimeout(() => {
+                        flash.remove();
+                    }, 300);
+                }, 5000);
+            });
         });
-    });
-
-    // Auto-dismiss after 5 seconds
-    const flashes = document.querySelectorAll('.flash');
-    flashes.forEach(flash => {
-        setTimeout(() => {
-            flash.style.transition = 'opacity 0.3s ease';
-            flash.style.opacity = '0';
-            setTimeout(() => {
-                flash.remove();
-            }, 300);
-        }, 5000);
-    });
-});
     </script>
 </body>
 </html>

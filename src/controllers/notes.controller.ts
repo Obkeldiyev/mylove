@@ -67,25 +67,52 @@ export class NotesController {
                         res.redirect("/notes");
                     }
                 }else{
-                    const note = await client.notes.update({
+                    const checkNote = await client.notes.findUnique({
                         where: {
                             id: Number(id)
-                        },
-                        data: {
-                            seen: false
-                        },
-                        include: {
-                            written_by: true,
-                            written_for: true
                         }
                     });
-        
-                    if (note) {
-                        req.flash("success", "Note viewed");
-                        res.render("notes/one", { note });
-                    } else {
-                        req.flash("error", "Note not found");
-                        res.redirect("/notes");
+
+                    if(checkNote?.seen == true){
+                        const note = await client.notes.update({
+                            where: {
+                                id: Number(id)
+                            },
+                            data: {
+                                seen: true
+                            },
+                            include: {
+                                written_by: true,
+                                written_for: true
+                            }
+                        });
+                        if (note) {
+                            req.flash("success", "Note viewed");
+                            res.render("notes/one", { note });
+                        } else {
+                            req.flash("error", "Note not found");
+                            res.redirect("/notes");
+                        }
+                    }else{
+                        const note = await client.notes.update({
+                            where: {
+                                id: Number(id)
+                            },
+                            data: {
+                                seen: false
+                            },
+                            include: {
+                                written_by: true,
+                                written_for: true
+                            }
+                        });
+                        if (note) {
+                            req.flash("success", "Note viewed");
+                            res.render("notes/one", { note });
+                        } else {
+                            req.flash("error", "Note not found");
+                            res.redirect("/notes");
+                        }
                     }
                 }
             }else{
