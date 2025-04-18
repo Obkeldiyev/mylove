@@ -2,7 +2,7 @@ import express, { Application } from "express";
 import dotenv from "dotenv";
 import router from "./routes";
 import * as path from "path";
-import { ErrorHandlerMiddleware } from "@middlewares";
+import { ErrorHandlerMiddleware } from "./middlewares/errorHandler.middleware";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash";
