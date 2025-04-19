@@ -22,7 +22,8 @@ export class ChatController {
 
       const formattedMessages = messages.map(msg => ({
         username: msg.sender.username,
-        message: msg.content
+        message: msg.content,
+        createdAt: msg.createdAt.toLocaleString() // format to readable date-time
       }));
 
       res.render("chat/chat", {

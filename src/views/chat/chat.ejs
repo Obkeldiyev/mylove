@@ -176,7 +176,10 @@
   <h2>Welcome to Chat, <%= username %></h2>
   <div id="chat-box">
     <% messages.forEach(msg => { %>
-      <div class="message"><strong><%= msg.username %></strong>: <%= msg.message %></div>
+      <div class="message">
+        <strong><%= msg.username %></strong>: <%= msg.message %>  
+        <small style="float:right;color:#999;font-size:0.8em;"><%= msg.createdAt %></small>
+      </div>
     <% }) %>
   </div>
   <div id="typing"></div>
@@ -209,12 +212,15 @@
     });
 
     socket.on("chat message", (data) => {
-      const div = document.createElement("div");
-      div.classList.add("message");
-      div.innerHTML = `<strong>${data.username}</strong>: ${data.message}`;
-      chatBox.appendChild(div);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    });
+  const div = document.createElement("div");
+  div.classList.add("message");
+  div.innerHTML = `
+    <strong>${data.username}</strong>: ${data.message}
+    <small style="float:right;color:#999;font-size:0.8em;">${data.createdAt}</small>
+  `;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
+});
 
     socket.on("typing", (user) => {
       typingDiv.textContent = `${user} is typing...`;

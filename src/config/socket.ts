@@ -11,6 +11,7 @@ export function initSocket(server: any) {
 
     socket.on("join", (username: string) => {
       socket.data.username = username;
+
       socket.broadcast.emit("chat message", {
         username: "System",
         message: `${username} joined the chat.`,
@@ -37,6 +38,13 @@ export function initSocket(server: any) {
     });
 
     socket.on("disconnect", () => {
+      if (socket.data.username) {
+        socket.broadcast.emit("chat message", {
+          username: "System",
+          message: `${socket.data.username} left the chat.`,
+        });
+      }
+
       console.log("🔴 User disconnected");
     });
   });
