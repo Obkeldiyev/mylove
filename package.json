@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "npx prisma migrate deploy && tsc",
-    "start": "node dist/index.js",
+    "build": "tsc",
+    "start": "npx prisma migrate deploy && node dist/index.js",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "postinstall": "npm run build"
