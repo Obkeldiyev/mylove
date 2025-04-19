@@ -21,7 +21,7 @@ export class DiaryController {
             });
 
             if(checkAdmin){
-                const diary = client.diary.findMany({
+                const diary = await client.diary.findMany({
                     where: {
                         adminId: data.id
                     }

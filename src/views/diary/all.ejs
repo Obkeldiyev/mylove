@@ -87,7 +87,11 @@
             color: #ff4d6a;
             font-weight: 600;
         }
-        .create-button {
+        .inbox-header .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .create-button, .my-diary-button {
             text-decoration: none;
             background-color: #ffffff;
             color: #ff4d6a;
@@ -98,7 +102,7 @@
             font-weight: 600;
             transition: background-color 0.2s, color 0.2s, border-color 0.2s;
         }
-        .create-button:hover {
+        .create-button:hover, .my-diary-button:hover {
             background-color: #90ee90;
             color: #ffffff;
             border-color: #90ee90;
@@ -194,7 +198,11 @@
             .inbox-header h1 {
                 font-size: 1.5rem;
             }
-            .create-button {
+            .inbox-header .button-group {
+                flex-direction: column;
+                width: 100%;
+            }
+            .create-button, .my-diary-button {
                 padding: 7px 14px;
                 font-size: 0.85rem;
                 width: 100%;
@@ -308,7 +316,10 @@
       </div>
     <header class="inbox-header">
         <h1>Diary Inbox</h1>
-        <a href="/diary/create" class="create-button">New Diary</a>
+        <div class="button-group">
+            <a href="/diary/create" class="create-button">New Diary</a>
+            <a href="/diary/my" class="my-diary-button">My Diary</a>
+        </div>
     </header>
     <div class="inbox-container">
         <% if (diary && diary.length) { %>

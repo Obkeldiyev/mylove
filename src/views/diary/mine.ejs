@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Diaries</title>
+    <title>All Diaries</title>
     <style>
         * {
             margin: 0;
@@ -87,7 +87,11 @@
             color: #ff4d6a;
             font-weight: 600;
         }
-        .create-button {
+        .inbox-header .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .create-button, .my-diary-button {
             text-decoration: none;
             background-color: #ffffff;
             color: #ff4d6a;
@@ -98,7 +102,7 @@
             font-weight: 600;
             transition: background-color 0.2s, color 0.2s, border-color 0.2s;
         }
-        .create-button:hover {
+        .create-button:hover, .my-diary-button:hover {
             background-color: #90ee90;
             color: #ffffff;
             border-color: #90ee90;
@@ -160,25 +164,6 @@
             text-overflow: ellipsis;
             max-width: 150px;
         }
-        .diary-actions {
-            font-size: 0.85rem;
-            color: #ff4d6a;
-            font-weight: 600;
-            min-width: 120px;
-            text-align: right;
-        }
-        .diary-actions a, .diary-actions button {
-            color: #ff4d6a;
-            text-decoration: none;
-            margin-left: 10px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .diary-actions a:hover, .diary-actions button:hover {
-            color: #90ee90;
-        }
         .no-diaries {
             text-align: center;
             font-size: 1rem;
@@ -213,7 +198,11 @@
             .inbox-header h1 {
                 font-size: 1.5rem;
             }
-            .create-button {
+            .inbox-header .button-group {
+                flex-direction: column;
+                width: 100%;
+            }
+            .create-button, .my-diary-button {
                 padding: 7px 14px;
                 font-size: 0.85rem;
                 width: 100%;
@@ -235,10 +224,6 @@
             }
             .diary-meta .rating {
                 max-width: 100%;
-            }
-            .diary-actions {
-                text-align: left;
-                margin-top: 5px;
             }
         }
         .flash-container {
@@ -330,8 +315,11 @@
         <% } %>
       </div>
     <header class="inbox-header">
-        <h1>My Diaries</h1>
-        <a href="/diary/create" class="create-button">New Diary</a>
+        <h1>Diary Inbox</h1>
+        <div class="button-group">
+            <a href="/diary/create" class="create-button">New Diary</a>
+            <a href="/diary/my" class="my-diary-button">My Diary</a>
+        </div>
     </header>
     <div class="inbox-container">
         <% if (diary && diary.length) { %>
@@ -342,13 +330,6 @@
                         <div class="diary-meta">
                             <span class="rating">Rating: <%= d.ranking %>/10</span>
                         </div>
-                    </div>
-                    <div class="diary-actions">
-                        <a href="/diary/<%= d.id %>">View</a>
-                        <a href="/diary/update/<%= d.id %>">Edit</a>
-                        <form action="/diary/delete/<%= d.id %>" method="POST" style="display: inline;">
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete this diary?')">Delete</button>
-                        </form>
                     </div>
                 </div>
             <% }) %>
