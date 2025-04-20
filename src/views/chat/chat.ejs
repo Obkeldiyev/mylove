@@ -182,6 +182,26 @@
           padding: 0.6rem 1rem;
         }
       }
+      #scroll-down-btn {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        background: #e91e63;
+        color: white;
+        border: none;
+        padding: 10px 14px;
+        font-size: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        display: none;
+        z-index: 1000;
+        transition: background 0.3s ease;
+      }
+
+      #scroll-down-btn:hover {
+        background: #c2185b;
+      }
     </style>
   </head>
   <body>
@@ -208,6 +228,8 @@
       <button id="send-btn" type="button">Send</button>
     </div>
 
+    <button id="scroll-down-btn" title="Scroll to latest">⬇️</button>
+
     <script>
       const socket = io();
       const username = "<%= username %>";
@@ -215,8 +237,8 @@
       const input = document.getElementById("message-input");
       const sendBtn = document.getElementById("send-btn");
       const typingDiv = document.getElementById("typing");
+      const scrollDownBtn = document.getElementById("scroll-down-btn");
     
-      // Request permission on page load
       if (Notification && Notification.permission !== "granted") {
         Notification.requestPermission();
       }
@@ -225,7 +247,7 @@
         if (Notification.permission === "granted") {
           new Notification(title, {
             body,
-            icon: "/icons/icon-192x192.png"
+            icon: "/icons/icon-192x192.png",
           });
         }
       }
@@ -238,7 +260,9 @@
           socket.emit("chat message", { message, username });
           input.value = "";
           typingDiv.textContent = "";
-          setTimeout(() => input.focus(), 50);
+          setTimeout(() => {
+            input.focus();
+          }, 50);
         }
       }
     
@@ -249,6 +273,11 @@
           e.preventDefault();
           sendMessage();
         }
+      });
+    
+      document.getElementById("chat-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        sendMessage();
       });
     
       input.addEventListener("input", () => {
@@ -264,9 +293,14 @@
           <small style="float: right; color: #999; font-size: 0.8em">${timestamp}</small>
         `;
         chatBox.appendChild(div);
-        chatBox.scrollTop = chatBox.scrollHeight;
     
-        // Show notification if the sender is not the current user
+        const isUserNearBottom =
+          chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
+    
+        if (data.username === username || isUserNearBottom) {
+          scrollToBottom();
+        }
+    
         if (data.username !== username) {
           showNotification(data.username, data.message);
         }
@@ -278,7 +312,20 @@
           setTimeout(() => (typingDiv.textContent = ""), 2000);
         }
       });
-    </script>
     
+      function scrollToBottom() {
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    
+      scrollToBottom();
+    
+      chatBox.addEventListener("scroll", () => {
+        const nearBottom =
+          chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
+        scrollDownBtn.style.display = nearBottom ? "none" : "block";
+      });
+    
+      scrollDownBtn.addEventListener("click", scrollToBottom);
+    </script>    
   </body>
 </html>
