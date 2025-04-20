@@ -1,233 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Room</title>
-  <script src="/socket.io/socket.io.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Room</title>
+    <link rel="manifest" href="../../../manifest.json" />
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #f9e1e6, #fce7ec);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-    }
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #f9e1e6, #fce7ec);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+      }
 
-    #home-btn {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      font-size: 24px;
-      color: #e91e63;
-      cursor: pointer;
-      z-index: 1000;
-      transition: transform 0.3s ease, color 0.3s ease;
-    }
-
-    #home-btn:hover {
-      color: #c2185b;
-      transform: scale(1.15) rotate(5deg);
-    }
-
-    h2 {
-      text-align: center;
-      color: #d81b60;
-      font-size: clamp(1.5rem, 5vw, 2rem);
-      padding: 1rem;
-      font-weight: 600;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      animation: pulse 3s infinite ease-in-out;
-    }
-
-    #chat-box {
-      flex: 1;
-      margin: 1rem;
-      padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-      overflow-y: auto;
-      max-height: 70vh;
-      scroll-behavior: smooth;
-    }
-
-    .message {
-      margin-bottom: 1rem;
-      padding: 0.75rem 1rem;
-      border-radius: 12px;
-      background: linear-gradient(145deg, #fff0f3, #ffe4e9);
-      animation: slideIn 0.3s ease-out;
-      font-size: clamp(0.9rem, 2.5vw, 1rem);
-      line-height: 1.4;
-      word-wrap: break-word;
-    }
-
-    .message strong {
-      color: #c2185b;
-      font-weight: 600;
-    }
-
-    #typing {
-      font-style: italic;
-      color: #f06292;
-      padding: 0.5rem 1.5rem;
-      min-height: 1.5rem;
-      font-size: clamp(0.85rem, 2vw, 0.9rem);
-    }
-
-    #chat-form {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05);
-      border-radius: 0 0 20px 20px;
-      margin: 0 1rem 1rem;
-    }
-
-    #message-input {
-      flex: 1;
-      padding: 0.75rem 1rem;
-      border: 2px solid #f48fb1;
-      border-radius: 20px;
-      outline: none;
-      font-size: clamp(0.9rem, 2.5vw, 1rem);
-      transition: border-color 0.3s ease, transform 0.3s ease;
-      background: #fff;
-    }
-
-    #message-input:focus {
-      border-color: #e91e63;
-      transform: translateY(-2px);
-    }
-
-    #send-btn {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      background: #e91e63;
-      color: white;
-      font-size: clamp(0.9rem, 2.5vw, 1rem);
-      border-radius: 20px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-
-    #send-btn:hover {
-      background: #c2185b;
-      transform: translateY(-2px);
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(-10px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-      100% { transform: scale(1); }
-    }
-
-    /* Mobile-specific adjustments */
-    @media (max-width: 600px) {
       #home-btn {
-        font-size: 20px;
-        top: 10px;
-        left: 10px;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        font-size: 24px;
+        color: #e91e63;
+        cursor: pointer;
+        z-index: 1000;
+        transition: transform 0.3s ease, color 0.3s ease;
+      }
+
+      #home-btn:hover {
+        color: #c2185b;
+        transform: scale(1.15) rotate(5deg);
       }
 
       h2 {
-        padding: 0.75rem;
+        text-align: center;
+        color: #d81b60;
+        font-size: clamp(1.5rem, 5vw, 2rem);
+        padding: 1rem;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        animation: pulse 3s infinite ease-in-out;
       }
 
       #chat-box {
-        margin: 0.5rem;
-        padding: 1rem;
-        max-height: 65vh;
+        flex: 1;
+        margin: 1rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        overflow-y: auto;
+        max-height: 70vh;
+        scroll-behavior: smooth;
+      }
+
+      .message {
+        margin-bottom: 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        background: linear-gradient(145deg, #fff0f3, #ffe4e9);
+        animation: slideIn 0.3s ease-out;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        line-height: 1.4;
+        word-wrap: break-word;
+      }
+
+      .message strong {
+        color: #c2185b;
+        font-weight: 600;
+      }
+
+      #typing {
+        font-style: italic;
+        color: #f06292;
+        padding: 0.5rem 1.5rem;
+        min-height: 1.5rem;
+        font-size: clamp(0.85rem, 2vw, 0.9rem);
       }
 
       #chat-form {
-        margin: 0 0.5rem 0.5rem;
-        padding: 0.75rem;
-        flex-wrap: wrap;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05);
+        border-radius: 0 0 20px 20px;
+        margin: 0 1rem 1rem;
       }
 
       #message-input {
-        padding: 0.6rem;
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 2px solid #f48fb1;
+        border-radius: 20px;
+        outline: none;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        transition: border-color 0.3s ease, transform 0.3s ease;
+        background: #fff;
+      }
+
+      #message-input:focus {
+        border-color: #e91e63;
+        transform: translateY(-2px);
       }
 
       #send-btn {
-        padding: 0.6rem 1rem;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        background: #e91e63;
+        color: white;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.3s ease;
       }
-    }
-  </style>
-</head>
-<body>
-  <a href="/profile" id="home-btn" title="Back to Profile">♥</a>
-  <h2>Welcome to Chat, <%= username %></h2>
-  <div id="chat-box">
-    <% messages.forEach(msg => { %>
+
+      #send-btn:hover {
+        background: #c2185b;
+        transform: translateY(-2px);
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Mobile-specific adjustments */
+      @media (max-width: 600px) {
+        #home-btn {
+          font-size: 20px;
+          top: 10px;
+          left: 10px;
+        }
+
+        h2 {
+          padding: 0.75rem;
+        }
+
+        #chat-box {
+          margin: 0.5rem;
+          padding: 1rem;
+          max-height: 65vh;
+        }
+
+        #chat-form {
+          margin: 0 0.5rem 0.5rem;
+          padding: 0.75rem;
+          flex-wrap: wrap;
+        }
+
+        #message-input {
+          padding: 0.6rem;
+        }
+
+        #send-btn {
+          padding: 0.6rem 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/profile" id="home-btn" title="Back to Profile">♥</a>
+    <h2>Welcome to Chat, <%= username %></h2>
+    <div id="chat-box">
+      <% messages.forEach(msg => { %>
       <div class="message">
-        <strong><%= msg.username %></strong>: <%= msg.message %>  
-        <small style="float:right;color:#999;font-size:0.8em;"><%= msg.createdAt %></small>
+        <strong><%= msg.username %></strong>: <%= msg.message %>
+        <small style="float: right; color: #999; font-size: 0.8em"
+          ><%= msg.createdAt %></small
+        >
       </div>
-    <% }) %>
-  </div>
-  <div id="typing"></div>
-  <form id="chat-form">
-    <input id="message-input" type="text" placeholder="Type a message..." autocomplete="off" />
-    <button id="send-btn">Send</button>
-  </form>
+      <% }) %>
+    </div>
+    <div id="typing"></div>
+    <div id="chat-form">
+      <input
+        id="message-input"
+        type="text"
+        placeholder="Type a message..."
+        autocomplete="off"
+      />
+      <button id="send-btn" type="button">Send</button>
+    </div>
 
-  <script>
-    const socket = io();
-    const username = "<%= username %>";
-    const chatBox = document.getElementById("chat-box");
-    const form = document.getElementById("chat-form");
-    const input = document.getElementById("message-input");
-    const typingDiv = document.getElementById("typing");
-
-    socket.emit("join", username);
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (input.value.trim()) {
-        socket.emit("chat message", { message: input.value, username });
-        input.value = "";
-        typingDiv.textContent = "";
+    <script>
+      const socket = io();
+      const username = "<%= username %>";
+      const chatBox = document.getElementById("chat-box");
+      const input = document.getElementById("message-input");
+      const sendBtn = document.getElementById("send-btn");
+      const typingDiv = document.getElementById("typing");
+    
+      // Request permission on page load
+      if (Notification && Notification.permission !== "granted") {
+        Notification.requestPermission();
       }
-    });
-
-    input.addEventListener("input", () => {
-      socket.emit("typing", username);
-    });
-
-    socket.on("chat message", (data) => {
-  const div = document.createElement("div");
-  div.classList.add("message");
-  div.innerHTML = `
-    <strong>${data.username}</strong>: ${data.message}
-    <small style="float:right;color:#999;font-size:0.8em;">${data.createdAt}</small>
-  `;
-  chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
-});
-
-    socket.on("typing", (user) => {
-      typingDiv.textContent = `${user} is typing...`;
-      setTimeout(() => {
-        typingDiv.textContent = "";
-      }, 2000);
-    });
-  </script>
-</body>
+    
+      function showNotification(title, body) {
+        if (Notification.permission === "granted") {
+          new Notification(title, {
+            body,
+            icon: "/icons/icon-192x192.png"
+          });
+        }
+      }
+    
+      socket.emit("join", username);
+    
+      function sendMessage() {
+        const message = input.value.trim();
+        if (message) {
+          socket.emit("chat message", { message, username });
+          input.value = "";
+          typingDiv.textContent = "";
+          setTimeout(() => input.focus(), 50);
+        }
+      }
+    
+      sendBtn.addEventListener("click", sendMessage);
+    
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    
+      input.addEventListener("input", () => {
+        socket.emit("typing", username);
+      });
+    
+      socket.on("chat message", (data) => {
+        const div = document.createElement("div");
+        div.classList.add("message");
+        const timestamp = new Date().toLocaleTimeString();
+        div.innerHTML = `
+          <strong>${data.username}</strong>: ${data.message}
+          <small style="float: right; color: #999; font-size: 0.8em">${timestamp}</small>
+        `;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    
+        // Show notification if the sender is not the current user
+        if (data.username !== username) {
+          showNotification(data.username, data.message);
+        }
+      });
+    
+      socket.on("typing", (name) => {
+        if (name !== username) {
+          typingDiv.textContent = `${name} is typing...`;
+          setTimeout(() => (typingDiv.textContent = ""), 2000);
+        }
+      });
+    </script>
+    
+  </body>
 </html>
