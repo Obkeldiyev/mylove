@@ -18,23 +18,51 @@ export function initSocket(server: any) {
       });
     });
 
-    socket.on("chat message", async ({ message, username }) => {
-      const admin = await client.admin.findUnique({ where: { username } });
-
-      if (!admin) return;
-
-      await client.message.create({
-        data: {
-          content: message,
-          senderId: admin.id,
-        },
-      });
-
-      io.emit("chat message", { username, message });
+    socket.on("chat message", async ({ message, username, fileUrl, id }) => {
+      if (isNaN(id)) {
+        console.error(`Invalid message ID in chat message: ${id}`);
+        return;
+      }
+      io.emit("chat message", { username, message, fileUrl, id, seen: false });
     });
 
     socket.on("typing", (username: string) => {
       socket.broadcast.emit("typing", username);
+    });
+
+    socket.on("message seen", async ({ messageId, username }) => {
+      if (messageId === undefined || messageId === null) {
+        console.debug(`Received null or undefined messageId from ${username}`);
+        return;
+      }
+
+      const id = parseInt(messageId, 10);
+      if (isNaN(id)) {
+        console.debug(`Invalid messageId from ${username}: ${messageId}`);
+        return;
+      }
+
+      try {
+        const message = await client.message.findUnique({
+          where: { id },
+          include: { sender: true },
+        });
+        if (message && !message.seen) {
+          // Ignore if the viewer is the sender
+          if (message.sender.username === username) {
+            console.log(`Ignoring message seen for ID ${id} from sender ${username}`);
+            return;
+          }
+          await client.message.update({
+            where: { id },
+            data: { seen: true },
+          });
+          io.emit("message seen", { messageId: id });
+          console.log(`Message ${id} marked as seen by ${username}`);
+        }
+      } catch (error) {
+        console.error(`Error marking message ${id} as seen:`, error);
+      }
     });
 
     socket.on("disconnect", () => {

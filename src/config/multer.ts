@@ -1,33 +1,23 @@
 import multer from "multer";
-import path from "path";
+import { join } from "path";
 
-// file filter for only images and videos
-const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: any) => {
-  const allowedTypes = /jpeg|jpg|png|gif|mp4|mov|avi|webm/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
-
-  if (extname && mimetype) {
-    cb(null, true);
-  } else {
-    cb(new Error("Only images and videos are allowed!"));
-  }
-};
-
-// destination and filename
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/"); // store in /uploads
+  destination: (req, file, cb) => {
+    cb(null, join(process.cwd(), "src", "public", "uploads"));
   },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
-    cb(null, filename);
-  }
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
 });
 
 export const upload = multer({
   storage,
-  fileFilter,
-  limits: { fileSize: 100 * 1024 * 1024 } // max 100MB
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "audio/mpeg", "audio/wav", "audio/ogg", "audio/webm", "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Invalid file type"));
+    }
+  },
 });

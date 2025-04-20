@@ -56,7 +56,7 @@
         border-radius: 16px;
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
         overflow-y: auto;
-        max-height: calc(100vh - 140px);
+        max-height: calc(100vh - 160px);
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
       }
@@ -70,11 +70,105 @@
         font-size: clamp(0.85rem, 2.2vw, 0.95rem);
         line-height: 1.4;
         word-wrap: break-word;
+        position: relative;
       }
 
       .message strong {
         color: #c2185b;
         font-weight: 600;
+      }
+
+      .message .seen-status {
+        position: absolute;
+        bottom: 4px;
+        right: 8px;
+        font-size: 12px;
+        color: #999;
+      }
+
+      .message .seen-status.seen::after {
+        content: '✓✓';
+        color: #4caf50;
+      }
+
+      .message .seen-status:not(.seen)::after {
+        content: '✓';
+        color: #999;
+      }
+
+      .message .file {
+        margin-top: 0.5rem;
+        max-width: 200px;
+      }
+
+      .message .file img {
+        max-width: 100%;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .message .file a {
+        color: #e91e63;
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+
+      .message .voice-message {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #f0f0f0;
+        padding: 0.5rem;
+        border-radius: 8px;
+        max-width: 250px;
+      }
+
+      .message .voice-message button {
+        background: #e91e63;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .message .voice-message .waveform {
+        flex: 1;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+
+      .message .voice-message .waveform .bar {
+        width: 4px;
+        height: 10px;
+        background: linear-gradient(90deg, #e91e63 0%, #f48fb1 100%);
+        border-radius: 2px;
+      }
+
+      .message .voice-message .waveform.playing .bar {
+        animation: wave 0.8s infinite ease-in-out;
+      }
+
+      .message .voice-message .waveform.playing .bar:nth-child(1) { animation-delay: 0s; }
+      .message .voice-message .waveform.playing .bar:nth-child(2) { animation-delay: 0.1s; }
+      .message .voice-message .waveform.playing .bar:nth-child(3) { animation-delay: 0.2s; }
+      .message .voice-message .waveform.playing .bar:nth-child(4) { animation-delay: 0.3s; }
+      .message .voice-message .waveform.playing .bar:nth-child(5) { animation-delay: 0.4s; }
+      .message .voice-message .waveform.playing .bar:nth-child(6) { animation-delay: 0.5s; }
+      .message .voice-message .waveform.playing .bar:nth-child(7) { animation-delay: 0.6s; }
+      .message .voice-message .waveform.playing .bar:nth-child(8) { animation-delay: 0.7s; }
+
+      @keyframes wave {
+        0% { transform: scaleY(1); }
+        50% { transform: scaleY(2); }
+        100% { transform: scaleY(1); }
       }
 
       #typing {
@@ -85,7 +179,15 @@
         font-size: clamp(0.8rem, 1.8vw, 0.85rem);
       }
 
-      form#chat-form {
+      #error-message {
+        color: #c2185b;
+        font-size: 0.85rem;
+        padding: 0.4rem 1.2rem;
+        text-align: center;
+        display: none;
+      }
+
+      #chat-form {
         display: flex;
         align-items: center;
         gap: 0.4rem;
@@ -115,8 +217,10 @@
         transform: translateY(-1px);
       }
 
-      #send-btn {
-        padding: 0.6rem 1.2rem;
+      #send-btn,
+      #file-btn,
+      #voice-btn {
+        padding: 0.6rem;
         border: none;
         background: #e91e63;
         color: white;
@@ -126,9 +230,24 @@
         transition: background 0.3s ease, transform 0.3s ease;
       }
 
-      #send-btn:hover {
+      #send-btn:disabled {
+        background: #f48fb1;
+        cursor: not-allowed;
+      }
+
+      #send-btn:hover:not(:disabled),
+      #file-btn:hover,
+      #voice-btn:hover {
         background: #c2185b;
         transform: translateY(-1px);
+      }
+
+      #file-input {
+        display: none;
+      }
+
+      #voice-btn.recording {
+        background: #c2185b;
       }
 
       @keyframes slideIn {
@@ -195,7 +314,7 @@
         #chat-box {
           margin: 0.4rem;
           padding: 0.8rem;
-          max-height: calc(100vh - 120px);
+          max-height: calc(100vh - 140px);
           border-radius: 12px;
         }
 
@@ -208,6 +327,7 @@
           margin: 0 0.4rem 0.4rem;
           padding: 0.6rem;
           border-radius: 0 0 12px 12px;
+          flex-wrap: wrap;
         }
 
         #message-input {
@@ -215,8 +335,10 @@
           font-size: clamp(0.8rem, 2vw, 0.9rem);
         }
 
-        #send-btn {
-          padding: 0.5rem 1rem;
+        #send-btn,
+        #file-btn,
+        #voice-btn {
+          padding: 0.5rem;
           font-size: clamp(0.8rem, 2vw, 0.9rem);
         }
 
@@ -225,6 +347,11 @@
           right: 12px;
           padding: 10px;
           font-size: 16px;
+        }
+
+        .message .voice-message .waveform .bar {
+          width: 3px;
+          height: 8px;
         }
       }
     </style>
@@ -235,19 +362,52 @@
 
     <div id="chat-box">
       <% messages.forEach(msg => { %>
-        <div class="message">
-          <strong><%= msg.username %></strong>: <%= msg.message %>
+        <div class="message" data-id="<%= msg.id %>" data-username="<%= msg.username %>">
+          <strong><%= msg.username %></strong>: 
+          <% if (msg.message) { %>
+            <%= msg.message %>
+          <% } %>
+          <% if (msg.fileUrl) { %>
+            <div class="file">
+              <% if (msg.fileUrl.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
+                <img src="<%= msg.fileUrl %>" alt="Uploaded image" />
+              <% } else if (msg.fileUrl.match(/\.(mp3|wav|ogg|webm)$/i)) { %>
+                <div class="voice-message">
+                  <button class="play-btn" data-src="<%= msg.fileUrl %>">▶</button>
+                  <div class="waveform">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                  </div>
+                </div>
+              <% } else { %>
+                <a href="<%= msg.fileUrl %>" target="_blank">Download File</a>
+              <% } %>
+            </div>
+          <% } %>
           <small style="float: right; color: #999; font-size: 0.75em">
             <%= msg.createdAt %>
           </small>
+          <% if (msg.username === username) { %>
+            <span class="seen-status <%= msg.seen ? 'seen' : '' %>"></span>
+          <% } %>
         </div>
       <% }) %>
     </div>
 
     <div id="typing"></div>
+    <div id="error-message"></div>
 
     <form id="chat-form">
-      <input id="message-input" type="text" placeholder="Type a message..." autocomplete="off" required />
+      <input id="message-input" type="text" placeholder="Type a message..." autocomplete="off" />
+      <input id="file-input" type="file" accept="image/*,audio/*,.pdf,.doc,.docx" />
+      <button id="file-btn" type="button" title="Upload file">📎</button>
+      <button id="voice-btn" type="button" title="Record voice">🎤</button>
       <button id="send-btn" type="submit">Send</button>
     </form>
 
@@ -260,7 +420,16 @@
       const input = document.getElementById("message-input");
       const form = document.getElementById("chat-form");
       const typingDiv = document.getElementById("typing");
+      const errorDiv = document.getElementById("error-message");
       const scrollDownBtn = document.getElementById("scroll-down-btn");
+      const fileInput = document.getElementById("file-input");
+      const fileBtn = document.getElementById("file-btn");
+      const voiceBtn = document.getElementById("voice-btn");
+      const sendBtn = document.getElementById("send-btn");
+
+      let mediaRecorder;
+      let audioChunks = [];
+      let scrollTimeout = null;
 
       if (Notification && Notification.permission !== "granted") {
         Notification.requestPermission();
@@ -275,17 +444,64 @@
         }
       }
 
+      function showError(message) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = "block";
+        setTimeout(() => {
+          errorDiv.textContent = "";
+          errorDiv.style.display = "none";
+        }, 5000);
+      }
+
       socket.emit("join", username);
 
       function sendMessage() {
         const message = input.value.trim();
-        if (message) {
-          socket.emit("chat message", { message, username });
-          input.value = "";
-          typingDiv.textContent = "";
-          // Keep focus on input to prevent keyboard from closing on mobile
-          input.focus();
+        const file = fileInput.files[0];
+        if (!message && !file) {
+          showError("Please enter a message or select a file.");
+          return;
         }
+
+        sendBtn.disabled = true;
+        sendBtn.textContent = "Sending...";
+
+        const formData = new FormData();
+        if (message) formData.append("message", message);
+        if (file) formData.append("file", file);
+
+        fetch("/upload", {
+          method: "POST",
+          body: formData,
+          headers: { "X-Username": username },
+        })
+          .then(async (res) => {
+            if (!res.ok) {
+              const error = await res.json();
+              throw new Error(error.error || "Failed to send message");
+            }
+            return res.json();
+          })
+          .then((data) => {
+            socket.emit("chat message", {
+              username,
+              message: data.message,
+              fileUrl: data.fileUrl,
+              id: parseInt(data.id),
+            });
+            input.value = "";
+            fileInput.value = "";
+            typingDiv.textContent = "";
+            input.focus();
+            sendBtn.disabled = false;
+            sendBtn.textContent = "Send";
+          })
+          .catch((err) => {
+            console.error("Upload failed:", err);
+            showError(err.message || "Failed to send message. Please try again.");
+            sendBtn.disabled = false;
+            sendBtn.textContent = "Send";
+          });
       }
 
       form.addEventListener("submit", (e) => {
@@ -293,7 +509,6 @@
         sendMessage();
       });
 
-      // Handle touch events for mobile to ensure message sending
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
@@ -305,14 +520,84 @@
         socket.emit("typing", username);
       });
 
+      fileBtn.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      voiceBtn.addEventListener("click", async () => {
+        if (voiceBtn.classList.contains("recording")) {
+          mediaRecorder.stop();
+          voiceBtn.classList.remove("recording");
+          voiceBtn.textContent = "🎤";
+        } else {
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = (e) => {
+              audioChunks.push(e.data);
+            };
+
+            mediaRecorder.onstop = () => {
+              const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+              const audioFile = new File([audioBlob], `voice-${Date.now()}.webm`, { type: "audio/webm" });
+              fileInput.files = new DataTransfer().files;
+              const dataTransfer = new DataTransfer();
+              dataTransfer.items.add(audioFile);
+              fileInput.files = dataTransfer.files;
+              sendMessage();
+            };
+
+            mediaRecorder.start();
+            voiceBtn.classList.add("recording");
+            voiceBtn.textContent = "⏹";
+          } catch (err) {
+            console.error("Audio recording failed:", err);
+            showError("Failed to start recording. Check microphone permissions.");
+          }
+        }
+      });
+
       socket.on("chat message", (data) => {
         const div = document.createElement("div");
         div.classList.add("message");
+        div.dataset.id = data.id;
+        div.dataset.username = data.username;
         const timestamp = new Date().toLocaleTimeString();
-        div.innerHTML = `
-          <strong>${data.username}</strong>: ${data.message}
+        let content = `<strong>${data.username}</strong>: `;
+        if (data.message) {
+          content += data.message;
+        }
+        if (data.fileUrl) {
+          content += `<div class="file">`;
+          if (data.fileUrl.match(/\.(jpg|jpeg|png|gif)$/i)) {
+            content += `<img src="${data.fileUrl}" alt="Uploaded image" />`;
+          } else if (data.fileUrl.match(/\.(mp3|wav|ogg|webm)$/i)) {
+            content += `
+              <div class="voice-message">
+                <button class="play-btn" data-src="${data.fileUrl}">▶</button>
+                <div class="waveform">
+                  <span class="bar"></span>
+                  <span class="bar"></span>
+                  <span class="bar"></span>
+                  <span class="bar"></span>
+                  <span class="bar"></span>
+                  <span class="bar"></span>
+                  <span class="bar"></span>
+                  <span class="bar"></span>
+                </div>
+              </div>`;
+          } else {
+            content += `<a href="${data.fileUrl}" target="_blank">Download File</a>`;
+          }
+          content += `</div>`;
+        }
+        content += `
           <small style="float: right; color: #999; font-size: 0.75em">${timestamp}</small>
+          ${data.username === username ? `<span class="seen-status ${data.seen ? 'seen' : ''}"></span>` : ""}
         `;
+        div.innerHTML = content;
         chatBox.appendChild(div);
 
         const isUserNearBottom =
@@ -323,7 +608,25 @@
         }
 
         if (data.username !== username) {
-          showNotification(data.username, data.message);
+          showNotification(data.username, data.message || "Sent a file");
+          const messageId = parseInt(data.id);
+          if (!isNaN(messageId)) {
+            console.log(`Emitting message seen for ID: ${messageId} from ${data.username}`);
+            socket.emit("message seen", { messageId, username });
+          } else {
+            console.error(`Invalid message ID in chat message: ${data.id}`);
+          }
+        }
+      });
+
+      socket.on("message seen", ({ messageId }) => {
+        const messageEl = document.querySelector(`.message[data-id="${messageId}"]`);
+        if (messageEl) {
+          const seenStatus = messageEl.querySelector(".seen-status");
+          if (seenStatus) {
+            seenStatus.classList.add("seen");
+            console.log(`Message ${messageId} marked as seen`);
+          }
         }
       });
 
@@ -338,19 +641,84 @@
         chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
       }
 
+      function debounceSeenMessages() {
+        if (scrollTimeout) {
+          clearTimeout(scrollTimeout);
+        }
+        scrollTimeout = setTimeout(() => {
+          const messages = document.querySelectorAll(".message");
+          messages.forEach((msg) => {
+            const rect = msg.getBoundingClientRect();
+            const messageId = parseInt(msg.dataset.id);
+            const msgUsername = msg.dataset.username;
+            if (
+              rect.top >= 0 &&
+              rect.bottom <= window.innerHeight &&
+              !isNaN(messageId) &&
+              msgUsername !== username // Only emit for other users' messages
+            ) {
+              console.log(`Emitting message seen for ID: ${messageId} from ${msgUsername}`);
+              socket.emit("message seen", { messageId, username });
+            } else if (isNaN(messageId)) {
+              console.error(`Invalid message ID on scroll: ${msg.dataset.id}`);
+            }
+          });
+        }, 300);
+      }
+
       chatBox.addEventListener("scroll", () => {
         const nearBottom =
           chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
         scrollDownBtn.style.display = nearBottom ? "none" : "block";
+        debounceSeenMessages();
       });
 
-      scrollDownBtn.addEventListener("click", scrollToBottom);
-
-      // Ensure smooth scrolling on mobile
       chatBox.addEventListener("touchmove", () => {
         const nearBottom =
           chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
         scrollDownBtn.style.display = nearBottom ? "none" : "block";
+        debounceSeenMessages();
+      });
+
+      scrollDownBtn.addEventListener("click", scrollToBottom);
+
+      chatBox.addEventListener("click", (e) => {
+        if (e.target.classList.contains("play-btn")) {
+          const button = e.target;
+          const audioSrc = button.dataset.src;
+          const waveform = button.nextElementSibling;
+          let audio = button.dataset.audio ? document.getElementById(button.dataset.audio) : null;
+
+          if (audio && !audio.paused) {
+            audio.pause();
+            button.textContent = "▶";
+            waveform.classList.remove("playing");
+          } else {
+            document.querySelectorAll(".voice-message .waveform.playing").forEach((wf) => {
+              wf.classList.remove("playing");
+              const btn = wf.previousElementSibling;
+              btn.textContent = "▶";
+              const otherAudio = document.getElementById(btn.dataset.audio);
+              if (otherAudio) otherAudio.pause();
+            });
+
+            if (!audio) {
+              audio = new Audio(audioSrc);
+              const audioId = `audio-${Date.now()}`;
+              audio.id = audioId;
+              button.dataset.audio = audioId;
+            }
+
+            audio.play();
+            button.textContent = "⏸";
+            waveform.classList.add("playing");
+
+            audio.onended = () => {
+              button.textContent = "▶";
+              waveform.classList.remove("playing");
+            };
+          }
+        }
       });
 
       scrollToBottom();

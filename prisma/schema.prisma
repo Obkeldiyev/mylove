@@ -55,10 +55,10 @@ model Diary {
 
 model Message {
   id        Int      @id @default(autoincrement())
-  content   String
+  content   String?
+  fileUrl   String?
   senderId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  status    String   @default("unread")
   sender    Admin    @relation(fields: [senderId], references: [id])
+  createdAt DateTime @default(now())
+  seen      Boolean  @default(false)
 }

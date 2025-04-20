@@ -6,5 +6,6 @@ import { upload } from "../config/multer";
 const chatRoutes = Router();
 
 chatRoutes.get("/chat", verifyToken, upload.single("file"), ChatController.getChatPage);
+chatRoutes.post("/upload", verifyToken, upload.single("file"), ChatController.uploadFile);
 
 export default chatRoutes;
