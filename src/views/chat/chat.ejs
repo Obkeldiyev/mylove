@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat Room</title>
     <link rel="manifest" href="../../../manifest.json" />
@@ -84,7 +83,7 @@
         font-size: clamp(0.85rem, 2vw, 0.9rem);
       }
 
-      #chat-form {
+      form#chat-form {
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -150,7 +149,6 @@
         }
       }
 
-      /* Mobile-specific adjustments */
       @media (max-width: 600px) {
         #home-btn {
           font-size: 20px;
@@ -182,6 +180,7 @@
           padding: 0.6rem 1rem;
         }
       }
+
       #scroll-down-btn {
         position: fixed;
         bottom: 80px;
@@ -207,137 +206,112 @@
   <body>
     <a href="/profile" id="home-btn" title="Back to Profile">♥</a>
     <h2>Welcome to Chat, <%= username %></h2>
+
     <div id="chat-box">
       <% messages.forEach(msg => { %>
-      <div class="message">
-        <strong><%= msg.username %></strong>: <%= msg.message %>
-        <small style="float: right; color: #999; font-size: 0.8em"
-          ><%= msg.createdAt %></small
-        >
-      </div>
+        <div class="message">
+          <strong><%= msg.username %></strong>: <%= msg.message %>
+          <small style="float: right; color: #999; font-size: 0.8em">
+            <%= msg.createdAt %>
+          </small>
+        </div>
       <% }) %>
     </div>
+
     <div id="typing"></div>
-    <div id="chat-form">
-      <input
-        id="message-input"
-        type="text"
-        placeholder="Type a message..."
-        autocomplete="off"
-      />
-      <button id="send-btn" type="button">Send</button>
-    </div>
+
+    <form id="chat-form">
+      <input id="message-input" type="text" placeholder="Type a message..." autocomplete="off" required />
+      <button id="send-btn" type="submit">Send</button>
+    </form>
 
     <button id="scroll-down-btn" title="Scroll to latest">⬇️</button>
 
     <script>
-  const socket = io();
-  const username = "<%= username %>";
-  const chatBox = document.getElementById("chat-box");
-  const input = document.getElementById("message-input");
-  const sendBtn = document.getElementById("send-btn");
-  const typingDiv = document.getElementById("typing");
-  const scrollDownBtn = document.getElementById("scroll-down-btn");
+      const socket = io();
+      const username = "<%= username %>";
+      const chatBox = document.getElementById("chat-box");
+      const input = document.getElementById("message-input");
+      const form = document.getElementById("chat-form");
+      const typingDiv = document.getElementById("typing");
+      const scrollDownBtn = document.getElementById("scroll-down-btn");
 
-  // Request permission for notifications
-  if (Notification && Notification.permission !== "granted") {
-    Notification.requestPermission();
-  }
+      if (Notification && Notification.permission !== "granted") {
+        Notification.requestPermission();
+      }
 
-  function showNotification(title, body) {
-    if (Notification.permission === "granted") {
-      new Notification(title, {
-        body,
-        icon: "/icons/icon-192x192.png",
+      function showNotification(title, body) {
+        if (Notification.permission === "granted") {
+          new Notification(title, {
+            body,
+            icon: "/icons/icon-192x192.png",
+          });
+        }
+      }
+
+      socket.emit("join", username);
+
+      function sendMessage() {
+        const message = input.value.trim();
+        if (message) {
+          socket.emit("chat message", { message, username });
+          input.value = "";
+          typingDiv.textContent = "";
+          setTimeout(() => input.focus(), 50);
+        }
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        sendMessage();
       });
-    }
-  }
 
-  socket.emit("join", username);
+      input.addEventListener("input", () => {
+        socket.emit("typing", username);
+      });
 
-  function sendMessage() {
-    const message = input.value.trim();
-    if (message) {
-      socket.emit("chat message", { message, username });
-      input.value = "";
-      typingDiv.textContent = "";
-      setTimeout(() => {
-        input.focus(); // Re-focus input for mobile users
-      }, 50);
-    }
-  }
+      socket.on("chat message", (data) => {
+        const div = document.createElement("div");
+        div.classList.add("message");
+        const timestamp = new Date().toLocaleTimeString();
+        div.innerHTML = `
+          <strong>${data.username}</strong>: ${data.message}
+          <small style="float: right; color: #999; font-size: 0.8em">${timestamp}</small>
+        `;
+        chatBox.appendChild(div);
 
-  // Event listeners for sending message
-  sendBtn.addEventListener("click", sendMessage);
+        const isUserNearBottom =
+          chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
 
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
+        if (data.username === username || isUserNearBottom) {
+          scrollToBottom();
+        }
 
-  // Prevent form submission if in a form
-  document.getElementById("chat-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    sendMessage();
-  });
+        if (data.username !== username) {
+          showNotification(data.username, data.message);
+        }
+      });
 
-  // Notify when typing
-  input.addEventListener("input", () => {
-    socket.emit("typing", username);
-  });
+      socket.on("typing", (name) => {
+        if (name !== username) {
+          typingDiv.textContent = `${name} is typing...`;
+          setTimeout(() => (typingDiv.textContent = ""), 2000);
+        }
+      });
 
-  // Handle incoming chat messages
-  socket.on("chat message", (data) => {
-    const div = document.createElement("div");
-    div.classList.add("message");
-    const timestamp = new Date().toLocaleTimeString();
-    div.innerHTML = `
-      <strong>${data.username}</strong>: ${data.message}
-      <small style="float: right; color: #999; font-size: 0.8em">${timestamp}</small>
-    `;
-    chatBox.appendChild(div);
+      function scrollToBottom() {
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
 
-    // Scroll to bottom if the user is near the bottom or if it's their own message
-    const isUserNearBottom =
-      chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
+      chatBox.addEventListener("scroll", () => {
+        const nearBottom =
+          chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
+        scrollDownBtn.style.display = nearBottom ? "none" : "block";
+      });
 
-    if (data.username === username || isUserNearBottom) {
+      scrollDownBtn.addEventListener("click", scrollToBottom);
+
       scrollToBottom();
-    }
-
-    // Show notification if the sender is not the current user
-    if (data.username !== username) {
-      showNotification(data.username, data.message);
-    }
-  });
-
-  // Handle typing status
-  socket.on("typing", (name) => {
-    if (name !== username) {
-      typingDiv.textContent = `${name} is typing...`;
-      setTimeout(() => (typingDiv.textContent = ""), 2000);
-    }
-  });
-
-  // Scroll to the bottom
-  function scrollToBottom() {
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  scrollToBottom();
-
-  // Scroll down button functionality
-  chatBox.addEventListener("scroll", () => {
-    const nearBottom =
-      chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
-    scrollDownBtn.style.display = nearBottom ? "none" : "block";
-  });
-
-  // Scroll to bottom when clicking the button
-  scrollDownBtn.addEventListener("click", scrollToBottom);
-</script>
-
+    </script>
   </body>
 </html>
