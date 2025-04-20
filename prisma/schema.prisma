@@ -54,9 +54,11 @@ model Diary {
 }
 
 model Message {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   content   String
-  createdAt DateTime @default(now())
   senderId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  status    String   @default("unread")
   sender    Admin    @relation(fields: [senderId], references: [id])
 }

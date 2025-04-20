@@ -231,101 +231,113 @@
     <button id="scroll-down-btn" title="Scroll to latest">⬇️</button>
 
     <script>
-      const socket = io();
-      const username = "<%= username %>";
-      const chatBox = document.getElementById("chat-box");
-      const input = document.getElementById("message-input");
-      const sendBtn = document.getElementById("send-btn");
-      const typingDiv = document.getElementById("typing");
-      const scrollDownBtn = document.getElementById("scroll-down-btn");
+  const socket = io();
+  const username = "<%= username %>";
+  const chatBox = document.getElementById("chat-box");
+  const input = document.getElementById("message-input");
+  const sendBtn = document.getElementById("send-btn");
+  const typingDiv = document.getElementById("typing");
+  const scrollDownBtn = document.getElementById("scroll-down-btn");
 
-      if (Notification && Notification.permission !== "granted") {
-        Notification.requestPermission();
-      }
+  // Request permission for notifications
+  if (Notification && Notification.permission !== "granted") {
+    Notification.requestPermission();
+  }
 
-      function showNotification(title, body) {
-        if (Notification.permission === "granted") {
-          new Notification(title, {
-            body,
-            icon: "/icons/icon-192x192.png",
-          });
-        }
-      }
-
-      socket.emit("join", username);
-
-      function sendMessage() {
-        const message = input.value.trim();
-        if (message) {
-          socket.emit("chat message", { message, username });
-          input.value = "";
-          typingDiv.textContent = "";
-          input.focus();
-        }
-      }
-
-      sendBtn.addEventListener("click", sendMessage);
-
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          sendMessage();
-        }
+  function showNotification(title, body) {
+    if (Notification.permission === "granted") {
+      new Notification(title, {
+        body,
+        icon: "/icons/icon-192x192.png",
       });
+    }
+  }
 
-      document.getElementById("chat-form").addEventListener("submit", (e) => {
-        e.preventDefault();
-        sendMessage();
-      });
+  socket.emit("join", username);
 
-      input.addEventListener("input", () => {
-        socket.emit("typing", username);
-      });
+  function sendMessage() {
+    const message = input.value.trim();
+    if (message) {
+      socket.emit("chat message", { message, username });
+      input.value = "";
+      typingDiv.textContent = "";
+      setTimeout(() => {
+        input.focus(); // Re-focus input for mobile users
+      }, 50);
+    }
+  }
 
-      socket.on("chat message", (data) => {
-        const div = document.createElement("div");
-        div.classList.add("message");
-        const timestamp = new Date().toLocaleTimeString();
-        div.innerHTML = `
-          <strong>${data.username}</strong>: ${data.message}
-          <small style="float: right; color: #999; font-size: 0.8em">${timestamp}</small>
-        `;
-        chatBox.appendChild(div);
+  // Event listeners for sending message
+  sendBtn.addEventListener("click", sendMessage);
 
-        const isUserNearBottom =
-          chatBox.scrollHeight - chatBox.scrollTop <=
-          chatBox.clientHeight + 100;
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
 
-        if (data.username === username || isUserNearBottom) {
-          scrollToBottom();
-        }
+  // Prevent form submission if in a form
+  document.getElementById("chat-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    sendMessage();
+  });
 
-        if (data.username !== username) {
-          showNotification(data.username, data.message);
-        }
-      });
+  // Notify when typing
+  input.addEventListener("input", () => {
+    socket.emit("typing", username);
+  });
 
-      socket.on("typing", (name) => {
-        if (name !== username) {
-          typingDiv.textContent = `${name} is typing...`;
-          setTimeout(() => (typingDiv.textContent = ""), 2000);
-        }
-      });
+  // Handle incoming chat messages
+  socket.on("chat message", (data) => {
+    const div = document.createElement("div");
+    div.classList.add("message");
+    const timestamp = new Date().toLocaleTimeString();
+    div.innerHTML = `
+      <strong>${data.username}</strong>: ${data.message}
+      <small style="float: right; color: #999; font-size: 0.8em">${timestamp}</small>
+    `;
+    chatBox.appendChild(div);
 
-      function scrollToBottom() {
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }
+    // Scroll to bottom if the user is near the bottom or if it's their own message
+    const isUserNearBottom =
+      chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
 
+    if (data.username === username || isUserNearBottom) {
       scrollToBottom();
+    }
 
-      chatBox.addEventListener("scroll", () => {
-        const nearBottom =
-          chatBox.scrollHeight - chatBox.scrollTop <=
-          chatBox.clientHeight + 100;
-        scrollDownBtn.style.display = nearBottom ? "none" : "block";
-      });
+    // Show notification if the sender is not the current user
+    if (data.username !== username) {
+      showNotification(data.username, data.message);
+    }
+  });
 
-      scrollDownBtn.addEventListener("click", scrollToBottom);
-    </script>
+  // Handle typing status
+  socket.on("typing", (name) => {
+    if (name !== username) {
+      typingDiv.textContent = `${name} is typing...`;
+      setTimeout(() => (typingDiv.textContent = ""), 2000);
+    }
+  });
+
+  // Scroll to the bottom
+  function scrollToBottom() {
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  scrollToBottom();
+
+  // Scroll down button functionality
+  chatBox.addEventListener("scroll", () => {
+    const nearBottom =
+      chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
+    scrollDownBtn.style.display = nearBottom ? "none" : "block";
+  });
+
+  // Scroll to bottom when clicking the button
+  scrollDownBtn.addEventListener("click", scrollToBottom);
+</script>
+
   </body>
 </html>
