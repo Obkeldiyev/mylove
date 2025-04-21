@@ -294,15 +294,9 @@
       }
 
       @keyframes pulse {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.02);
-        }
-        100% {
-          transform: scale(1);
-        }
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+        100% { transform: scale(1); }
       }
 
       #scroll-down-btn {
@@ -564,16 +558,13 @@
 
         try {
           console.log("sendMessage: Sending fetch to /upload");
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
           const res = await fetch("/upload", {
             method: "POST",
             body: formData,
             headers: { "X-Username": username },
-            signal: controller.signal,
           });
-          clearTimeout(timeoutId);
 
+          console.log("sendMessage: Fetch response received", res.status);
           if (!res.ok) {
             const error = await res.json();
             console.log("sendMessage: Fetch failed", error);
@@ -596,11 +587,7 @@
           scrollToBottom();
         } catch (err) {
           console.error("sendMessage: Error occurred", err);
-          if (err.name === "AbortError") {
-            showError("Request timed out. Please try again.");
-          } else {
-            showError(err.message || "Failed to send message. Please try again.");
-          }
+          showError(err.message || "Failed to send message. Please try again.");
         } finally {
           resetForm();
         }
@@ -615,69 +602,21 @@
         console.log("resetForm: Form state reset");
       }
 
-      function debounce(func, wait) {
-        let timeout;
-        return function (...args) {
-          clearTimeout(timeout);
-          timeout = setTimeout(() => func.apply(this, args), wait);
-        };
+      function handleButtonEvent(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log(`${e.currentTarget.id}: Event triggered`, e.type);
+        if (e.currentTarget === sendBtn) {
+          sendMessage();
+        } else if (e.currentTarget === fileBtn) {
+          fileInput.click();
+        } else if (e.currentTarget === voiceBtn) {
+          toggleVoiceRecording();
+        }
       }
 
-      const debouncedSendMessage = debounce(sendMessage, 200);
-
-      sendBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log("sendBtn: Click event triggered");
-        debouncedSendMessage();
-      });
-
-      sendBtn.addEventListener("touchend", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log("sendBtn: Touchend event triggered");
-        debouncedSendMessage();
-      });
-
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          e.stopPropagation();
-          console.log("input: Enter key pressed");
-          debouncedSendMessage();
-        }
-      });
-
-      input.addEventListener("input", () => {
-        socket.emit("typing", username);
-      });
-
-      input.addEventListener("focus", () => {
-        setTimeout(scrollToBottom, 300);
-      });
-
-      fileBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        console.log("fileBtn: Click event triggered");
-        fileInput.click();
-      });
-
-      fileBtn.addEventListener("touchend", (e) => {
-        e.preventDefault();
-        console.log("fileBtn: Touchend event triggered");
-        fileInput.click();
-      });
-
-      fileInput.addEventListener("change", () => {
-        if (fileInput.files.length > 0) {
-          console.log("fileInput: File selected", fileInput.files[0].name);
-          debouncedSendMessage();
-        }
-      });
-
-      voiceBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        console.log("voiceBtn: Click event triggered");
+      async function toggleVoiceRecording() {
+        console.log("toggleVoiceRecording: Function called");
         if (voiceBtn.classList.contains("recording")) {
           console.log("voiceBtn: Stopping recording");
           mediaRecorder.stop();
@@ -693,8 +632,7 @@
           try {
             console.log("voiceBtn: Requesting microphone access");
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mimeType = MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4";
-            mediaRecorder = new MediaRecorder(stream, { mimeType });
+            mediaRecorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
             audioChunks = [];
 
             mediaRecorder.ondataavailable = (e) => {
@@ -706,9 +644,8 @@
 
             mediaRecorder.onstop = () => {
               console.log("voiceBtn: Recording stopped, processing audio");
-              const audioBlob = new Blob(audioChunks, { type: mimeType });
-              const extension = mimeType === "audio/webm" ? "webm" : "m4a";
-              const audioFile = new File([audioBlob], `voice-${Date.now()}.${extension}`, { type: mimeType });
+              const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+              const audioFile = new File([audioBlob], `voice-${Date.now()}.webm`, { type: "audio/webm" });
 
               fileInput.value = "";
               const dataTransfer = new DataTransfer();
@@ -717,7 +654,7 @@
 
               stream.getTracks().forEach((track) => track.stop());
               console.log("voiceBtn: Audio file created", audioFile.name);
-              debouncedSendMessage();
+              sendMessage();
             };
 
             mediaRecorder.onerror = (err) => {
@@ -729,7 +666,7 @@
               resetForm();
             };
 
-            mediaRecorder.start(100);
+            mediaRecorder.start();
             voiceBtn.classList.add("recording");
             voiceBtn.textContent = "⏹";
             console.log("voiceBtn: Recording started");
@@ -742,12 +679,35 @@
             }
           }
         }
+      }
+
+      [sendBtn, fileBtn, voiceBtn].forEach((btn) => {
+        btn.addEventListener("click", handleButtonEvent, { passive: false });
+        btn.addEventListener("touchstart", handleButtonEvent, { passive: false });
       });
 
-      voiceBtn.addEventListener("touchend", async (e) => {
-        e.preventDefault();
-        console.log("voiceBtn: Touchend event triggered");
-        voiceBtn.click();
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log("input: Enter key pressed");
+          sendMessage();
+        }
+      });
+
+      input.addEventListener("input", () => {
+        socket.emit("typing", username);
+      });
+
+      input.addEventListener("focus", () => {
+        setTimeout(scrollToBottom, 300);
+      });
+
+      fileInput.addEventListener("change", () => {
+        if (fileInput.files.length > 0) {
+          console.log("fileInput: File selected", fileInput.files[0].name);
+          sendMessage();
+        }
       });
 
       socket.on("chat message", (data) => {
