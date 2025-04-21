@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,6 +21,8 @@
         flex-direction: column;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: none; /* Prevent pull-to-refresh issues */
+        touch-action: pan-y; /* Allow smooth scrolling */
       }
 
       #home-btn {
@@ -59,6 +62,7 @@
         max-height: calc(100vh - 160px);
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain; /* Prevent overscroll bounce */
       }
 
       .message {
@@ -194,10 +198,12 @@
         padding: 0.8rem;
         background: rgba(255, 255, 255, 0.9);
         box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.05);
-        border-radius: 0 0 16px 16px;
-        margin: 0 0.8rem 0.8rem;
-        position: sticky;
+        border-radius: 0;
+        position: fixed;
         bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
         z-index: 100;
       }
 
@@ -297,7 +303,7 @@
 
       @media (max-width: 600px) {
         body {
-          overscroll-behavior-y: contain;
+          overscroll-behavior-y: none;
         }
 
         #home-btn {
@@ -324,9 +330,7 @@
         }
 
         #chat-form {
-          margin: 0 0.4rem 0.4rem;
           padding: 0.6rem;
-          border-radius: 0 0 12px 12px;
           flex-wrap: wrap;
         }
 
@@ -371,7 +375,7 @@
             <div class="file">
               <% if (msg.fileUrl.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
                 <img src="<%= msg.fileUrl %>" alt="Uploaded image" />
-              <% } else if (msg.fileUrl.match(/\.(mp3|wav|ogg|webm)$/i)) { %>
+              <% } else if (msg.fileUrl.match(/\.(mp3|wav|ogg|webm|m4a)$/i)) { %>
                 <div class="voice-message">
                   <button class="play-btn" data-src="<%= msg.fileUrl %>">▶</button>
                   <div class="waveform">
@@ -405,7 +409,7 @@
 
     <form id="chat-form">
       <input id="message-input" type="text" placeholder="Type a message..." autocomplete="off" />
-      <input id="file-input" type="file" accept="image/*,audio/*,.pdf,.doc,.docx" />
+      <input id="file-input" type="file" accept="image/*,audio/*,video/*,.pdf,.doc,.docx" />
       <button id="file-btn" type="button" title="Upload file">📎</button>
       <button id="voice-btn" type="button" title="Record voice">🎤</button>
       <button id="send-btn" type="submit">Send</button>
@@ -461,6 +465,31 @@
         if (!message && !file) {
           showError("Please enter a message or select a file.");
           return;
+        }
+
+        if (sendBtn.disabled) return;
+
+        if (file) {
+          const validTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "audio/mpeg",
+            "audio/wav",
+            "audio/ogg",
+            "audio/webm",
+            "audio/mp4",
+            "video/mp4",
+            "video/webm",
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          ];
+          if (!validTypes.includes(file.type)) {
+            showError("Unsupported file type. Please upload an image, audio, video, PDF, or Word document.");
+            fileInput.value = "";
+            return;
+          }
         }
 
         sendBtn.disabled = true;
@@ -520,8 +549,25 @@
         socket.emit("typing", username);
       });
 
+      input.addEventListener("focus", () => {
+        setTimeout(() => {
+          scrollToBottom();
+        }, 300);
+      });
+
       fileBtn.addEventListener("click", () => {
         fileInput.click();
+      });
+
+      fileInput.addEventListener("change", () => {
+        if (fileInput.files.length > 0) {
+          sendMessage();
+        }
+      });
+
+      sendBtn.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        sendMessage();
       });
 
       voiceBtn.addEventListener("click", async () => {
@@ -530,23 +576,41 @@
           voiceBtn.classList.remove("recording");
           voiceBtn.textContent = "🎤";
         } else {
+          if (!navigator.mediaDevices || !MediaRecorder) {
+            showError("Voice recording is not supported in this browser.");
+            return;
+          }
+
           try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
+            const mimeType = MediaRecorder.isTypeSupported("audio/mp4") ? "audio/mp4" : "audio/webm";
+            mediaRecorder = new MediaRecorder(stream, { mimeType });
             audioChunks = [];
 
             mediaRecorder.ondataavailable = (e) => {
-              audioChunks.push(e.data);
+              if (e.data.size > 0) audioChunks.push(e.data);
             };
 
             mediaRecorder.onstop = () => {
-              const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-              const audioFile = new File([audioBlob], `voice-${Date.now()}.webm`, { type: "audio/webm" });
-              fileInput.files = new DataTransfer().files;
+              const audioBlob = new Blob(audioChunks, { type: mimeType });
+              const extension = mimeType === "audio/mp4" ? "m4a" : "webm";
+              const audioFile = new File([audioBlob], `voice-${Date.now()}.${extension}`, { type: mimeType });
+
+              fileInput.value = "";
               const dataTransfer = new DataTransfer();
               dataTransfer.items.add(audioFile);
               fileInput.files = dataTransfer.files;
+
+              stream.getTracks().forEach((track) => track.stop());
               sendMessage();
+            };
+
+            mediaRecorder.onerror = (err) => {
+              console.error("MediaRecorder error:", err);
+              showError("Recording failed. Please try again.");
+              voiceBtn.classList.remove("recording");
+              voiceBtn.textContent = "🎤";
+              stream.getTracks().forEach((track) => track.stop());
             };
 
             mediaRecorder.start();
@@ -554,7 +618,11 @@
             voiceBtn.textContent = "⏹";
           } catch (err) {
             console.error("Audio recording failed:", err);
-            showError("Failed to start recording. Check microphone permissions.");
+            if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+              showError("Microphone access denied. Please allow microphone permissions.");
+            } else {
+              showError("Failed to start recording. Check microphone permissions or try another browser.");
+            }
           }
         }
       });
@@ -573,7 +641,7 @@
           content += `<div class="file">`;
           if (data.fileUrl.match(/\.(jpg|jpeg|png|gif)$/i)) {
             content += `<img src="${data.fileUrl}" alt="Uploaded image" />`;
-          } else if (data.fileUrl.match(/\.(mp3|wav|ogg|webm)$/i)) {
+          } else if (data.fileUrl.match(/\.(mp3|wav|ogg|webm|m4a)$/i)) {
             content += `
               <div class="voice-message">
                 <button class="play-btn" data-src="${data.fileUrl}">▶</button>
@@ -638,7 +706,9 @@
       });
 
       function scrollToBottom() {
-        chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
+        setTimeout(() => {
+          chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
+        }, 100);
       }
 
       function debounceSeenMessages() {
@@ -655,7 +725,7 @@
               rect.top >= 0 &&
               rect.bottom <= window.innerHeight &&
               !isNaN(messageId) &&
-              msgUsername !== username // Only emit for other users' messages
+              msgUsername !== username
             ) {
               console.log(`Emitting message seen for ID: ${messageId} from ${msgUsername}`);
               socket.emit("message seen", { messageId, username });
@@ -725,3 +795,4 @@
     </script>
   </body>
 </html>
+```
