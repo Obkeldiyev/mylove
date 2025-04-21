@@ -224,70 +224,34 @@
         animation: ownWave 1.4s infinite ease-in-out;
       }
 
-      .message .voice-message.own .waveform .bar:nth-child(1) {
-        animation-delay: 0s;
-      }
-      .message .voice-message.own .waveform .bar:nth-child(2) {
-        animation-delay: 0.1s;
-      }
-      .message .voice-message.own .waveform .bar:nth-child(3) {
-        animation-delay: 0.2s;
-      }
-      .message .voice-message.own .waveform .bar:nth-child(4) {
-        animation-delay: 0.3s;
-      }
-      .message .voice-message.own .waveform .bar:nth-child(5) {
-        animation-delay: 0.4s;
-      }
-      .message .voice-message.own .waveform .bar:nth-child(6) {
-        animation-delay: 0.5s;
-      }
+      .message .voice-message.own .waveform .bar:nth-child(1) { animation-delay: 0s; }
+      .message .voice-message.own .waveform .bar:nth-child(2) { animation-delay: 0.1s; }
+      .message .voice-message.own .waveform .bar:nth-child(3) { animation-delay: 0.2s; }
+      .message .voice-message.own .waveform .bar:nth-child(4) { animation-delay: 0.3s; }
+      .message .voice-message.own .waveform .bar:nth-child(5) { animation-delay: 0.4s; }
+      .message .voice-message.own .waveform .bar:nth-child(6) { animation-delay: 0.5s; }
 
       .message .voice-message .waveform.playing .bar {
         animation: wave 1s infinite ease-in-out;
       }
 
-      .message .voice-message .waveform.playing .bar:nth-child(1) {
-        animation-delay: 0s;
-      }
-      .message .voice-message .waveform.playing .bar:nth-child(2) {
-        animation-delay: 0.1s;
-      }
-      .message .voice-message .waveform.playing .bar:nth-child(3) {
-        animation-delay: 0.2s;
-      }
-      .message .voice-message .waveform.playing .bar:nth-child(4) {
-        animation-delay: 0.3s;
-      }
-      .message .voice-message .waveform.playing .bar:nth-child(5) {
-        animation-delay: 0.4s;
-      }
-      .message .voice-message .waveform.playing .bar:nth-child(6) {
-        animation-delay: 0.5s;
-      }
+      .message .voice-message .waveform.playing .bar:nth-child(1) { animation-delay: 0s; }
+      .message .voice-message .waveform.playing .bar:nth-child(2) { animation-delay: 0.1s; }
+      .message .voice-message .waveform.playing .bar:nth-child(3) { animation-delay: 0.2s; }
+      .message .voice-message .waveform.playing .bar:nth-child(4) { animation-delay: 0.3s; }
+      .message .voice-message .waveform.playing .bar:nth-child(5) { animation-delay: 0.4s; }
+      .message .voice-message .waveform.playing .bar:nth-child(6) { animation-delay: 0.5s; }
 
       @keyframes wave {
-        0% {
-          height: 10px;
-        }
-        50% {
-          height: 20px;
-        }
-        100% {
-          height: 10px;
-        }
+        0% { height: 10px; }
+        50% { height: 20px; }
+        100% { height: 10px; }
       }
 
       @keyframes ownWave {
-        0% {
-          height: 8px;
-        }
-        50% {
-          height: 24px;
-        }
-        100% {
-          height: 8px;
-        }
+        0% { height: 8px; }
+        50% { height: 24px; }
+        100% { height: 8px; }
       }
 
       #typing {
@@ -317,16 +281,9 @@
       }
 
       @keyframes shake {
-        0%,
-        100% {
-          transform: translateX(0);
-        }
-        25% {
-          transform: translateX(-5px);
-        }
-        75% {
-          transform: translateX(5px);
-        }
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
       }
 
       #chat-form {
@@ -425,7 +382,6 @@
       #voice-recording-ui {
         display: none;
         position: fixed;
-        bottom: 90px;
         bottom: calc(90px + env(safe-area-inset-bottom));
         left: 12px;
         right: 12px;
@@ -466,8 +422,8 @@
         color: #fff;
       }
 
-      #voice-recording-ui.processing::after {
-        content: "Processing...";
+      #voice-recording-ui.sending::after {
+        content: "Sending... ⏳";
         position: absolute;
         right: 1rem;
         font-size: 0.9rem;
@@ -475,17 +431,7 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-      }
-
-      #voice-recording-ui.processing::after::before {
-        content: "⏳";
-        animation: spin 1s linear infinite;
-      }
-
-      @keyframes spin {
-        100% {
-          transform: rotate(360deg);
-        }
+        animation: pulse 1.5s infinite;
       }
 
       #voice-timer {
@@ -503,13 +449,8 @@
       }
 
       @keyframes blink {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0;
-        }
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
       }
 
       #voice-waveform {
@@ -541,26 +482,14 @@
       }
 
       @keyframes slideIn {
-        from {
-          opacity: 0;
-          transform: translateX(-8px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(0);
-        }
+        from { opacity: 0; transform: translateX(-8px); }
+        to { opacity: 1; transform: translateX(0); }
       }
 
       @keyframes pulse {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.02);
-        }
-        100% {
-          transform: scale(1);
-        }
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
       }
 
       #scroll-down-btn {
@@ -810,6 +739,7 @@
       const voiceTimer = document.getElementById("voice-timer");
       const voiceWaveform = document.getElementById("voice-waveform");
       const voiceCancel = document.getElementById("voice-cancel");
+      const isDebug = true; // Set to false in production
 
       let mediaRecorder = null;
       let audioChunks = [];
@@ -821,6 +751,7 @@
       let analyser = null;
       let stream = null;
       let newMessages = 0;
+      let stopTimeout = null;
 
       // Request notification permission
       if (Notification && Notification.permission !== "granted") {
@@ -877,7 +808,7 @@
       // Socket join
       socket.emit("join", username);
 
-      // Send message
+      // Send text message
       async function sendMessage() {
         if (isSending) return;
         const message = input.value.trim();
@@ -893,52 +824,12 @@
         voiceBtn.disabled = true;
         sendBtn.textContent = "Sending...";
 
-        if (file) {
-          const validTypes = [
-            "image/jpeg",
-            "image/png",
-            "image/gif",
-            "audio/mpeg",
-            "audio/wav",
-            "audio/ogg",
-            "audio/webm",
-            "audio/mp4",
-            "video/mp4",
-            "video/webm",
-            "application/pdf",
-            "application/msword",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          ];
-          if (!validTypes.includes(file.type)) {
-            showError("Unsupported file type.");
-            fileInput.value = "";
-            resetForm();
-            return;
-          }
-          if (file.size > 10 * 1024 * 1024) {
-            showError("File is too large. Maximum size is 10MB.");
-            fileInput.value = "";
-            resetForm();
-            return;
-          }
-        }
-
         const formData = new FormData();
         if (message) formData.append("message", message);
         if (file) formData.append("file", file);
 
         try {
-          const res = await fetch("/upload", {
-            method: "POST",
-            body: formData,
-            headers: { "X-Username": username },
-          });
-
-          if (!res.ok) {
-            const error = await res.json();
-            throw new Error(error.error || "Failed to send message");
-          }
-
+          const res = await uploadWithRetry(formData);
           const data = await res.json();
           socket.emit("chat message", {
             username,
@@ -959,6 +850,58 @@
         }
       }
 
+      // Send voice message
+      async function sendVoiceMessage(audioFile) {
+        if (isSending) return;
+        isSending = true;
+        sendBtn.disabled = true;
+        fileBtn.disabled = true;
+        voiceBtn.disabled = true;
+        voiceRecordingUI.classList.add("sending");
+
+        const formData = new FormData();
+        formData.append("file", audioFile);
+
+        try {
+          const res = await uploadWithRetry(formData);
+          const data = await res.json();
+          socket.emit("chat message", {
+            username,
+            fileUrl: data.fileUrl,
+            id: parseInt(data.id),
+          });
+          scrollToBottom();
+        } catch (err) {
+          showError(err.message || "Failed to send voice message.");
+        } finally {
+          resetForm();
+        }
+      }
+
+      // Upload with retry
+      async function uploadWithRetry(formData, maxRetries = 2) {
+        let attempt = 0;
+        while (attempt <= maxRetries) {
+          try {
+            const res = await fetch("/upload", {
+              method: "POST",
+              body: formData,
+              headers: { "X-Username": username },
+            });
+            if (!res.ok) {
+              const error = await res.json();
+              throw new Error(`Upload failed: ${error.error || res.statusText} (Status: ${res.status})`);
+            }
+            return res;
+          } catch (err) {
+            attempt++;
+            if (attempt > maxRetries) throw err;
+            if (isDebug) console.log(`Upload attempt ${attempt} failed, retrying...`, err);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        }
+      }
+
       // Reset form
       function resetForm() {
         isSending = false;
@@ -966,7 +909,7 @@
         fileBtn.disabled = false;
         voiceBtn.disabled = false;
         sendBtn.textContent = "Send";
-        voiceRecordingUI.classList.remove("processing");
+        voiceRecordingUI.classList.remove("sending");
       }
 
       // Handle button events
@@ -983,9 +926,13 @@
 
       // Get supported MIME type
       function getSupportedMimeType() {
-        const types = ["audio/webm", "audio/mp4", "audio/ogg"];
+        const types = [
+          { mime: "audio/webm", ext: "webm" },
+          { mime: "audio/mp4", ext: "m4a" },
+          { mime: "audio/ogg", ext: "ogg" }
+        ];
         for (const type of types) {
-          if (MediaRecorder.isTypeSupported(type)) {
+          if (MediaRecorder.isTypeSupported(type.mime)) {
             return type;
           }
         }
@@ -999,8 +946,8 @@
           return;
         }
 
-        const mimeType = getSupportedMimeType();
-        if (!mimeType) {
+        const supportedType = getSupportedMimeType();
+        if (!supportedType) {
           showError("No supported audio format found.");
           return;
         }
@@ -1009,7 +956,7 @@
           .getUserMedia({ audio: true })
           .then((micStream) => {
             stream = micStream;
-            mediaRecorder = new MediaRecorder(stream, { mimeType });
+            mediaRecorder = new MediaRecorder(stream, { mimeType: supportedType.mime });
             audioChunks = [];
 
             // Setup Web Audio API for waveform
@@ -1042,14 +989,25 @@
               voiceTimer.textContent = `${minutes}:${seconds}`;
             }, 1000);
 
+            mediaRecorder.onstart = () => {
+              if (isDebug) console.log("Recording started with MIME type:", supportedType.mime);
+            };
+
             mediaRecorder.ondataavailable = (e) => {
               if (e.data.size > 0) {
                 audioChunks.push(e.data);
+                if (isDebug) console.log("Received audio chunk, size:", e.data.size);
               }
             };
 
             mediaRecorder.onstop = () => {
-              voiceRecordingUI.classList.add("processing");
+              if (isDebug) console.log("Recording stopped, chunks:", audioChunks.length);
+              if (audioChunks.length === 0) {
+                showError("No audio data recorded.");
+                cleanupRecording();
+                return;
+              }
+
               const elapsed = (Date.now() - recordingStartTime) / 1000;
               if (elapsed < 0.5) {
                 showError("Recording too short.");
@@ -1057,49 +1015,42 @@
                 return;
               }
 
-              const audioBlob = new Blob(audioChunks, { type: mimeType });
-              const fileExtension = mimeType.split("/")[1].split(";")[0];
-              const audioFile = new File([audioBlob], `voice-${Date.now()}.${fileExtension}`, {
-                type: mimeType,
+              const audioBlob = new Blob(audioChunks, { type: supportedType.mime });
+              const audioFile = new File([audioBlob], `voice-${Date.now()}.${supportedType.ext}`, {
+                type: supportedType.mime,
               });
 
-              fileInput.value = "";
-              const dataTransfer = new DataTransfer();
-              dataTransfer.items.add(audioFile);
-              fileInput.files = dataTransfer.files;
-
-              // Delay sendMessage to ensure file is ready
+              if (isDebug) console.log("Audio file created:", audioFile.name, audioFile.size);
               setTimeout(() => {
-                sendMessage();
+                sendVoiceMessage(audioFile);
                 cleanupRecording();
-              }, 200);
+              }, 500);
             };
 
             mediaRecorder.onerror = (err) => {
-              console.error("MediaRecorder error:", err);
+              if (isDebug) console.error("MediaRecorder error:", err);
               showError("Recording failed: " + err.message);
               cleanupRecording();
             };
-
-            // Timeout to detect if recording fails to start
-            setTimeout(() => {
-              if (mediaRecorder && mediaRecorder.state !== "recording") {
-                showError("Failed to start recording.");
-                cleanupRecording();
-              }
-            }, 1000);
 
             mediaRecorder.start();
             voiceRecordingUI.classList.add("recording");
             voiceBtn.classList.add("recording");
             voiceBtn.textContent = "⏹";
             updateWaveform();
-            console.log("Recording started with MIME type:", mimeType);
+
+            // Timeout to detect recording failure
+            setTimeout(() => {
+              if (mediaRecorder && mediaRecorder.state !== "recording") {
+                showError("Failed to start recording.");
+                cleanupRecording();
+              }
+            }, 1000);
           })
           .catch((err) => {
-            console.error("getUserMedia error:", err);
+            if (isDebug) console.error("getUserMedia error:", err);
             if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
-              showError("Microphone access denied. Please enable it in your browser settings.");
+              showError("Microphone access denied. Please enable it in settings.");
             } else {
               showError("Failed to start recording: " + err.message);
             }
@@ -1109,15 +1060,18 @@
 
       // Stop recording
       function stopRecording() {
-        if (mediaRecorder && mediaRecorder.state !== "inactive") {
-          mediaRecorder.stop();
-          console.log("Recording stopped");
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+          if (stopTimeout) clearTimeout(stopTimeout);
+          stopTimeout = setTimeout(() => {
+            mediaRecorder.stop();
+            if (isDebug) console.log("Recording stopped");
+          }, 100);
         }
       }
 
       // Cleanup recording
       function cleanupRecording() {
-        console.log("Cleaning up recording");
+        if (isDebug) console.log("Cleaning up recording");
         voiceRecordingUI.classList.remove("recording");
         voiceBtn.classList.remove("recording");
         voiceBtn.textContent = "🎤";
@@ -1136,62 +1090,33 @@
         }
         audioChunks = [];
         mediaRecorder = null;
+        if (stopTimeout) {
+          clearTimeout(stopTimeout);
+          stopTimeout = null;
+        }
       }
 
       // Voice button events
-      voiceBtn.addEventListener(
-        "mousedown",
-        (e) => {
-          e.preventDefault();
-          vibrate();
-          startVoiceRecording();
-        },
-        { passive: false }
-      );
+      voiceBtn.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
+        vibrate();
+        startVoiceRecording();
+      }, { passive: false });
 
-      voiceBtn.addEventListener(
-        "touchstart",
-        (e) => {
-          e.preventDefault();
-          vibrate();
-          startVoiceRecording();
-        },
-        { passive: false }
-      );
+      voiceBtn.addEventListener("pointerup", (e) => {
+        e.preventDefault();
+        if (voiceRecordingUI.classList.contains("recording")) {
+          stopRecording();
+        }
+      }, { passive: false });
 
-      voiceBtn.addEventListener(
-        "mouseup",
-        (e) => {
-          e.preventDefault();
-          if (voiceRecordingUI.classList.contains("recording")) {
-            stopRecording();
-          }
-        },
-        { passive: false }
-      );
-
-      voiceBtn.addEventListener(
-        "touchend",
-        (e) => {
-          e.preventDefault();
-          if (voiceRecordingUI.classList.contains("recording")) {
-            stopRecording();
-          }
-        },
-        { passive: false }
-      );
-
-      voiceBtn.addEventListener(
-        "touchcancel",
-        (e) => {
-          e.preventDefault();
-          if (voiceRecordingUI.classList.contains("recording")) {
-            cleanupRecording();
-            showError("Recording interrupted.");
-          }
-        },
-        { passive: false }
-      );
+      voiceBtn.addEventListener("touchcancel", (e) => {
+        e.preventDefault();
+        if (voiceRecordingUI.classList.contains("recording")) {
+          cleanupRecording();
+          showError("Recording interrupted.");
+        }
+      }, { passive: false });
 
       voiceCancel.addEventListener("click", (e) => {
         e.preventDefault();
@@ -1217,12 +1142,9 @@
         }
       });
 
-      input.addEventListener(
-        "input",
-        debounce(() => {
-          socket.emit("typing", username);
-        }, 300)
-      );
+      input.addEventListener("input", debounce(() => {
+        socket.emit("typing", username);
+      }, 300));
 
       input.addEventListener("focus", () => {
         form.classList.add("keyboard-active");
@@ -1431,7 +1353,7 @@
         }
       });
 
-      // Swipe to reply (basic)
+      // Swipe to reply
       let touchStartX = 0;
       chatBox.addEventListener("touchstart", (e) => {
         touchStartX = e.touches[0].clientX;
