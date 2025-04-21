@@ -21,14 +21,20 @@
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
         overscroll-behavior-y: none;
-        touch-action: pan-y;
+        touch-action: manipulation;
+        transition: background 0.3s ease;
+      }
+
+      body.dark-mode {
+        background: linear-gradient(135deg, #2c2c2c, #1f1f1f);
+        color: #fff;
       }
 
       #home-btn {
         position: fixed;
         top: 12px;
         left: 12px;
-        font-size: 22px;
+        font-size: 24px;
         color: #e91e63;
         cursor: pointer;
         z-index: 1000;
@@ -56,7 +62,8 @@
         animation: pulse 3s infinite ease-in-out;
       }
 
-      #like-btn {
+      #like-btn,
+      #dark-mode-btn {
         font-size: 22px;
         color: #e91e63;
         cursor: pointer;
@@ -64,7 +71,8 @@
         transition: transform 0.3s ease, color 0.3s ease;
       }
 
-      #like-btn:hover {
+      #like-btn:hover,
+      #dark-mode-btn:hover {
         color: #c2185b;
         transform: scale(1.15);
       }
@@ -87,6 +95,11 @@
         -webkit-overflow-scrolling: touch;
         overscroll-behavior-y: contain;
         touch-action: pan-y;
+        will-change: transform;
+      }
+
+      body.dark-mode #chat-box {
+        background: rgba(50, 50, 50, 0.95);
       }
 
       .message {
@@ -99,6 +112,15 @@
         line-height: 1.4;
         word-wrap: break-word;
         position: relative;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+
+      body.dark-mode .message {
+        background: linear-gradient(145deg, #444, #555);
+      }
+
+      .message:hover {
+        transform: scale(1.02);
       }
 
       .message strong {
@@ -115,12 +137,12 @@
       }
 
       .message .seen-status.seen::after {
-        content: '✓✓';
+        content: "✓✓";
         color: #4caf50;
       }
 
       .message .seen-status:not(.seen)::after {
-        content: '✓';
+        content: "✓";
         color: #999;
       }
 
@@ -129,7 +151,8 @@
         max-width: 200px;
       }
 
-      .message .file img {
+      .message .file img,
+      .message .file video {
         max-width: 100%;
         border-radius: 8px;
         cursor: pointer;
@@ -144,59 +167,140 @@
       .message .voice-message {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        background: #f0f0f0;
-        padding: 0.5rem;
-        border-radius: 8px;
-        max-width: 250px;
+        gap: 0.8rem;
+        background: linear-gradient(145deg, #f8f8f8, #e0e0e0);
+        padding: 0.6rem;
+        border-radius: 12px;
+        max-width: 280px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      body.dark-mode .message .voice-message {
+        background: linear-gradient(145deg, #555, #666);
+      }
+
+      .message .voice-message:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
       .message .voice-message button {
-        background: #e91e63;
+        background: linear-gradient(45deg, #e91e63, #f48fb1);
         color: white;
         border: none;
         border-radius: 50%;
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .message .voice-message button:hover {
+        transform: scale(1.1);
+        background: linear-gradient(45deg, #c2185b, #f06292);
       }
 
       .message .voice-message .waveform {
         flex: 1;
-        height: 20px;
+        height: 28px;
         display: flex;
         align-items: center;
-        gap: 2px;
+        gap: 3px;
       }
 
       .message .voice-message .waveform .bar {
-        width: 4px;
+        width: 5px;
         height: 10px;
         background: linear-gradient(90deg, #e91e63 0%, #f48fb1 100%);
-        border-radius: 2px;
+        border-radius: 3px;
+        transition: height 0.1s ease;
+      }
+
+      .message .voice-message.own .waveform .bar {
+        animation: ownWave 1.4s infinite ease-in-out;
+      }
+
+      .message .voice-message.own .waveform .bar:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(5) {
+        animation-delay: 0.4s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(6) {
+        animation-delay: 0.5s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(7) {
+        animation-delay: 0.6s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(8) {
+        animation-delay: 0.7s;
       }
 
       .message .voice-message .waveform.playing .bar {
-        animation: wave 0.8s infinite ease-in-out;
+        animation: wave 1s infinite ease-in-out;
       }
 
-      .message .voice-message .waveform.playing .bar:nth-child(1) { animation-delay: 0s; }
-      .message .voice-message .waveform.playing .bar:nth-child(2) { animation-delay: 0.1s; }
-      .message .voice-message .waveform.playing .bar:nth-child(3) { animation-delay: 0.2s; }
-      .message .voice-message .waveform.playing .bar:nth-child(4) { animation-delay: 0.3s; }
-      .message .voice-message .waveform.playing .bar:nth-child(5) { animation-delay: 0.4s; }
-      .message .voice-message .waveform.playing .bar:nth-child(6) { animation-delay: 0.5s; }
-      .message .voice-message .waveform.playing .bar:nth-child(7) { animation-delay: 0.6s; }
-      .message .voice-message .waveform.playing .bar:nth-child(8) { animation-delay: 0.7s; }
+      .message .voice-message .waveform.playing .bar:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(5) {
+        animation-delay: 0.4s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(6) {
+        animation-delay: 0.5s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(7) {
+        animation-delay: 0.6s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(8) {
+        animation-delay: 0.7s;
+      }
 
       @keyframes wave {
-        0% { transform: scaleY(1); }
-        50% { transform: scaleY(2); }
-        100% { transform: scaleY(1); }
+        0% {
+          height: 10px;
+        }
+        50% {
+          height: 20px;
+        }
+        100% {
+          height: 10px;
+        }
+      }
+
+      @keyframes ownWave {
+        0% {
+          height: 8px;
+        }
+        50% {
+          height: 24px;
+        }
+        100% {
+          height: 8px;
+        }
       }
 
       #typing {
@@ -205,6 +309,12 @@
         padding: 0.4rem 1.2rem;
         min-height: 1.4rem;
         font-size: clamp(0.8rem, 1.8vw, 0.85rem);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      #typing.active {
+        opacity: 1;
       }
 
       #error-message {
@@ -213,12 +323,29 @@
         padding: 0.4rem 1.2rem;
         text-align: center;
         display: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
+        margin: 0.4rem;
+        animation: shake 0.3s ease-in-out;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
       }
 
       #chat-form {
         display: flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.6rem;
         padding: 0.8rem;
         background: rgba(255, 255, 255, 0.9);
         box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.05);
@@ -229,17 +356,32 @@
         right: 0;
         margin: 0;
         z-index: 100;
+        transition: transform 0.3s ease;
+      }
+
+      body.dark-mode #chat-form {
+        background: rgba(50, 50, 50, 0.9);
+      }
+
+      #chat-form.keyboard-active {
+        transform: translateY(-10px);
       }
 
       #message-input {
         flex: 1;
-        padding: 0.6rem 0.9rem;
+        padding: 0.8rem 1rem;
         border: 2px solid #f48fb1;
-        border-radius: 16px;
+        border-radius: 20px;
         outline: none;
-        font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+        font-size: clamp(0.9rem, 2.2vw, 1rem);
         transition: border-color 0.3s ease, transform 0.3s ease;
         background: #fff;
+      }
+
+      body.dark-mode #message-input {
+        background: #444;
+        color: #fff;
+        border-color: #666;
       }
 
       #message-input:focus {
@@ -250,13 +392,18 @@
       #send-btn,
       #file-btn,
       #voice-btn {
-        padding: 0.6rem;
+        padding: 0.8rem;
         border: none;
         background: #e91e63;
         color: white;
-        font-size: clamp(0.85rem, 2.2vw, 0.95rem);
-        border-radius: 16px;
+        font-size: clamp(0.9rem, 2.2vw, 1rem);
+        border-radius: 20px;
         cursor: pointer;
+        min-width: 48px;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         transition: background 0.3s ease, transform 0.3s ease;
       }
 
@@ -271,7 +418,7 @@
       #file-btn:hover:not(:disabled),
       #voice-btn:hover:not(:disabled) {
         background: #c2185b;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
       }
 
       #file-input {
@@ -280,6 +427,97 @@
 
       #voice-btn.recording {
         background: #c2185b;
+        transform: scale(1.1);
+      }
+
+      #voice-recording-ui {
+        display: none;
+        position: fixed;
+        bottom: 80px;
+        left: 12px;
+        right: 12px;
+        background: linear-gradient(145deg, #ffffff, #f0f0f0);
+        padding: 1rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 200;
+        align-items: center;
+        gap: 1rem;
+        font-size: 1rem;
+        color: #333;
+        transform: translateY(20px);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      #voice-recording-ui.recording {
+        display: flex;
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      body.dark-mode #voice-recording-ui {
+        background: linear-gradient(145deg, #444, #555);
+        color: #fff;
+      }
+
+      #voice-recording-ui.processing::after {
+        content: "Processing...";
+        position: absolute;
+        right: 1rem;
+        font-size: 0.9rem;
+        color: #e91e63;
+      }
+
+      #voice-timer {
+        font-family: "Roboto Mono", monospace;
+        font-weight: 700;
+        font-size: 1.1rem;
+        position: relative;
+      }
+
+      #voice-timer::before {
+        content: "●";
+        color: #e91e63;
+        margin-right: 0.5rem;
+        animation: blink 1s infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      #voice-waveform {
+        flex: 1;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      #voice-waveform .bar {
+        width: 6px;
+        background: linear-gradient(90deg, #e91e63 0%, #f48fb1 100%);
+        border-radius: 4px;
+        transition: height 0.1s ease;
+      }
+
+      #voice-cancel {
+        color: #e91e63;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: color 0.2s ease;
+      }
+
+      #voice-cancel:hover {
+        color: #c2185b;
       }
 
       @keyframes slideIn {
@@ -294,9 +532,15 @@
       }
 
       @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.02); }
-        100% { transform: scale(1); }
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       #scroll-down-btn {
@@ -321,8 +565,25 @@
         transform: scale(1.1);
       }
 
+      #scroll-down-btn.new-messages::after {
+        content: "!";
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        background: #4caf50;
+        color: white;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+      }
+
       button[type="button"] {
         -webkit-appearance: none;
+        touch-action: manipulation;
       }
 
       @media (max-width: 600px) {
@@ -331,7 +592,7 @@
         }
 
         #home-btn {
-          font-size: 18px;
+          font-size: 20px;
           top: 8px;
           left: 8px;
         }
@@ -344,8 +605,9 @@
           font-size: clamp(1.2rem, 4vw, 1.5rem);
         }
 
-        #like-btn {
-          font-size: 18px;
+        #like-btn,
+        #dark-mode-btn {
+          font-size: 20px;
           margin-left: 6px;
         }
 
@@ -357,52 +619,66 @@
         }
 
         .message {
-          padding: 0.5rem 0.8rem;
-          font-size: clamp(0.8rem, 2vw, 0.9rem);
+          padding: 0.6rem 0.8rem;
+          font-size: clamp(0.85rem, 2vw, 0.9rem);
         }
 
         #chat-form {
           padding: 0.6rem;
-          flex-wrap: wrap;
+          gap: 0.4rem;
         }
 
         #message-input {
-          padding: 0.5rem 0.8rem;
-          font-size: clamp(0.8rem, 2vw, 0.9rem);
+          padding: 0.7rem 0.9rem;
+          font-size: clamp(0.85rem, 2vw, 0.9rem);
+          border-radius: 16px;
         }
 
         #send-btn,
         #file-btn,
         #voice-btn {
-          padding: 0.5rem;
-          font-size: clamp(0.8rem, 2vw, 0.9rem);
+          padding: 0.7rem;
+          font-size: clamp(0.85rem, 2vw, 0.9rem);
+          min-width: 44px;
+          min-height: 44px;
         }
 
         #scroll-down-btn {
-          bottom: 80px;
+          bottom: 90px;
           right: 12px;
           padding: 10px;
           font-size: 16px;
         }
 
+        #voice-recording-ui {
+          bottom: 70px;
+          padding: 0.8rem;
+          font-size: 0.9rem;
+        }
+
+        .message .voice-message {
+          max-width: 240px;
+        }
+
         .message .voice-message .waveform .bar {
-          width: 3px;
+          width: 4px;
           height: 8px;
         }
       }
     </style>
   </head>
   <body>
-    <a href="/profile" id="home-btn" title="Back to Profile">♥</a>
+    <a href="/profile" id="home-btn" title="Back to Profile" aria-label="Back to Profile">♥</a>
     <div class="title-container">
       <h2>Welcome to Chat, <%= username %></h2>
       <span id="like-btn" title="Like this chat" aria-label="Like this chat">♥</span>
+      <span id="dark-mode-btn" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</span>
     </div>
 
-    <div id="chat-box">
+    <div id="chat-box" role="log" aria-live="polite">
       <% messages.forEach(msg => { %>
         <div class="message" data-id="<%= msg.id %>" data-username="<%= msg.username %>">
-          <strong><%= msg.username %></strong>: 
+          <strong><%= msg.username %></strong>:
           <% if (msg.message) { %>
             <%= msg.message %>
           <% } %>
@@ -410,9 +686,11 @@
             <div class="file">
               <% if (msg.fileUrl.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
                 <img src="<%= msg.fileUrl %>" alt="Uploaded image" />
+              <% } else if (msg.fileUrl.match(/\.(mp4|webm)$/i)) { %>
+                <video src="<%= msg.fileUrl %>" controls preload="metadata"></video>
               <% } else if (msg.fileUrl.match(/\.(mp3|wav|ogg|webm|m4a)$/i)) { %>
-                <div class="voice-message">
-                  <button class="play-btn" data-src="<%= msg.fileUrl %>">▶</button>
+                <div class="voice-message <%= msg.username === username ? 'own' : '' %>">
+                  <button class="play-btn" data-src="<%= msg.fileUrl %>" aria-label="Play voice message">▶</button>
                   <div class="waveform">
                     <span class="bar"></span>
                     <span class="bar"></span>
@@ -425,32 +703,65 @@
                   </div>
                 </div>
               <% } else { %>
-                <a href="<%= msg.fileUrl %>" target="_blank">Download File</a>
+                <a href="<%= msg.fileUrl %>" target="_blank" aria-label="Download file">Download File</a>
               <% } %>
             </div>
           <% } %>
           <small style="float: right; color: #999; font-size: 0.75em">
-            <%= msg.createdAt %>
+            <%= new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
           </small>
           <% if (msg.username === username) { %>
-            <span class="seen-status <%= msg.seen ? 'seen' : '' %>"></span>
+            <span class="seen-status <%= msg.seen ? 'seen' : '' %>" aria-label="Message status"></span>
           <% } %>
         </div>
       <% }) %>
     </div>
 
-    <div id="typing"></div>
-    <div id="error-message"></div>
+    <div id="typing" aria-live="polite"></div>
+    <div id="error-message" role="alert"></div>
 
-    <div id="chat-form">
-      <input id="message-input" type="text" placeholder="Type a message..." autocomplete="off" />
-      <input id="file-input" type="file" accept="image/*,audio/*,video/*,.pdf,.doc,.docx" />
-      <button id="file-btn" type="button" title="Upload file">📎</button>
-      <button id="voice-btn" type="button" title="Record voice">🎤</button>
-      <button id="send-btn" type="button" title="Send message">Send</button>
+    <div id="chat-form" role="form">
+      <input
+        id="message-input"
+        type="text"
+        placeholder="Type a message..."
+        autocomplete="off"
+        aria-label="Type a message"
+      />
+      <input
+        id="file-input"
+        type="file"
+        accept="image/*,audio/*,video/*,.pdf,.doc,.docx"
+        aria-label="Upload file"
+      />
+      <button id="file-btn" type="button" title="Upload file" aria-label="Upload file">📎</button>
+      <button
+        id="voice-btn"
+        type="button"
+        title="Record voice"
+        aria-label="Record voice message"
+      >
+        🎤
+      </button>
+      <button id="send-btn" type="button" title="Send message" aria-label="Send message">Send</button>
     </div>
 
-    <button id="scroll-down-btn" title="Scroll to latest">⬇️</button>
+    <div id="voice-recording-ui" role="region" aria-label="Voice recording controls">
+      <span id="voice-timer" aria-live="polite">00:00</span>
+      <div id="voice-waveform">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      <span id="voice-cancel" title="Cancel recording" aria-label="Cancel recording">Cancel</span>
+    </div>
+
+    <button id="scroll-down-btn" title="Scroll to latest" aria-label="Scroll to latest messages">⬇️</button>
 
     <script>
       const socket = io();
@@ -466,22 +777,36 @@
       const voiceBtn = document.getElementById("voice-btn");
       const sendBtn = document.getElementById("send-btn");
       const likeBtn = document.getElementById("like-btn");
+      const darkModeBtn = document.getElementById("dark-mode-btn");
+      const voiceRecordingUI = document.getElementById("voice-recording-ui");
+      const voiceTimer = document.getElementById("voice-timer");
+      const voiceWaveform = document.getElementById("voice-waveform");
+      const voiceCancel = document.getElementById("voice-cancel");
 
-      let mediaRecorder;
+      let mediaRecorder = null;
       let audioChunks = [];
       let scrollTimeout = null;
       let isSending = false;
+      let recordingStartTime = null;
+      let recordingInterval = null;
+      let audioContext = null;
+      let analyser = null;
+      let stream = null;
+      let newMessages = 0;
 
+      // Request notification permission
       if (Notification && Notification.permission !== "granted") {
         Notification.requestPermission();
       }
 
+      // Show notification
       function showNotification(title, body) {
         if (Notification.permission === "granted") {
           new Notification(title, { body, icon: "/icons/icon-192x192.png" });
         }
       }
 
+      // Show error
       function showError(message) {
         errorDiv.textContent = message;
         errorDiv.style.display = "block";
@@ -491,24 +816,42 @@
         }, 5000);
       }
 
-      likeBtn.addEventListener("click", () => {
-        likeBtn.classList.toggle("liked");
-        console.log("likeBtn: Toggled like state", likeBtn.classList.contains("liked"));
+      // Haptic feedback
+      function vibrate() {
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
+      }
+
+      // Toggle dark mode
+      darkModeBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        darkModeBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+        localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "true" : "false");
+        vibrate();
       });
 
+      // Load dark mode preference
+      if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+        darkModeBtn.textContent = "☀️";
+      }
+
+      // Like button
+      likeBtn.addEventListener("click", () => {
+        likeBtn.classList.toggle("liked");
+        vibrate();
+      });
+
+      // Socket join
       socket.emit("join", username);
 
+      // Send message
       async function sendMessage() {
-        console.log("sendMessage: Function called");
-        if (isSending) {
-          console.log("sendMessage: Already sending, ignoring");
-          return;
-        }
-
+        if (isSending) return;
         const message = input.value.trim();
         const file = fileInput.files[0];
         if (!message && !file) {
-          console.log("sendMessage: No message or file provided");
           showError("Please enter a message or select a file.");
           return;
         }
@@ -518,7 +861,6 @@
         fileBtn.disabled = true;
         voiceBtn.disabled = true;
         sendBtn.textContent = "Sending...";
-        console.log("sendMessage: Preparing to send", { message, file: file ? file.name : null });
 
         if (file) {
           const validTypes = [
@@ -537,14 +879,12 @@
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
           ];
           if (!validTypes.includes(file.type)) {
-            console.log("sendMessage: Invalid file type", file.type);
-            showError("Unsupported file type. Please upload an image, audio, video, PDF, or Word document.");
+            showError("Unsupported file type.");
             fileInput.value = "";
             resetForm();
             return;
           }
           if (file.size > 10 * 1024 * 1024) {
-            console.log("sendMessage: File too large", file.size);
             showError("File is too large. Maximum size is 10MB.");
             fileInput.value = "";
             resetForm();
@@ -557,22 +897,18 @@
         if (file) formData.append("file", file);
 
         try {
-          console.log("sendMessage: Sending fetch to /upload");
           const res = await fetch("/upload", {
             method: "POST",
             body: formData,
             headers: { "X-Username": username },
           });
 
-          console.log("sendMessage: Fetch response received", res.status);
           if (!res.ok) {
             const error = await res.json();
-            console.log("sendMessage: Fetch failed", error);
             throw new Error(error.error || "Failed to send message");
           }
 
           const data = await res.json();
-          console.log("sendMessage: Fetch successful, emitting socket event", data);
           socket.emit("chat message", {
             username,
             message: data.message,
@@ -586,137 +922,249 @@
           input.focus();
           scrollToBottom();
         } catch (err) {
-          console.error("sendMessage: Error occurred", err);
-          showError(err.message || "Failed to send message. Please try again.");
+          showError(err.message || "Failed to send message.");
         } finally {
           resetForm();
         }
       }
 
+      // Reset form
       function resetForm() {
         isSending = false;
         sendBtn.disabled = false;
         fileBtn.disabled = false;
         voiceBtn.disabled = false;
         sendBtn.textContent = "Send";
-        console.log("resetForm: Form state reset");
+        voiceRecordingUI.classList.remove("processing");
       }
 
+      // Handle button events
       function handleButtonEvent(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log(`${e.currentTarget.id}: Event triggered`, e.type);
+        vibrate();
         if (e.currentTarget === sendBtn) {
           sendMessage();
         } else if (e.currentTarget === fileBtn) {
           fileInput.click();
-        } else if (e.currentTarget === voiceBtn) {
-          toggleVoiceRecording();
         }
       }
 
-      async function toggleVoiceRecording() {
-        console.log("toggleVoiceRecording: Function called");
-        if (voiceBtn.classList.contains("recording")) {
-          console.log("voiceBtn: Stopping recording");
-          mediaRecorder.stop();
-          voiceBtn.classList.remove("recording");
-          voiceBtn.textContent = "🎤";
-        } else {
-          if (!navigator.mediaDevices || !MediaRecorder) {
-            console.log("voiceBtn: Voice recording not supported");
-            showError("Voice recording is not supported in this browser.");
-            return;
-          }
+      // Voice recording
+      function startVoiceRecording() {
+        if (!navigator.mediaDevices || !MediaRecorder) {
+          showError("Voice recording is not supported in this browser.");
+          return;
+        }
 
-          try {
-            console.log("voiceBtn: Requesting microphone access");
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        navigator.mediaDevices
+          .getUserMedia({ audio: true })
+          .then((micStream) => {
+            stream = micStream;
             mediaRecorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
             audioChunks = [];
+
+            // Setup Web Audio API for waveform
+            audioContext = new AudioContext();
+            analyser = audioContext.createAnalyser();
+            const source = audioContext.createMediaStreamSource(stream);
+            source.connect(analyser);
+            analyser.fftSize = 256;
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+
+            // Update waveform
+            function updateWaveform() {
+              if (!voiceRecordingUI.classList.contains("recording")) return;
+              analyser.getByteFrequencyData(dataArray);
+              const bars = voiceWaveform.querySelectorAll(".bar");
+              bars.forEach((bar, i) => {
+                const height = (dataArray[i * 2] / 255) * 32;
+                bar.style.height = `${Math.max(8, height)}px`;
+              });
+              requestAnimationFrame(updateWaveform);
+            }
+
+            // Timer
+            recordingStartTime = Date.now();
+            recordingInterval = setInterval(() => {
+              const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+              const minutes = String(Math.floor(elapsed / 60)).padStart(2, "0");
+              const seconds = String(elapsed % 60).padStart(2, "0");
+              voiceTimer.textContent = `${minutes}:${seconds}`;
+            }, 1000);
 
             mediaRecorder.ondataavailable = (e) => {
               if (e.data.size > 0) {
                 audioChunks.push(e.data);
-                console.log("voiceBtn: Received audio data", e.data.size);
               }
             };
 
             mediaRecorder.onstop = () => {
-              console.log("voiceBtn: Recording stopped, processing audio");
+              voiceRecordingUI.classList.add("processing");
+              const elapsed = (Date.now() - recordingStartTime) / 1000;
+              if (elapsed < 0.5) {
+                showError("Recording too short.");
+                cleanupRecording();
+                return;
+              }
+
               const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-              const audioFile = new File([audioBlob], `voice-${Date.now()}.webm`, { type: "audio/webm" });
+              const audioFile = new File([audioBlob], `voice-${Date.now()}.webm`, {
+                type: "audio/webm",
+              });
 
               fileInput.value = "";
               const dataTransfer = new DataTransfer();
               dataTransfer.items.add(audioFile);
               fileInput.files = dataTransfer.files;
 
-              stream.getTracks().forEach((track) => track.stop());
-              console.log("voiceBtn: Audio file created", audioFile.name);
-              sendMessage();
+              // Delay sendMessage to ensure file is ready
+              setTimeout(() => {
+                sendMessage();
+                cleanupRecording();
+              }, 100);
             };
 
             mediaRecorder.onerror = (err) => {
-              console.error("voiceBtn: MediaRecorder error", err);
-              showError("Recording failed. Please try again.");
-              voiceBtn.classList.remove("recording");
-              voiceBtn.textContent = "🎤";
-              stream.getTracks().forEach((track) => track.stop());
-              resetForm();
+              showError("Recording failed: " + err.message);
+              cleanupRecording();
             };
 
             mediaRecorder.start();
+            voiceRecordingUI.classList.add("recording");
             voiceBtn.classList.add("recording");
             voiceBtn.textContent = "⏹";
-            console.log("voiceBtn: Recording started");
-          } catch (err) {
-            console.error("voiceBtn: Audio recording failed", err);
+            updateWaveform();
+          })
+          .catch((err) => {
             if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
-              showError("Microphone access denied. Please allow microphone permissions.");
+              showError("Microphone access denied.");
             } else {
-              showError("Failed to start recording. Check microphone permissions or try another browser.");
+              showError("Failed to start recording: " + err.message);
             }
-          }
+            cleanupRecording();
+          });
+      }
+
+      // Stop recording
+      function stopRecording() {
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+          mediaRecorder.stop();
         }
       }
 
-      [sendBtn, fileBtn, voiceBtn].forEach((btn) => {
+      // Cleanup recording
+      function cleanupRecording() {
+        voiceRecordingUI.classList.remove("recording");
+        voiceBtn.classList.remove("recording");
+        voiceBtn.textContent = "🎤";
+        voiceTimer.textContent = "00:00";
+        if (recordingInterval) {
+          clearInterval(recordingInterval);
+          recordingInterval = null;
+        }
+        if (audioContext) {
+          audioContext.close();
+          audioContext = null;
+        }
+        if (stream) {
+          stream.getTracks().forEach((track) => track.stop());
+          stream = null;
+        }
+        audioChunks = [];
+        mediaRecorder = null;
+      }
+
+      // Voice button events
+      voiceBtn.addEventListener(
+        "mousedown",
+        (e) => {
+          e.preventDefault();
+          vibrate();
+          startVoiceRecording();
+        },
+        { passive: false }
+      );
+
+      voiceBtn.addEventListener(
+        "touchstart",
+        (e) => {
+          e.preventDefault();
+          vibrate();
+          startVoiceRecording();
+        },
+        { passive: false }
+      );
+
+      voiceBtn.addEventListener(
+        "mouseup",
+        (e) => {
+          e.preventDefault();
+          if (voiceRecordingUI.classList.contains("recording")) {
+            stopRecording();
+          }
+        },
+        { passive: false }
+      );
+
+      voiceBtn.addEventListener(
+        "touchend",
+        (e) => {
+          e.preventDefault();
+          if (voiceRecordingUI.classList.contains("recording")) {
+            stopRecording();
+          }
+        },
+        { passive: false }
+      );
+
+      voiceCancel.addEventListener("click", cleanupRecording);
+      voiceCancel.addEventListener("touchend", cleanupRecording);
+
+      // Other button event listeners
+      [sendBtn, fileBtn].forEach((btn) => {
         btn.addEventListener("click", handleButtonEvent, { passive: false });
-        btn.addEventListener("touchstart", handleButtonEvent, { passive: false });
+        btn.addEventListener("touchend", handleButtonEvent, { passive: false });
       });
 
+      // Input events
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
-          e.stopPropagation();
-          console.log("input: Enter key pressed");
           sendMessage();
         }
       });
 
-      input.addEventListener("input", () => {
-        socket.emit("typing", username);
-      });
+      input.addEventListener(
+        "input",
+        debounce(() => {
+          socket.emit("typing", username);
+        }, 300)
+      );
 
       input.addEventListener("focus", () => {
+        form.classList.add("keyboard-active");
         setTimeout(scrollToBottom, 300);
+      });
+
+      input.addEventListener("focusout", () => {
+        form.classList.remove("keyboard-active");
       });
 
       fileInput.addEventListener("change", () => {
         if (fileInput.files.length > 0) {
-          console.log("fileInput: File selected", fileInput.files[0].name);
           sendMessage();
         }
       });
 
+      // Socket events
       socket.on("chat message", (data) => {
-        console.log("socket: Received chat message", data);
         const div = document.createElement("div");
         div.classList.add("message");
         div.dataset.id = data.id;
         div.dataset.username = data.username;
-        const timestamp = new Date().toLocaleTimeString();
+        const timestamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
         let content = `<strong>${data.username}</strong>: `;
         if (data.message) {
           content += data.message;
@@ -725,10 +1173,12 @@
           content += `<div class="file">`;
           if (data.fileUrl.match(/\.(jpg|jpeg|png|gif)$/i)) {
             content += `<img src="${data.fileUrl}" alt="Uploaded image" />`;
+          } else if (data.fileUrl.match(/\.(mp4|webm)$/i)) {
+            content += `<video src="${data.fileUrl}" controls preload="metadata"></video>`;
           } else if (data.fileUrl.match(/\.(mp3|wav|ogg|webm|m4a)$/i)) {
             content += `
-              <div class="voice-message">
-                <button class="play-btn" data-src="${data.fileUrl}">▶</button>
+              <div class="voice-message ${data.username === username ? 'own' : ''}">
+                <button class="play-btn" data-src="${data.fileUrl}" aria-label="Play voice message">▶</button>
                 <div class="waveform">
                   <span class="bar"></span>
                   <span class="bar"></span>
@@ -741,29 +1191,30 @@
                 </div>
               </div>`;
           } else {
-            content += `<a href="${data.fileUrl}" target="_blank">Download File</a>`;
+            content += `<a href="${data.fileUrl}" target="_blank" aria-label="Download file">Download File</a>`;
           }
           content += `</div>`;
         }
         content += `
           <small style="float: right; color: #999; font-size: 0.75em">${timestamp}</small>
-          ${data.username === username ? `<span class="seen-status ${data.seen ? 'seen' : ''}"></span>` : ""}
+          ${data.username === username ? `<span class="seen-status ${data.seen ? 'seen' : ''}" aria-label="Message status"></span>` : ""}
         `;
         div.innerHTML = content;
         chatBox.appendChild(div);
 
-        const isUserNearBottom =
-          chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
-
+        const isUserNearBottom = chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
         if (data.username === username || isUserNearBottom) {
           scrollToBottom();
+        } else {
+          newMessages++;
+          scrollDownBtn.classList.add("new-messages");
+          scrollDownBtn.style.display = "block";
         }
 
         if (data.username !== username) {
           showNotification(data.username, data.message || "Sent a file");
           const messageId = parseInt(data.id);
           if (!isNaN(messageId)) {
-            console.log(`socket: Emitting message seen for ID: ${messageId}`);
             socket.emit("message seen", { messageId, username });
           }
         }
@@ -775,7 +1226,6 @@
           const seenStatus = messageEl.querySelector(".seen-status");
           if (seenStatus) {
             seenStatus.classList.add("seen");
-            console.log(`socket: Message ${messageId} marked as seen`);
           }
         }
       });
@@ -783,17 +1233,25 @@
       socket.on("typing", (name) => {
         if (name !== username) {
           typingDiv.textContent = `${name} is typing...`;
-          setTimeout(() => (typingDiv.textContent = ""), 2000);
+          typingDiv.classList.add("active");
+          setTimeout(() => {
+            typingDiv.textContent = "";
+            typingDiv.classList.remove("active");
+          }, 2000);
         }
       });
 
+      // Scroll to bottom
       function scrollToBottom() {
         setTimeout(() => {
           chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
           scrollDownBtn.style.display = "none";
+          scrollDownBtn.classList.remove("new-messages");
+          newMessages = 0;
         }, 100);
       }
 
+      // Debounce seen messages
       function debounceSeenMessages() {
         if (scrollTimeout) clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
@@ -808,29 +1266,42 @@
               !isNaN(messageId) &&
               msgUsername !== username
             ) {
-              console.log(`debounceSeenMessages: Emitting message seen for ID: ${messageId}`);
               socket.emit("message seen", { messageId, username });
             }
           });
         }, 300);
       }
 
+      // Debounce utility
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+
+      // Scroll events
       chatBox.addEventListener("scroll", () => {
-        const nearBottom =
-          chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
+        const nearBottom = chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
         scrollDownBtn.style.display = nearBottom ? "none" : "block";
         debounceSeenMessages();
       });
 
       chatBox.addEventListener("touchmove", () => {
-        const nearBottom =
-          chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
+        const nearBottom = chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
         scrollDownBtn.style.display = nearBottom ? "none" : "block";
         debounceSeenMessages();
       });
 
       scrollDownBtn.addEventListener("click", scrollToBottom);
+      scrollDownBtn.addEventListener("touchend", scrollToBottom);
 
+      // Audio playback
       chatBox.addEventListener("click", (e) => {
         if (e.target.classList.contains("play-btn")) {
           e.preventDefault();
@@ -859,19 +1330,53 @@
               button.dataset.audio = audioId;
             }
 
-            audio.play().catch((err) => {
-              console.error("chatBox: Audio playback failed", err);
-              showError("Failed to play audio. Please try again.");
-            });
+            audio
+              .play()
+              .catch((err) => {
+                showError("Failed to play audio.");
+              });
             button.textContent = "⏸";
             waveform.classList.add("playing");
+            if (waveform.parentElement.classList.contains("own")) {
+              waveform.classList.remove("own");
+            }
 
             audio.onended = () => {
               button.textContent = "▶";
               waveform.classList.remove("playing");
+              if (waveform.parentElement.classList.contains("own")) {
+                waveform.classList.add("own");
+              }
             };
           }
         }
+      });
+
+      // Swipe to reply (basic)
+      let touchStartX = 0;
+      chatBox.addEventListener("touchstart", (e) => {
+        touchStartX = e.touches[0].clientX;
+      });
+
+      chatBox.addEventListener("touchend", (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const deltaX = touchEndX - touchStartX;
+        if (deltaX > 50) {
+          const message = e.target.closest(".message");
+          if (message) {
+            input.value = `Replying to ${message.dataset.username}: `;
+            input.focus();
+          }
+        }
+      });
+
+      // Offline handling
+      window.addEventListener("offline", () => {
+        showError("You are offline. Some features may not work.");
+      });
+
+      window.addEventListener("online", () => {
+        showError("Back online!");
       });
 
       scrollToBottom();

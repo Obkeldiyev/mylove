@@ -27,7 +27,7 @@ export class ChatController {
         username: msg.sender.username,
         message: msg.content,
         fileUrl: msg.fileUrl,
-        createdAt: msg.createdAt.toLocaleString(),
+        createdAt: msg.createdAt.toISOString(),
         seen: msg.seen,
       }));
 
@@ -43,6 +43,8 @@ export class ChatController {
   static async uploadFile(req: Request, res: Response, next: NextFunction) {
     try {
       const username = req.headers["x-username"] as string;
+      if (!username) return res.status(401).json({ error: "Username required" });
+
       const admin = await client.admin.findUnique({ where: { username } });
       if (!admin) return res.status(401).json({ error: "Unauthorized" });
 
@@ -61,6 +63,7 @@ export class ChatController {
           content: message || undefined,
           fileUrl,
           senderId: admin.id,
+          seen: false,
         },
       });
 

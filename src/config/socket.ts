@@ -4,14 +4,18 @@ import { PrismaClient } from "@prisma/client";
 const client = new PrismaClient();
 
 export function initSocket(server: any) {
-  const io = new Server(server);
+  const io = new Server(server, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+    },
+  });
 
   io.on("connection", (socket) => {
     console.log("🟢 User connected");
 
     socket.on("join", (username: string) => {
       socket.data.username = username;
-
       socket.broadcast.emit("chat message", {
         username: "System",
         message: `${username} joined the chat.`,
@@ -48,7 +52,6 @@ export function initSocket(server: any) {
           include: { sender: true },
         });
         if (message && !message.seen) {
-          // Ignore if the viewer is the sender
           if (message.sender.username === username) {
             console.log(`Ignoring message seen for ID ${id} from sender ${username}`);
             return;
@@ -72,7 +75,6 @@ export function initSocket(server: any) {
           message: `${socket.data.username} left the chat.`,
         });
       }
-
       console.log("🔴 User disconnected");
     });
   });

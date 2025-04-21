@@ -7,22 +7,23 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash";
 import http from "http";
-import { Server } from "socket.io";
 import { initSocket } from "./config/socket";
 dotenv.config();
 
 const app: Application = express();
 
 app.use(cookieParser());
-app.use(session({
-  secret: process.env.SECRET_KEY as string,
-  resave: false,
-  saveUninitialized: true,
-}));
+app.use(
+  session({
+    secret: process.env.SECRET_KEY as string,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(flash());
 app.use((req, res, next) => {
-  res.locals.successMessage = req.flash('success');
-  res.locals.errorMessage = req.flash('error');
+  res.locals.successMessage = req.flash("success");
+  res.locals.errorMessage = req.flash("error");
   next();
 });
 app.use(express.json());
