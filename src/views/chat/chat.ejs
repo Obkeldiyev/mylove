@@ -210,7 +210,7 @@
       #error-message {
         color: #c2185b;
         font-size: 0.85rem;
-        padding: 0.4rem: 1.2rem;
+        padding: 0.4rem 1.2rem;
         text-align: center;
         display: none;
       }
@@ -327,7 +327,7 @@
         transform: scale(1.1);
       }
 
-      button[type="submit"] {
+      button[type="button"] {
         -webkit-appearance: none;
       }
 
@@ -402,7 +402,7 @@
     <a href="/profile" id="home-btn" title="Back to Profile">♥</a>
     <div class="title-container">
       <h2>Welcome to Chat, <%= username %></h2>
-      <span id="like-btn" title="Like this chat">♥</span>
+      <span id="like-btn" title="Like this chat" aria-label="Like this chat">♥</span>
     </div>
 
     <div id="chat-box">
@@ -484,10 +484,7 @@
 
       function showNotification(title, body) {
         if (Notification.permission === "granted") {
-          new Notification(title, {
-            body,
-            icon: "/icons/icon-192x192.png",
-          });
+          new Notification(title, { body, icon: "/icons/icon-192x192.png" });
         }
       }
 
@@ -507,12 +504,8 @@
 
       socket.emit("join", username);
 
-      async function sendMessage(e) {
-        if (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          console.log("sendMessage: Event prevented");
-        }
+      async function sendMessage() {
+        console.log("sendMessage: Function called");
         if (isSending) {
           console.log("sendMessage: Already sending, ignoring");
           return;
@@ -521,6 +514,7 @@
         const message = input.value.trim();
         const file = fileInput.files[0];
         if (!message && !file) {
+          console.log("sendMessage: No message or file provided");
           showError("Please enter a message or select a file.");
           return;
         }
@@ -530,7 +524,7 @@
         fileBtn.disabled = true;
         voiceBtn.disabled = true;
         sendBtn.textContent = "Sending...";
-        console.log("sendMessage: Sending message or file", { message, file: file ? file.name : null });
+        console.log("sendMessage: Preparing to send", { message, file: file ? file.name : null });
 
         if (file) {
           const validTypes = [
@@ -549,12 +543,14 @@
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
           ];
           if (!validTypes.includes(file.type)) {
+            console.log("sendMessage: Invalid file type", file.type);
             showError("Unsupported file type. Please upload an image, audio, video, PDF, or Word document.");
             fileInput.value = "";
             resetForm();
             return;
           }
-          if (file.size > 10 * 1024 * 1024) { // 10MB limit
+          if (file.size > 10 * 1024 * 1024) {
+            console.log("sendMessage: File too large", file.size);
             showError("File is too large. Maximum size is 10MB.");
             fileInput.value = "";
             resetForm();
@@ -568,14 +564,19 @@
 
         try {
           console.log("sendMessage: Sending fetch to /upload");
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
           const res = await fetch("/upload", {
             method: "POST",
             body: formData,
             headers: { "X-Username": username },
+            signal: controller.signal,
           });
+          clearTimeout(timeoutId);
 
           if (!res.ok) {
             const error = await res.json();
+            console.log("sendMessage: Fetch failed", error);
             throw new Error(error.error || "Failed to send message");
           }
 
@@ -594,8 +595,12 @@
           input.focus();
           scrollToBottom();
         } catch (err) {
-          console.error("sendMessage: Upload failed", err);
-          showError(err.message || "Failed to send message. Please try again.");
+          console.error("sendMessage: Error occurred", err);
+          if (err.name === "AbortError") {
+            showError("Request timed out. Please try again.");
+          } else {
+            showError(err.message || "Failed to send message. Please try again.");
+          }
         } finally {
           resetForm();
         }
@@ -607,21 +612,31 @@
         fileBtn.disabled = false;
         voiceBtn.disabled = false;
         sendBtn.textContent = "Send";
-        console.log("sendMessage: Form reset");
+        console.log("resetForm: Form state reset");
       }
+
+      function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+      }
+
+      const debouncedSendMessage = debounce(sendMessage, 200);
 
       sendBtn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
         console.log("sendBtn: Click event triggered");
-        sendMessage();
+        debouncedSendMessage();
       });
 
       sendBtn.addEventListener("touchend", (e) => {
         e.preventDefault();
         e.stopPropagation();
         console.log("sendBtn: Touchend event triggered");
-        sendMessage();
+        debouncedSendMessage();
       });
 
       input.addEventListener("keydown", (e) => {
@@ -629,7 +644,7 @@
           e.preventDefault();
           e.stopPropagation();
           console.log("input: Enter key pressed");
-          sendMessage();
+          debouncedSendMessage();
         }
       });
 
@@ -641,18 +656,28 @@
         setTimeout(scrollToBottom, 300);
       });
 
-      fileBtn.addEventListener("click", () => {
+      fileBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log("fileBtn: Click event triggered");
+        fileInput.click();
+      });
+
+      fileBtn.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        console.log("fileBtn: Touchend event triggered");
         fileInput.click();
       });
 
       fileInput.addEventListener("change", () => {
         if (fileInput.files.length > 0) {
           console.log("fileInput: File selected", fileInput.files[0].name);
-          sendMessage();
+          debouncedSendMessage();
         }
       });
 
-      voiceBtn.addEventListener("click", async () => {
+      voiceBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        console.log("voiceBtn: Click event triggered");
         if (voiceBtn.classList.contains("recording")) {
           console.log("voiceBtn: Stopping recording");
           mediaRecorder.stop();
@@ -660,6 +685,7 @@
           voiceBtn.textContent = "🎤";
         } else {
           if (!navigator.mediaDevices || !MediaRecorder) {
+            console.log("voiceBtn: Voice recording not supported");
             showError("Voice recording is not supported in this browser.");
             return;
           }
@@ -678,7 +704,7 @@
               }
             };
 
-            mediaRecorder.onstop = async () => {
+            mediaRecorder.onstop = () => {
               console.log("voiceBtn: Recording stopped, processing audio");
               const audioBlob = new Blob(audioChunks, { type: mimeType });
               const extension = mimeType === "audio/webm" ? "webm" : "m4a";
@@ -691,7 +717,7 @@
 
               stream.getTracks().forEach((track) => track.stop());
               console.log("voiceBtn: Audio file created", audioFile.name);
-              await sendMessage();
+              debouncedSendMessage();
             };
 
             mediaRecorder.onerror = (err) => {
@@ -703,7 +729,7 @@
               resetForm();
             };
 
-            mediaRecorder.start(100); // Capture data every 100ms
+            mediaRecorder.start(100);
             voiceBtn.classList.add("recording");
             voiceBtn.textContent = "⏹";
             console.log("voiceBtn: Recording started");
@@ -716,6 +742,12 @@
             }
           }
         }
+      });
+
+      voiceBtn.addEventListener("touchend", async (e) => {
+        e.preventDefault();
+        console.log("voiceBtn: Touchend event triggered");
+        voiceBtn.click();
       });
 
       socket.on("chat message", (data) => {
