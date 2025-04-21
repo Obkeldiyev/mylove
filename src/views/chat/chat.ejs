@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Chat Room</title>
     <link rel="manifest" href="../../../manifest.json" />
     <script src="/socket.io/socket.io.js"></script>
@@ -224,34 +227,70 @@
         animation: ownWave 1.4s infinite ease-in-out;
       }
 
-      .message .voice-message.own .waveform .bar:nth-child(1) { animation-delay: 0s; }
-      .message .voice-message.own .waveform .bar:nth-child(2) { animation-delay: 0.1s; }
-      .message .voice-message.own .waveform .bar:nth-child(3) { animation-delay: 0.2s; }
-      .message .voice-message.own .waveform .bar:nth-child(4) { animation-delay: 0.3s; }
-      .message .voice-message.own .waveform .bar:nth-child(5) { animation-delay: 0.4s; }
-      .message .voice-message.own .waveform .bar:nth-child(6) { animation-delay: 0.5s; }
+      .message .voice-message.own .waveform .bar:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(5) {
+        animation-delay: 0.4s;
+      }
+      .message .voice-message.own .waveform .bar:nth-child(6) {
+        animation-delay: 0.5s;
+      }
 
       .message .voice-message .waveform.playing .bar {
         animation: wave 1s infinite ease-in-out;
       }
 
-      .message .voice-message .waveform.playing .bar:nth-child(1) { animation-delay: 0s; }
-      .message .voice-message .waveform.playing .bar:nth-child(2) { animation-delay: 0.1s; }
-      .message .voice-message .waveform.playing .bar:nth-child(3) { animation-delay: 0.2s; }
-      .message .voice-message .waveform.playing .bar:nth-child(4) { animation-delay: 0.3s; }
-      .message .voice-message .waveform.playing .bar:nth-child(5) { animation-delay: 0.4s; }
-      .message .voice-message .waveform.playing .bar:nth-child(6) { animation-delay: 0.5s; }
+      .message .voice-message .waveform.playing .bar:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(5) {
+        animation-delay: 0.4s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(6) {
+        animation-delay: 0.5s;
+      }
 
       @keyframes wave {
-        0% { height: 10px; }
-        50% { height: 20px; }
-        100% { height: 10px; }
+        0% {
+          height: 10px;
+        }
+        50% {
+          height: 20px;
+        }
+        100% {
+          height: 10px;
+        }
       }
 
       @keyframes ownWave {
-        0% { height: 8px; }
-        50% { height: 24px; }
-        100% { height: 8px; }
+        0% {
+          height: 8px;
+        }
+        50% {
+          height: 24px;
+        }
+        100% {
+          height: 8px;
+        }
       }
 
       #typing {
@@ -281,9 +320,16 @@
       }
 
       @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
       }
 
       #chat-form {
@@ -348,7 +394,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        transition: background 0.3s ease, transform 0.3s ease,
+          box-shadow 0.3s ease;
       }
 
       #send-btn:disabled,
@@ -449,8 +496,13 @@
       }
 
       @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
       }
 
       #voice-waveform {
@@ -482,14 +534,26 @@
       }
 
       @keyframes slideIn {
-        from { opacity: 0; transform: translateX(-8px); }
-        to { opacity: 1; transform: translateX(0); }
+        from {
+          opacity: 0;
+          transform: translateX(-8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
       }
 
       @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       #scroll-down-btn {
@@ -629,50 +693,81 @@
     </style>
   </head>
   <body>
-    <a href="/profile" id="home-btn" title="Back to Profile" aria-label="Back to Profile">♥</a>
+    <a
+      href="/profile"
+      id="home-btn"
+      title="Back to Profile"
+      aria-label="Back to Profile"
+      >♥</a
+    >
     <div class="title-container">
       <h2>Welcome to Chat, <%= username %></h2>
-      <span id="like-btn" title="Like this chat" aria-label="Like this chat">♥</span>
-      <span id="dark-mode-btn" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</span>
+      <span id="like-btn" title="Like this chat" aria-label="Like this chat"
+        >♥</span
+      >
+      <span
+        id="dark-mode-btn"
+        title="Toggle dark mode"
+        aria-label="Toggle dark mode"
+        >🌙</span
+      >
     </div>
 
     <div id="chat-box" role="log" aria-live="polite">
       <% messages.forEach(msg => { %>
-        <div class="message" data-id="<%= msg.id %>" data-username="<%= msg.username %>">
-          <strong><%= msg.username %></strong>:
-          <% if (msg.message) { %>
-            <%= msg.message %>
-          <% } %>
-          <% if (msg.fileUrl) { %>
-            <div class="file">
-              <% if (msg.fileUrl.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
-                <img src="<%= msg.fileUrl %>" alt="Uploaded image" />
-              <% } else if (msg.fileUrl.match(/\.(mp4|webm)$/i)) { %>
-                <video src="<%= msg.fileUrl %>" controls preload="metadata"></video>
-              <% } else if (msg.fileUrl.match(/\.(mp3|wav|ogg|webm|m4a)$/i)) { %>
-                <div class="voice-message <%= msg.username === username ? 'own' : '' %>">
-                  <button class="play-btn" data-src="<%= msg.fileUrl %>" aria-label="Play voice message">▶</button>
-                  <div class="waveform">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                  </div>
-                </div>
-              <% } else { %>
-                <a href="<%= msg.fileUrl %>" target="_blank" aria-label="Download file">Download File</a>
-              <% } %>
+      <div
+        class="message"
+        data-id="<%= msg.id %>"
+        data-username="<%= msg.username %>"
+      >
+        <strong><%= msg.username %></strong>: <% if (msg.message) { %> <%=
+        msg.message %> <% } %> <% if (msg.fileUrl) { %>
+        <div class="file">
+          <% if (msg.fileUrl.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
+          <img src="<%= msg.fileUrl %>" alt="Uploaded image" />
+          <% } else if (msg.fileUrl.match(/\.(mp4|webm)$/i)) { %>
+          <video src="<%= msg.fileUrl %>" controls preload="metadata"></video>
+          <% } else if (msg.fileUrl.match(/\.(mp3|wav|ogg|webm|m4a)$/i)) { %>
+          <div
+            class="voice-message <%= msg.username === username ? 'own' : '' %>"
+          >
+            <button
+              class="play-btn"
+              data-src="<%= msg.fileUrl %>"
+              aria-label="Play voice message"
+            >
+              ▶
+            </button>
+            <div class="waveform">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
             </div>
-          <% } %>
-          <small style="float: right; color: #999; font-size: 0.75em">
-            <%= new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
-          </small>
-          <% if (msg.username === username) { %>
-            <span class="seen-status <%= msg.seen ? 'seen' : '' %>" aria-label="Message status"></span>
+          </div>
+          <% } else { %>
+          <a
+            href="<%= msg.fileUrl %>"
+            target="_blank"
+            aria-label="Download file"
+            >Download File</a
+          >
           <% } %>
         </div>
+        <% } %>
+        <small style="float: right; color: #999; font-size: 0.75em">
+          <%= new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit',
+          minute: '2-digit' }) %>
+        </small>
+        <% if (msg.username === username) { %>
+        <span
+          class="seen-status <%= msg.seen ? 'seen' : '' %>"
+          aria-label="Message status"
+        ></span>
+        <% } %>
+      </div>
       <% }) %>
     </div>
 
@@ -693,7 +788,14 @@
         accept="image/*,audio/*,video/*,.pdf,.doc,.docx"
         aria-label="Upload file"
       />
-      <button id="file-btn" type="button" title="Upload file" aria-label="Upload file">📎</button>
+      <button
+        id="file-btn"
+        type="button"
+        title="Upload file"
+        aria-label="Upload file"
+      >
+        📎
+      </button>
       <button
         id="voice-btn"
         type="button"
@@ -702,10 +804,21 @@
       >
         🎤
       </button>
-      <button id="send-btn" type="button" title="Send message" aria-label="Send message">Send</button>
+      <button
+        id="send-btn"
+        type="button"
+        title="Send message"
+        aria-label="Send message"
+      >
+        Send
+      </button>
     </div>
 
-    <div id="voice-recording-ui" role="region" aria-label="Voice recording controls">
+    <div
+      id="voice-recording-ui"
+      role="region"
+      aria-label="Voice recording controls"
+    >
       <span id="voice-timer" aria-live="polite">00:00</span>
       <div id="voice-waveform">
         <span class="bar"></span>
@@ -715,10 +828,21 @@
         <span class="bar"></span>
         <span class="bar"></span>
       </div>
-      <span id="voice-cancel" title="Cancel recording" aria-label="Cancel recording">Cancel</span>
+      <span
+        id="voice-cancel"
+        title="Cancel recording"
+        aria-label="Cancel recording"
+        >Cancel</span
+      >
     </div>
 
-    <button id="scroll-down-btn" title="Scroll to latest" aria-label="Scroll to latest messages">⬇️</button>
+    <button
+      id="scroll-down-btn"
+      title="Scroll to latest"
+      aria-label="Scroll to latest messages"
+    >
+      ⬇️
+    </button>
 
     <script>
       const socket = io();
@@ -752,6 +876,10 @@
       let stream = null;
       let newMessages = 0;
       let stopTimeout = null;
+      let isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
 
       // Request notification permission
       if (Notification && Notification.permission !== "granted") {
@@ -774,22 +902,45 @@
           errorDiv.style.display = "none";
         }, 5000);
         if (message.includes("not supported")) {
-          errorDiv.textContent += " Please update your browser or use a compatible one (e.g., Chrome, Safari, Firefox).";
+          errorDiv.textContent +=
+            " Please update your browser or use a compatible one (e.g., Chrome, Safari, Firefox).";
         }
       }
 
       // Haptic feedback
       function vibrate() {
         if (navigator.vibrate) {
-          navigator.vibrate(100);
+          navigator.vibrate(50); // Shorter vibration for mobile
+        }
+      }
+
+      // Mobile-specific adjustments
+      if (isMobile) {
+        // Add touch-action to prevent browser interference
+        voiceBtn.style.touchAction = "none";
+        sendBtn.style.touchAction = "none";
+        fileBtn.style.touchAction = "none";
+
+        // Adjust viewport for mobile keyboards
+        const viewport = document.querySelector("meta[name=viewport]");
+        if (viewport) {
+          viewport.setAttribute(
+            "content",
+            "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          );
         }
       }
 
       // Toggle dark mode
       darkModeBtn.addEventListener("click", () => {
         document.body.classList.toggle("dark-mode");
-        darkModeBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
-        localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "true" : "false");
+        darkModeBtn.textContent = document.body.classList.contains("dark-mode")
+          ? "☀️"
+          : "🌙";
+        localStorage.setItem(
+          "darkMode",
+          document.body.classList.contains("dark-mode") ? "true" : "false"
+        );
         vibrate();
       });
 
@@ -890,14 +1041,19 @@
             });
             if (!res.ok) {
               const error = await res.json();
-              throw new Error(`Upload failed: ${error.error || res.statusText} (Status: ${res.status})`);
+              throw new Error(
+                `Upload failed: ${error.error || res.statusText} (Status: ${
+                  res.status
+                })`
+              );
             }
             return res;
           } catch (err) {
             attempt++;
             if (attempt > maxRetries) throw err;
-            if (isDebug) console.log(`Upload attempt ${attempt} failed, retrying...`, err);
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            if (isDebug)
+              console.log(`Upload attempt ${attempt} failed, retrying...`, err);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
           }
         }
       }
@@ -929,7 +1085,7 @@
         const types = [
           { mime: "audio/webm", ext: "webm" },
           { mime: "audio/mp4", ext: "m4a" },
-          { mime: "audio/ogg", ext: "ogg" }
+          { mime: "audio/ogg", ext: "ogg" },
         ];
         for (const type of types) {
           if (MediaRecorder.isTypeSupported(type.mime)) {
@@ -939,7 +1095,7 @@
         return null;
       }
 
-      // Voice recording
+      // Voice recording - mobile optimized
       function startVoiceRecording() {
         if (!navigator.mediaDevices || !MediaRecorder) {
           showError("Voice recording is not supported in this browser.");
@@ -952,105 +1108,151 @@
           return;
         }
 
+        // Mobile-specific audio constraints
+        const audioConstraints = {
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true,
+            channelCount: 1,
+          },
+        };
+
         navigator.mediaDevices
-          .getUserMedia({ audio: true })
+          .getUserMedia(audioConstraints)
           .then((micStream) => {
             stream = micStream;
-            mediaRecorder = new MediaRecorder(stream, { mimeType: supportedType.mime });
+            mediaRecorder = new MediaRecorder(stream, {
+              mimeType: supportedType.mime,
+            });
             audioChunks = [];
 
             // Setup Web Audio API for waveform
-            audioContext = new AudioContext();
-            analyser = audioContext.createAnalyser();
-            const source = audioContext.createMediaStreamSource(stream);
-            source.connect(analyser);
-            analyser.fftSize = 256;
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
+            try {
+              audioContext = new (window.AudioContext ||
+                window.webkitAudioContext)();
+              analyser = audioContext.createAnalyser();
+              const source = audioContext.createMediaStreamSource(stream);
+              source.connect(analyser);
+              analyser.fftSize = 64; // Reduced for mobile performance
+              const bufferLength = analyser.frequencyBinCount;
+              const dataArray = new Uint8Array(bufferLength);
 
-            // Update waveform
-            function updateWaveform() {
-              if (!voiceRecordingUI.classList.contains("recording")) return;
-              analyser.getByteFrequencyData(dataArray);
-              const bars = voiceWaveform.querySelectorAll(".bar");
-              bars.forEach((bar, i) => {
-                const height = (dataArray[i * 3] / 255) * 28;
-                bar.style.height = `${Math.max(6, height)}px`;
-              });
-              requestAnimationFrame(updateWaveform);
-            }
-
-            // Timer
-            recordingStartTime = Date.now();
-            recordingInterval = setInterval(() => {
-              const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
-              const minutes = String(Math.floor(elapsed / 60)).padStart(2, "0");
-              const seconds = String(elapsed % 60).padStart(2, "0");
-              voiceTimer.textContent = `${minutes}:${seconds}`;
-            }, 1000);
-
-            mediaRecorder.onstart = () => {
-              if (isDebug) console.log("Recording started with MIME type:", supportedType.mime);
-            };
-
-            mediaRecorder.ondataavailable = (e) => {
-              if (e.data.size > 0) {
-                audioChunks.push(e.data);
-                if (isDebug) console.log("Received audio chunk, size:", e.data.size);
+              // Update waveform
+              function updateWaveform() {
+                if (!voiceRecordingUI.classList.contains("recording")) return;
+                analyser.getByteFrequencyData(dataArray);
+                const bars = voiceWaveform.querySelectorAll(".bar");
+                bars.forEach((bar, i) => {
+                  const height = (dataArray[i] / 255) * 28;
+                  bar.style.height = `${Math.max(6, height)}px`;
+                });
+                requestAnimationFrame(updateWaveform);
               }
-            };
 
-            mediaRecorder.onstop = () => {
-              if (isDebug) console.log("Recording stopped, chunks:", audioChunks.length);
-              if (audioChunks.length === 0) {
-                showError("No audio data recorded.");
+              // Timer
+              recordingStartTime = Date.now();
+              recordingInterval = setInterval(() => {
+                const elapsed = Math.floor(
+                  (Date.now() - recordingStartTime) / 1000
+                );
+                const minutes = String(Math.floor(elapsed / 60)).padStart(
+                  2,
+                  "0"
+                );
+                const seconds = String(elapsed % 60).padStart(2, "0");
+                voiceTimer.textContent = `${minutes}:${seconds}`;
+              }, 1000);
+
+              mediaRecorder.onstart = () => {
+                if (isDebug)
+                  console.log(
+                    "Recording started with MIME type:",
+                    supportedType.mime
+                  );
+              };
+
+              mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) {
+                  audioChunks.push(e.data);
+                  if (isDebug)
+                    console.log("Received audio chunk, size:", e.data.size);
+                }
+              };
+
+              mediaRecorder.onstop = () => {
+                if (isDebug)
+                  console.log("Recording stopped, chunks:", audioChunks.length);
+                if (audioChunks.length === 0) {
+                  showError("No audio data recorded.");
+                  cleanupRecording();
+                  return;
+                }
+
+                const elapsed = (Date.now() - recordingStartTime) / 1000;
+                if (elapsed < 0.5) {
+                  showError("Recording too short.");
+                  cleanupRecording();
+                  return;
+                }
+
+                const audioBlob = new Blob(audioChunks, {
+                  type: supportedType.mime,
+                });
+                const audioFile = new File(
+                  [audioBlob],
+                  `voice-${Date.now()}.${supportedType.ext}`,
+                  {
+                    type: supportedType.mime,
+                  }
+                );
+
+                if (isDebug)
+                  console.log(
+                    "Audio file created:",
+                    audioFile.name,
+                    audioFile.size
+                  );
+                setTimeout(() => {
+                  sendVoiceMessage(audioFile);
+                  cleanupRecording();
+                }, 500);
+              };
+
+              mediaRecorder.onerror = (err) => {
+                if (isDebug) console.error("MediaRecorder error:", err);
+                showError("Recording failed: " + err.message);
                 cleanupRecording();
-                return;
-              }
+              };
 
-              const elapsed = (Date.now() - recordingStartTime) / 1000;
-              if (elapsed < 0.5) {
-                showError("Recording too short.");
-                cleanupRecording();
-                return;
-              }
+              mediaRecorder.start(100); // Smaller chunks for mobile
+              voiceRecordingUI.classList.add("recording");
+              voiceBtn.classList.add("recording");
+              voiceBtn.textContent = "⏹";
+              updateWaveform();
 
-              const audioBlob = new Blob(audioChunks, { type: supportedType.mime });
-              const audioFile = new File([audioBlob], `voice-${Date.now()}.${supportedType.ext}`, {
-                type: supportedType.mime,
-              });
-
-              if (isDebug) console.log("Audio file created:", audioFile.name, audioFile.size);
+              // Timeout to detect recording failure
               setTimeout(() => {
-                sendVoiceMessage(audioFile);
-                cleanupRecording();
-              }, 500);
-            };
-
-            mediaRecorder.onerror = (err) => {
-              if (isDebug) console.error("MediaRecorder error:", err);
-              showError("Recording failed: " + err.message);
+                if (mediaRecorder && mediaRecorder.state !== "recording") {
+                  showError("Failed to start recording.");
+                  cleanupRecording();
+                }
+              }, 1000);
+            } catch (err) {
+              console.error("Audio setup error:", err);
+              showError("Audio setup failed");
               cleanupRecording();
-            };
-
-            mediaRecorder.start();
-            voiceRecordingUI.classList.add("recording");
-            voiceBtn.classList.add("recording");
-            voiceBtn.textContent = "⏹";
-            updateWaveform();
-
-            // Timeout to detect recording failure
-            setTimeout(() => {
-              if (mediaRecorder && mediaRecorder.state !== "recording") {
-                showError("Failed to start recording.");
-                cleanupRecording();
-              }
-            }, 1000);
+            }
           })
           .catch((err) => {
             if (isDebug) console.error("getUserMedia error:", err);
-            if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
-              showError("Microphone access denied. Please enable it in settings.");
+            if (
+              err.name === "NotAllowedError" ||
+              err.name === "PermissionDeniedError"
+            ) {
+              showError(
+                "Microphone access denied. Please enable it in settings."
+              );
             } else {
               showError("Failed to start recording: " + err.message);
             }
@@ -1081,7 +1283,9 @@
           recordingInterval = null;
         }
         if (audioContext) {
-          audioContext.close().catch((err) => console.error("AudioContext close error:", err));
+          audioContext
+            .close()
+            .catch((err) => console.error("AudioContext close error:", err));
           audioContext = null;
         }
         if (stream) {
@@ -1096,27 +1300,62 @@
         }
       }
 
-      // Voice button events
-      voiceBtn.addEventListener("pointerdown", (e) => {
-        e.preventDefault();
-        vibrate();
-        startVoiceRecording();
-      }, { passive: false });
+      // Mobile-optimized voice button events
+      if (isMobile) {
+        voiceBtn.addEventListener(
+          "touchstart",
+          (e) => {
+            e.preventDefault();
+            vibrate();
+            startVoiceRecording();
+          },
+          { passive: false }
+        );
 
-      voiceBtn.addEventListener("pointerup", (e) => {
-        e.preventDefault();
-        if (voiceRecordingUI.classList.contains("recording")) {
-          stopRecording();
-        }
-      }, { passive: false });
+        voiceBtn.addEventListener(
+          "touchend",
+          (e) => {
+            e.preventDefault();
+            if (voiceRecordingUI.classList.contains("recording")) {
+              stopRecording();
+            }
+          },
+          { passive: false }
+        );
 
-      voiceBtn.addEventListener("touchcancel", (e) => {
-        e.preventDefault();
-        if (voiceRecordingUI.classList.contains("recording")) {
-          cleanupRecording();
-          showError("Recording interrupted.");
-        }
-      }, { passive: false });
+        voiceBtn.addEventListener(
+          "touchcancel",
+          (e) => {
+            e.preventDefault();
+            if (voiceRecordingUI.classList.contains("recording")) {
+              cleanupRecording();
+              showError("Recording interrupted.");
+            }
+          },
+          { passive: false }
+        );
+      } else {
+        voiceBtn.addEventListener(
+          "pointerdown",
+          (e) => {
+            e.preventDefault();
+            vibrate();
+            startVoiceRecording();
+          },
+          { passive: false }
+        );
+
+        voiceBtn.addEventListener(
+          "pointerup",
+          (e) => {
+            e.preventDefault();
+            if (voiceRecordingUI.classList.contains("recording")) {
+              stopRecording();
+            }
+          },
+          { passive: false }
+        );
+      }
 
       voiceCancel.addEventListener("click", (e) => {
         e.preventDefault();
@@ -1134,7 +1373,7 @@
         btn.addEventListener("touchend", handleButtonEvent, { passive: false });
       });
 
-      // Input events
+      // Mobile-optimized input events
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
@@ -1142,18 +1381,42 @@
         }
       });
 
-      input.addEventListener("input", debounce(() => {
-        socket.emit("typing", username);
-      }, 300));
+      // Mobile-specific input handling
+      if (isMobile) {
+        // Fix for mobile keyboards pushing content up
+        input.addEventListener("focus", () => {
+          form.classList.add("keyboard-active");
+          setTimeout(() => {
+            scrollToBottom();
+            // On some mobile browsers, we need to manually scroll the window
+            window.scrollTo(0, document.body.scrollHeight);
+          }, 300);
+        });
 
-      input.addEventListener("focus", () => {
-        form.classList.add("keyboard-active");
-        setTimeout(scrollToBottom, 300);
-      });
+        input.addEventListener("blur", () => {
+          form.classList.remove("keyboard-active");
+          // Delay the scroll adjustment to allow keyboard to fully hide
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+          }, 200);
+        });
+      } else {
+        input.addEventListener("focus", () => {
+          form.classList.add("keyboard-active");
+          setTimeout(scrollToBottom, 300);
+        });
 
-      input.addEventListener("focusout", () => {
-        form.classList.remove("keyboard-active");
-      });
+        input.addEventListener("focusout", () => {
+          form.classList.remove("keyboard-active");
+        });
+      }
+
+      input.addEventListener(
+        "input",
+        debounce(() => {
+          socket.emit("typing", username);
+        }, 300)
+      );
 
       fileInput.addEventListener("change", () => {
         if (fileInput.files.length > 0) {
@@ -1167,7 +1430,10 @@
         div.classList.add("message");
         div.dataset.id = data.id;
         div.dataset.username = data.username;
-        const timestamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        const timestamp = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
         let content = `<strong>${data.username}</strong>: `;
         if (data.message) {
           content += data.message;
@@ -1180,30 +1446,40 @@
             content += `<video src="${data.fileUrl}" controls preload="metadata"></video>`;
           } else if (data.fileUrl.match(/\.(mp3|wav|ogg|webm|m4a)$/i)) {
             content += `
-              <div class="voice-message ${data.username === username ? 'own' : ''}">
-                <button class="play-btn" data-src="${data.fileUrl}" aria-label="Play voice message">▶</button>
-                <div class="waveform">
-                  <span class="bar"></span>
-                  <span class="bar"></span>
-                  <span class="bar"></span>
-                  <span class="bar"></span>
-                  <span class="bar"></span>
-                  <span class="bar"></span>
-                </div>
-              </div>`;
+        <div class="voice-message ${data.username === username ? "own" : ""}">
+          <button class="play-btn" data-src="${
+            data.fileUrl
+          }" aria-label="Play voice message">▶</button>
+          <div class="waveform">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>`;
           } else {
             content += `<a href="${data.fileUrl}" target="_blank" aria-label="Download file">Download File</a>`;
           }
           content += `</div>`;
         }
         content += `
-          <small style="float: right; color: #999; font-size: 0.75em">${timestamp}</small>
-          ${data.username === username ? `<span class="seen-status ${data.seen ? 'seen' : ''}" aria-label="Message status"></span>` : ""}
-        `;
+    <small style="float: right; color: #999; font-size: 0.75em">${timestamp}</small>
+    ${
+      data.username === username
+        ? `<span class="seen-status ${
+            data.seen ? "seen" : ""
+          }" aria-label="Message status"></span>`
+        : ""
+    }
+  `;
         div.innerHTML = content;
         chatBox.appendChild(div);
 
-        const isUserNearBottom = chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
+        const isUserNearBottom =
+          chatBox.scrollHeight - chatBox.scrollTop <=
+          chatBox.clientHeight + 100;
         if (data.username === username || isUserNearBottom) {
           scrollToBottom();
         } else {
@@ -1222,7 +1498,9 @@
       });
 
       socket.on("message seen", ({ messageId }) => {
-        const messageEl = document.querySelector(`.message[data-id="${messageId}"]`);
+        const messageEl = document.querySelector(
+          `.message[data-id="${messageId}"]`
+        );
         if (messageEl) {
           const seenStatus = messageEl.querySelector(".seen-status");
           if (seenStatus) {
@@ -1249,6 +1527,11 @@
           scrollDownBtn.style.display = "none";
           scrollDownBtn.classList.remove("new-messages");
           newMessages = 0;
+
+          // Mobile-specific scroll adjustment
+          if (isMobile) {
+            window.scrollTo(0, document.body.scrollHeight);
+          }
         }, 100);
       }
 
@@ -1288,13 +1571,17 @@
 
       // Scroll events
       chatBox.addEventListener("scroll", () => {
-        const nearBottom = chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
+        const nearBottom =
+          chatBox.scrollHeight - chatBox.scrollTop <=
+          chatBox.clientHeight + 100;
         scrollDownBtn.style.display = nearBottom ? "none" : "block";
         debounceSeenMessages();
       });
 
       chatBox.addEventListener("touchmove", () => {
-        const nearBottom = chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
+        const nearBottom =
+          chatBox.scrollHeight - chatBox.scrollTop <=
+          chatBox.clientHeight + 100;
         scrollDownBtn.style.display = nearBottom ? "none" : "block";
         debounceSeenMessages();
       });
@@ -1302,44 +1589,62 @@
       scrollDownBtn.addEventListener("click", scrollToBottom);
       scrollDownBtn.addEventListener("touchend", scrollToBottom);
 
-      // Audio playback
+      // Mobile-optimized audio playback
       chatBox.addEventListener("click", (e) => {
         if (e.target.classList.contains("play-btn")) {
           e.preventDefault();
           const button = e.target;
           const audioSrc = button.dataset.src;
           const waveform = button.nextElementSibling;
-          let audio = button.dataset.audio ? document.getElementById(button.dataset.audio) : null;
+          let audio = button.dataset.audio
+            ? document.getElementById(button.dataset.audio)
+            : null;
 
           if (audio && !audio.paused) {
             audio.pause();
             button.textContent = "▶";
             waveform.classList.remove("playing");
           } else {
-            document.querySelectorAll(".voice-message .waveform.playing").forEach((wf) => {
-              wf.classList.remove("playing");
-              const btn = wf.previousElementSibling;
-              btn.textContent = "▶";
-              const otherAudio = document.getElementById(btn.dataset.audio);
-              if (otherAudio) otherAudio.pause();
-            });
+            document
+              .querySelectorAll(".voice-message .waveform.playing")
+              .forEach((wf) => {
+                wf.classList.remove("playing");
+                const btn = wf.previousElementSibling;
+                btn.textContent = "▶";
+                const otherAudio = document.getElementById(btn.dataset.audio);
+                if (otherAudio) otherAudio.pause();
+              });
 
             if (!audio) {
               audio = new Audio(audioSrc);
               const audioId = `audio-${Date.now()}`;
               audio.id = audioId;
               button.dataset.audio = audioId;
+
+              // Mobile-specific audio settings
+              audio.preload = "metadata";
+              audio.muted = false;
+              audio.volume = 1.0;
             }
 
-            audio
-              .play()
-              .catch((err) => {
-                showError("Failed to play audio.");
-              });
-            button.textContent = "⏸";
-            waveform.classList.add("playing");
-            if (waveform.parentElement.classList.contains("own")) {
-              waveform.classList.remove("own");
+            // Mobile browsers require this to be in a user gesture
+            const playPromise = audio.play();
+
+            if (playPromise !== undefined) {
+              playPromise
+                .then(() => {
+                  button.textContent = "⏸";
+                  waveform.classList.add("playing");
+                  if (waveform.parentElement.classList.contains("own")) {
+                    waveform.classList.remove("own");
+                  }
+                })
+                .catch((err) => {
+                  showError(
+                    "Failed to play audio. Make sure your device isn't muted."
+                  );
+                  console.error("Audio play error:", err);
+                });
             }
 
             audio.onended = () => {
@@ -1353,23 +1658,39 @@
         }
       });
 
-      // Swipe to reply
+      // Swipe to reply - mobile optimized
       let touchStartX = 0;
-      chatBox.addEventListener("touchstart", (e) => {
-        touchStartX = e.touches[0].clientX;
-      });
+      let touchStartY = 0;
+      chatBox.addEventListener(
+        "touchstart",
+        (e) => {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        },
+        { passive: true }
+      );
 
-      chatBox.addEventListener("touchend", (e) => {
-        const touchEndX = e.changedTouches[0].clientX;
-        const deltaX = touchEndX - touchStartX;
-        if (deltaX > 50) {
-          const message = e.target.closest(".message");
-          if (message) {
-            input.value = `Replying to ${message.dataset.username}: `;
-            input.focus();
+      chatBox.addEventListener(
+        "touchend",
+        (e) => {
+          const touchEndX = e.changedTouches[0].clientX;
+          const touchEndY = e.changedTouches[0].clientY;
+          const deltaX = touchEndX - touchStartX;
+          const deltaY = touchEndY - touchStartY;
+
+          // Only consider horizontal swipes with minimal vertical movement
+          if (Math.abs(deltaX) > 50 && Math.abs(deltaY) < 30) {
+            const message = document
+              .elementFromPoint(touchEndX, touchEndY)
+              .closest(".message");
+            if (message) {
+              input.value = `Replying to ${message.dataset.username}: `;
+              input.focus();
+            }
           }
-        }
-      });
+        },
+        { passive: true }
+      );
 
       // Offline handling
       window.addEventListener("offline", () => {
@@ -1380,7 +1701,19 @@
         showError("Back online!");
       });
 
-      scrollToBottom();
+      // Initial scroll to bottom
+      setTimeout(scrollToBottom, 500);
+
+      // Mobile viewport height fix
+      function adjustViewport() {
+        if (isMobile) {
+          const vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty("--vh", `${vh}px`);
+        }
+      }
+
+      window.addEventListener("resize", adjustViewport);
+      adjustViewport();
     </script>
   </body>
 </html>
