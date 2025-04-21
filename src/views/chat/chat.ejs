@@ -200,9 +200,8 @@
         transition: transform 0.2s ease, background 0.2s ease;
       }
 
-      .message .voice-message button:hover {
+      .message .voice-message button:active {
         transform: scale(1.1);
-        background: linear-gradient(45deg, #c2185b, #f06292);
       }
 
       .message .voice-message .waveform {
@@ -243,12 +242,6 @@
       .message .voice-message.own .waveform .bar:nth-child(6) {
         animation-delay: 0.5s;
       }
-      .message .voice-message.own .waveform .bar:nth-child(7) {
-        animation-delay: 0.6s;
-      }
-      .message .voice-message.own .waveform .bar:nth-child(8) {
-        animation-delay: 0.7s;
-      }
 
       .message .voice-message .waveform.playing .bar {
         animation: wave 1s infinite ease-in-out;
@@ -271,12 +264,6 @@
       }
       .message .voice-message .waveform.playing .bar:nth-child(6) {
         animation-delay: 0.5s;
-      }
-      .message .voice-message .waveform.playing .bar:nth-child(7) {
-        animation-delay: 0.6s;
-      }
-      .message .voice-message .waveform.playing .bar:nth-child(8) {
-        animation-delay: 0.7s;
       }
 
       @keyframes wave {
@@ -404,7 +391,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background 0.3s ease, transform 0.3s ease;
+        transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       }
 
       #send-btn:disabled,
@@ -421,19 +408,25 @@
         transform: translateY(-2px);
       }
 
-      #file-input {
-        display: none;
-      }
-
       #voice-btn.recording {
         background: #c2185b;
-        transform: scale(1.1);
+        transform: scale(1.2);
+        box-shadow: 0 0 8px rgba(200, 24, 91, 0.5);
+      }
+
+      #voice-btn:active {
+        transform: scale(1.25);
+      }
+
+      #file-input {
+        display: none;
       }
 
       #voice-recording-ui {
         display: none;
         position: fixed;
-        bottom: 80px;
+        bottom: 90px;
+        bottom: calc(90px + env(safe-area-inset-bottom));
         left: 12px;
         right: 12px;
         background: linear-gradient(145deg, #ffffff, #f0f0f0);
@@ -448,12 +441,24 @@
         transform: translateY(20px);
         opacity: 0;
         transition: transform 0.3s ease, opacity 0.3s ease;
+        touch-action: none;
       }
 
       #voice-recording-ui.recording {
         display: flex;
         transform: translateY(0);
         opacity: 1;
+      }
+
+      #voice-recording-ui.recording::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.2);
+        z-index: -1;
       }
 
       body.dark-mode #voice-recording-ui {
@@ -467,6 +472,20 @@
         right: 1rem;
         font-size: 0.9rem;
         color: #e91e63;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      #voice-recording-ui.processing::after::before {
+        content: "⏳";
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        100% {
+          transform: rotate(360deg);
+        }
       }
 
       #voice-timer {
@@ -516,7 +535,8 @@
         transition: color 0.2s ease;
       }
 
-      #voice-cancel:hover {
+      #voice-cancel:hover,
+      #voice-cancel:active {
         color: #c2185b;
       }
 
@@ -639,8 +659,8 @@
         #voice-btn {
           padding: 0.7rem;
           font-size: clamp(0.85rem, 2vw, 0.9rem);
-          min-width: 44px;
-          min-height: 44px;
+          min-width: 52px;
+          min-height: 52px;
         }
 
         #scroll-down-btn {
@@ -651,7 +671,7 @@
         }
 
         #voice-recording-ui {
-          bottom: 70px;
+          bottom: calc(90px + env(safe-area-inset-bottom));
           padding: 0.8rem;
           font-size: 0.9rem;
         }
@@ -660,9 +680,21 @@
           max-width: 240px;
         }
 
+        .message .voice-message .waveform {
+          gap: 2px;
+        }
+
         .message .voice-message .waveform .bar {
           width: 4px;
           height: 8px;
+        }
+
+        #voice-waveform {
+          gap: 3px;
+        }
+
+        #voice-waveform .bar {
+          width: 5px;
         }
       }
     </style>
@@ -692,8 +724,6 @@
                 <div class="voice-message <%= msg.username === username ? 'own' : '' %>">
                   <button class="play-btn" data-src="<%= msg.fileUrl %>" aria-label="Play voice message">▶</button>
                   <div class="waveform">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
                     <span class="bar"></span>
                     <span class="bar"></span>
                     <span class="bar"></span>
@@ -749,8 +779,6 @@
     <div id="voice-recording-ui" role="region" aria-label="Voice recording controls">
       <span id="voice-timer" aria-live="polite">00:00</span>
       <div id="voice-waveform">
-        <span class="bar"></span>
-        <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
@@ -814,12 +842,15 @@
           errorDiv.textContent = "";
           errorDiv.style.display = "none";
         }, 5000);
+        if (message.includes("not supported")) {
+          errorDiv.textContent += " Please update your browser or use a compatible one (e.g., Chrome, Safari, Firefox).";
+        }
       }
 
       // Haptic feedback
       function vibrate() {
         if (navigator.vibrate) {
-          navigator.vibrate(50);
+          navigator.vibrate(100);
         }
       }
 
@@ -950,6 +981,17 @@
         }
       }
 
+      // Get supported MIME type
+      function getSupportedMimeType() {
+        const types = ["audio/webm", "audio/mp4", "audio/ogg"];
+        for (const type of types) {
+          if (MediaRecorder.isTypeSupported(type)) {
+            return type;
+          }
+        }
+        return null;
+      }
+
       // Voice recording
       function startVoiceRecording() {
         if (!navigator.mediaDevices || !MediaRecorder) {
@@ -957,11 +999,17 @@
           return;
         }
 
+        const mimeType = getSupportedMimeType();
+        if (!mimeType) {
+          showError("No supported audio format found.");
+          return;
+        }
+
         navigator.mediaDevices
           .getUserMedia({ audio: true })
           .then((micStream) => {
             stream = micStream;
-            mediaRecorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
+            mediaRecorder = new MediaRecorder(stream, { mimeType });
             audioChunks = [];
 
             // Setup Web Audio API for waveform
@@ -979,8 +1027,8 @@
               analyser.getByteFrequencyData(dataArray);
               const bars = voiceWaveform.querySelectorAll(".bar");
               bars.forEach((bar, i) => {
-                const height = (dataArray[i * 2] / 255) * 32;
-                bar.style.height = `${Math.max(8, height)}px`;
+                const height = (dataArray[i * 3] / 255) * 28;
+                bar.style.height = `${Math.max(6, height)}px`;
               });
               requestAnimationFrame(updateWaveform);
             }
@@ -1009,9 +1057,10 @@
                 return;
               }
 
-              const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-              const audioFile = new File([audioBlob], `voice-${Date.now()}.webm`, {
-                type: "audio/webm",
+              const audioBlob = new Blob(audioChunks, { type: mimeType });
+              const fileExtension = mimeType.split("/")[1].split(";")[0];
+              const audioFile = new File([audioBlob], `voice-${Date.now()}.${fileExtension}`, {
+                type: mimeType,
               });
 
               fileInput.value = "";
@@ -1023,23 +1072,34 @@
               setTimeout(() => {
                 sendMessage();
                 cleanupRecording();
-              }, 100);
+              }, 200);
             };
 
             mediaRecorder.onerror = (err) => {
+              console.error("MediaRecorder error:", err);
               showError("Recording failed: " + err.message);
               cleanupRecording();
             };
+
+            // Timeout to detect if recording fails to start
+            setTimeout(() => {
+              if (mediaRecorder && mediaRecorder.state !== "recording") {
+                showError("Failed to start recording.");
+                cleanupRecording();
+              }
+            }, 1000);
 
             mediaRecorder.start();
             voiceRecordingUI.classList.add("recording");
             voiceBtn.classList.add("recording");
             voiceBtn.textContent = "⏹";
             updateWaveform();
+            console.log("Recording started with MIME type:", mimeType);
           })
           .catch((err) => {
+            console.error("getUserMedia error:", err);
             if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
-              showError("Microphone access denied.");
+              showError("Microphone access denied. Please enable it in your browser settings.");
             } else {
               showError("Failed to start recording: " + err.message);
             }
@@ -1051,11 +1111,13 @@
       function stopRecording() {
         if (mediaRecorder && mediaRecorder.state !== "inactive") {
           mediaRecorder.stop();
+          console.log("Recording stopped");
         }
       }
 
       // Cleanup recording
       function cleanupRecording() {
+        console.log("Cleaning up recording");
         voiceRecordingUI.classList.remove("recording");
         voiceBtn.classList.remove("recording");
         voiceBtn.textContent = "🎤";
@@ -1065,7 +1127,7 @@
           recordingInterval = null;
         }
         if (audioContext) {
-          audioContext.close();
+          audioContext.close().catch((err) => console.error("AudioContext close error:", err));
           audioContext = null;
         }
         if (stream) {
@@ -1119,8 +1181,27 @@
         { passive: false }
       );
 
-      voiceCancel.addEventListener("click", cleanupRecording);
-      voiceCancel.addEventListener("touchend", cleanupRecording);
+      voiceBtn.addEventListener(
+        "touchcancel",
+        (e) => {
+          e.preventDefault();
+          if (voiceRecordingUI.classList.contains("recording")) {
+            cleanupRecording();
+            showError("Recording interrupted.");
+          }
+        },
+        { passive: false }
+      );
+
+      voiceCancel.addEventListener("click", (e) => {
+        e.preventDefault();
+        cleanupRecording();
+      });
+
+      voiceCancel.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        cleanupRecording();
+      });
 
       // Other button event listeners
       [sendBtn, fileBtn].forEach((btn) => {
@@ -1180,8 +1261,6 @@
               <div class="voice-message ${data.username === username ? 'own' : ''}">
                 <button class="play-btn" data-src="${data.fileUrl}" aria-label="Play voice message">▶</button>
                 <div class="waveform">
-                  <span class="bar"></span>
-                  <span class="bar"></span>
                   <span class="bar"></span>
                   <span class="bar"></span>
                   <span class="bar"></span>
