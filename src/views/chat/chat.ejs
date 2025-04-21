@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Chat Room</title>
     <link rel="manifest" href="../../../manifest.json" />
     <script src="/socket.io/socket.io.js"></script>
@@ -90,12 +93,12 @@
       }
 
       .message .seen-status.seen::after {
-        content: '✓✓';
+        content: "✓✓";
         color: #4caf50;
       }
 
       .message .seen-status:not(.seen)::after {
-        content: '✓';
+        content: "✓";
         color: #999;
       }
 
@@ -159,19 +162,41 @@
         animation: wave 0.8s infinite ease-in-out;
       }
 
-      .message .voice-message .waveform.playing .bar:nth-child(1) { animation-delay: 0s; }
-      .message .voice-message .waveform.playing .bar:nth-child(2) { animation-delay: 0.1s; }
-      .message .voice-message .waveform.playing .bar:nth-child(3) { animation-delay: 0.2s; }
-      .message .voice-message .waveform.playing .bar:nth-child(4) { animation-delay: 0.3s; }
-      .message .voice-message .waveform.playing .bar:nth-child(5) { animation-delay: 0.4s; }
-      .message .voice-message .waveform.playing .bar:nth-child(6) { animation-delay: 0.5s; }
-      .message .voice-message .waveform.playing .bar:nth-child(7) { animation-delay: 0.6s; }
-      .message .voice-message .waveform.playing .bar:nth-child(8) { animation-delay: 0.7s; }
+      .message .voice-message .waveform.playing .bar:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(5) {
+        animation-delay: 0.4s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(6) {
+        animation-delay: 0.5s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(7) {
+        animation-delay: 0.6s;
+      }
+      .message .voice-message .waveform.playing .bar:nth-child(8) {
+        animation-delay: 0.7s;
+      }
 
       @keyframes wave {
-        0% { transform: scaleY(1); }
-        50% { transform: scaleY(2); }
-        100% { transform: scaleY(1); }
+        0% {
+          transform: scaleY(1);
+        }
+        50% {
+          transform: scaleY(2);
+        }
+        100% {
+          transform: scaleY(1);
+        }
       }
 
       #typing {
@@ -365,41 +390,42 @@
 
     <div id="chat-box">
       <% messages.forEach(msg => { %>
-        <div class="message" data-id="<%= msg.id %>" data-username="<%= msg.username %>">
-          <strong><%= msg.username %></strong>: 
-          <% if (msg.message) { %>
-            <%= msg.message %>
-          <% } %>
-          <% if (msg.fileUrl) { %>
-            <div class="file">
-              <% if (msg.fileUrl.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
-                <img src="<%= msg.fileUrl %>" alt="Uploaded image" />
-              <% } else if (msg.fileUrl.match(/\.(mp3|wav|ogg|webm|m4a)$/i)) { %>
-                <div class="voice-message">
-                  <button class="play-btn" data-src="<%= msg.fileUrl %>">▶</button>
-                  <div class="waveform">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                  </div>
-                </div>
-              <% } else { %>
-                <a href="<%= msg.fileUrl %>" target="_blank">Download File</a>
-              <% } %>
+      <div
+        class="message"
+        data-id="<%= msg.id %>"
+        data-username="<%= msg.username %>"
+      >
+        <strong><%= msg.username %></strong>: <% if (msg.message) { %> <%=
+        msg.message %> <% } %> <% if (msg.fileUrl) { %>
+        <div class="file">
+          <% if (msg.fileUrl.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
+          <img src="<%= msg.fileUrl %>" alt="Uploaded image" />
+          <% } else if (msg.fileUrl.match(/\.(mp3|wav|ogg|webm|m4a)$/i)) { %>
+          <div class="voice-message">
+            <button class="play-btn" data-src="<%= msg.fileUrl %>">▶</button>
+            <div class="waveform">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
             </div>
-          <% } %>
-          <small style="float: right; color: #999; font-size: 0.75em">
-            <%= msg.createdAt %>
-          </small>
-          <% if (msg.username === username) { %>
-            <span class="seen-status <%= msg.seen ? 'seen' : '' %>"></span>
+          </div>
+          <% } else { %>
+          <a href="<%= msg.fileUrl %>" target="_blank">Download File</a>
           <% } %>
         </div>
+        <% } %>
+        <small style="float: right; color: #999; font-size: 0.75em">
+          <%= msg.createdAt %>
+        </small>
+        <% if (msg.username === username) { %>
+        <span class="seen-status <%= msg.seen ? 'seen' : '' %>"></span>
+        <% } %>
+      </div>
       <% }) %>
     </div>
 
@@ -407,8 +433,17 @@
     <div id="error-message"></div>
 
     <form id="chat-form" novalidate>
-      <input id="message-input" type="text" placeholder="Type a message..." autocomplete="off" />
-      <input id="file-input" type="file" accept="image/*,audio/*,video/*,.pdf,.doc,.docx" />
+      <input
+        id="message-input"
+        type="text"
+        placeholder="Type a message..."
+        autocomplete="off"
+      />
+      <input
+        id="file-input"
+        type="file"
+        accept="image/*,audio/*,video/*,.pdf,.doc,.docx"
+      />
       <button id="file-btn" type="button" title="Upload file">📎</button>
       <button id="voice-btn" type="button" title="Record voice">🎤</button>
       <button id="send-btn" type="submit">Send</button>
@@ -433,7 +468,9 @@
       let mediaRecorder;
       let audioChunks = [];
       let scrollTimeout = null;
+      let isSending = false; // Prevent multiple submissions
 
+      // Request notification permission
       if (Notification && Notification.permission !== "granted") {
         Notification.requestPermission();
       }
@@ -458,9 +495,13 @@
 
       socket.emit("join", username);
 
-      function sendMessage(e) {
+      async function sendMessage(e) {
         if (e) e.preventDefault(); // Prevent default form submission
-        console.log("sendMessage called"); // Debug log
+        if (isSending) {
+          console.log("Already sending, ignoring");
+          return;
+        }
+
         const message = input.value.trim();
         const file = fileInput.files[0];
         if (!message && !file) {
@@ -468,10 +509,9 @@
           return;
         }
 
-        if (sendBtn.disabled) {
-          console.log("Send button disabled, ignoring"); // Debug log
-          return;
-        }
+        isSending = true;
+        sendBtn.disabled = true;
+        sendBtn.textContent = "Sending...";
 
         if (file) {
           const validTypes = [
@@ -492,88 +532,90 @@
           if (!validTypes.includes(file.type)) {
             showError("Unsupported file type. Please upload an image, audio, video, PDF, or Word document.");
             fileInput.value = "";
+            isSending = false;
+            sendBtn.disabled = false;
+            sendBtn.textContent = "Send";
             return;
           }
         }
-
-        sendBtn.disabled = true;
-        sendBtn.textContent = "Sending...";
-        console.log("Sending message or file:", { message, file }); // Debug log
 
         const formData = new FormData();
         if (message) formData.append("message", message);
         if (file) formData.append("file", file);
 
-        fetch("/upload", {
-          method: "POST",
-          body: formData,
-          headers: { "X-Username": username },
-        })
-          .then(async (res) => {
-            if (!res.ok) {
-              const error = await res.json();
-              throw new Error(error.error || "Failed to send message");
-            }
-            return res.json();
-          })
-          .then((data) => {
-            console.log("Message sent successfully:", data); // Debug log
-            socket.emit("chat message", {
-              username,
-              message: data.message,
-              fileUrl: data.fileUrl,
-              id: parseInt(data.id),
-            });
-            input.value = "";
-            fileInput.value = "";
-            typingDiv.textContent = "";
-            input.focus();
-            sendBtn.disabled = false;
-            sendBtn.textContent = "Send";
-          })
-          .catch((err) => {
-            console.error("Upload failed:", err);
-            showError(err.message || "Failed to send message. Please try again.");
-            sendBtn.disabled = false;
-            sendBtn.textContent = "Send";
+        try {
+          const res = await fetch("/upload", {
+            method: "POST",
+            body: formData,
+            headers: { "X-Username": username },
           });
+
+          if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.error || "Failed to send message");
+          }
+
+          const data = await res.json();
+          socket.emit("chat message", {
+            username,
+            message: data.message,
+            fileUrl: data.fileUrl,
+            id: parseInt(data.id),
+          });
+
+          input.value = "";
+          fileInput.value = "";
+          typingDiv.textContent = "";
+          input.focus();
+          scrollToBottom();
+        } catch (err) {
+          console.error("Upload failed:", err);
+          showError(err.message || "Failed to send message. Please try again.");
+        } finally {
+          isSending = false;
+          sendBtn.disabled = false;
+          sendBtn.textContent = "Send";
+        }
       }
 
+      // Form submission handler
       form.addEventListener("submit", (e) => {
         e.preventDefault();
-        console.log("Form submit event triggered"); // Debug log
+        e.stopPropagation(); // Extra precaution to prevent bubbling
         sendMessage(e);
       });
 
+      // Handle Enter key for sending messages
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
-          console.log("Enter key pressed"); // Debug log
           sendMessage(e);
         }
       });
 
+      // Typing indicator
       input.addEventListener("input", () => {
         socket.emit("typing", username);
       });
 
+      // Scroll to bottom when input is focused
       input.addEventListener("focus", () => {
-        setTimeout(() => {
-          scrollToBottom();
-        }, 300);
+        setTimeout(scrollToBottom, 300);
       });
 
+      // File upload trigger
       fileBtn.addEventListener("click", () => {
         fileInput.click();
       });
 
+      // Handle file selection
       fileInput.addEventListener("change", () => {
         if (fileInput.files.length > 0) {
-          console.log("File selected:", fileInput.files[0]); // Debug log
           sendMessage();
         }
       });
 
+      // Voice recording
       voiceBtn.addEventListener("click", async () => {
         if (voiceBtn.classList.contains("recording")) {
           mediaRecorder.stop();
@@ -606,7 +648,6 @@
               fileInput.files = dataTransfer.files;
 
               stream.getTracks().forEach((track) => track.stop());
-              console.log("Voice recording stopped, sending file"); // Debug log
               sendMessage();
             };
 
@@ -621,9 +662,8 @@
             mediaRecorder.start();
             voiceBtn.classList.add("recording");
             voiceBtn.textContent = "⏹";
-            console.log("Voice recording started"); // Debug log
           } catch (err) {
-            console.error("Audio recording failed:", err);
+            eradicate("Audio recording failed:", err);
             if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
               showError("Microphone access denied. Please allow microphone permissions.");
             } else {
@@ -633,6 +673,7 @@
         }
       });
 
+      // Handle incoming messages
       socket.on("chat message", (data) => {
         const div = document.createElement("div");
         div.classList.add("message");
@@ -685,25 +726,23 @@
           showNotification(data.username, data.message || "Sent a file");
           const messageId = parseInt(data.id);
           if (!isNaN(messageId)) {
-            console.log(`Emitting message seen for ID: ${messageId} from ${data.username}`);
             socket.emit("message seen", { messageId, username });
-          } else {
-            console.error(`Invalid message ID in chat message: ${data.id}`);
           }
         }
       });
 
+      // Handle message seen
       socket.on("message seen", ({ messageId }) => {
         const messageEl = document.querySelector(`.message[data-id="${messageId}"]`);
         if (messageEl) {
           const seenStatus = messageEl.querySelector(".seen-status");
           if (seenStatus) {
             seenStatus.classList.add("seen");
-            console.log(`Message ${messageId} marked as seen`);
           }
         }
       });
 
+      // Typing indicator
       socket.on("typing", (name) => {
         if (name !== username) {
           typingDiv.textContent = `${name} is typing...`;
@@ -714,13 +753,12 @@
       function scrollToBottom() {
         setTimeout(() => {
           chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
+          scrollDownBtn.style.display = "none";
         }, 100);
       }
 
       function debounceSeenMessages() {
-        if (scrollTimeout) {
-          clearTimeout(scrollTimeout);
-        }
+        if (scrollTimeout) clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
           const messages = document.querySelectorAll(".message");
           messages.forEach((msg) => {
@@ -733,15 +771,13 @@
               !isNaN(messageId) &&
               msgUsername !== username
             ) {
-              console.log(`Emitting message seen for ID: ${messageId} from ${msgUsername}`);
               socket.emit("message seen", { messageId, username });
-            } else if (isNaN(messageId)) {
-              console.error(`Invalid message ID on scroll: ${msg.dataset.id}`);
             }
           });
         }, 300);
       }
 
+      // Scroll and touch handlers
       chatBox.addEventListener("scroll", () => {
         const nearBottom =
           chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
@@ -758,8 +794,10 @@
 
       scrollDownBtn.addEventListener("click", scrollToBottom);
 
+      // Voice message playback
       chatBox.addEventListener("click", (e) => {
         if (e.target.classList.contains("play-btn")) {
+          e.preventDefault(); // Prevent any default behavior
           const button = e.target;
           const audioSrc = button.dataset.src;
           const waveform = button.nextElementSibling;
@@ -785,7 +823,10 @@
               button.dataset.audio = audioId;
             }
 
-            audio.play();
+            audio.play().catch((err) => {
+              console.error("Audio playback failed:", err);
+              showError("Failed to play audio. Please try again.");
+            });
             button.textContent = "⏸";
             waveform.classList.add("playing");
 
@@ -797,6 +838,14 @@
         }
       });
 
+      // Prevent accidental form submissions on touch
+      form.addEventListener("touchstart", (e) => {
+        if (e.target === sendBtn && isSending) {
+          e.preventDefault();
+        }
+      });
+
+      // Initial scroll
       scrollToBottom();
     </script>
   </body>
