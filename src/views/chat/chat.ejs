@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -21,8 +20,8 @@
         flex-direction: column;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
-        overscroll-behavior-y: none; /* Prevent pull-to-refresh issues */
-        touch-action: pan-y; /* Allow smooth scrolling */
+        overscroll-behavior-y: none;
+        touch-action: pan-y;
       }
 
       #home-btn {
@@ -62,7 +61,7 @@
         max-height: calc(100vh - 160px);
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
-        overscroll-behavior-y: contain; /* Prevent overscroll bounce */
+        overscroll-behavior-y: contain;
       }
 
       .message {
@@ -407,7 +406,7 @@
     <div id="typing"></div>
     <div id="error-message"></div>
 
-    <form id="chat-form">
+    <form id="chat-form" novalidate>
       <input id="message-input" type="text" placeholder="Type a message..." autocomplete="off" />
       <input id="file-input" type="file" accept="image/*,audio/*,video/*,.pdf,.doc,.docx" />
       <button id="file-btn" type="button" title="Upload file">📎</button>
@@ -459,7 +458,9 @@
 
       socket.emit("join", username);
 
-      function sendMessage() {
+      function sendMessage(e) {
+        if (e) e.preventDefault(); // Prevent default form submission
+        console.log("sendMessage called"); // Debug log
         const message = input.value.trim();
         const file = fileInput.files[0];
         if (!message && !file) {
@@ -467,7 +468,10 @@
           return;
         }
 
-        if (sendBtn.disabled) return;
+        if (sendBtn.disabled) {
+          console.log("Send button disabled, ignoring"); // Debug log
+          return;
+        }
 
         if (file) {
           const validTypes = [
@@ -494,6 +498,7 @@
 
         sendBtn.disabled = true;
         sendBtn.textContent = "Sending...";
+        console.log("Sending message or file:", { message, file }); // Debug log
 
         const formData = new FormData();
         if (message) formData.append("message", message);
@@ -512,6 +517,7 @@
             return res.json();
           })
           .then((data) => {
+            console.log("Message sent successfully:", data); // Debug log
             socket.emit("chat message", {
               username,
               message: data.message,
@@ -535,13 +541,15 @@
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
-        sendMessage();
+        console.log("Form submit event triggered"); // Debug log
+        sendMessage(e);
       });
 
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
-          sendMessage();
+          console.log("Enter key pressed"); // Debug log
+          sendMessage(e);
         }
       });
 
@@ -561,13 +569,9 @@
 
       fileInput.addEventListener("change", () => {
         if (fileInput.files.length > 0) {
+          console.log("File selected:", fileInput.files[0]); // Debug log
           sendMessage();
         }
-      });
-
-      sendBtn.addEventListener("touchstart", (e) => {
-        e.preventDefault();
-        sendMessage();
       });
 
       voiceBtn.addEventListener("click", async () => {
@@ -602,6 +606,7 @@
               fileInput.files = dataTransfer.files;
 
               stream.getTracks().forEach((track) => track.stop());
+              console.log("Voice recording stopped, sending file"); // Debug log
               sendMessage();
             };
 
@@ -616,6 +621,7 @@
             mediaRecorder.start();
             voiceBtn.classList.add("recording");
             voiceBtn.textContent = "⏹";
+            console.log("Voice recording started"); // Debug log
           } catch (err) {
             console.error("Audio recording failed:", err);
             if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
